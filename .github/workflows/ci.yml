@@ -60,7 +60,7 @@ jobs:
           retry sudo apt-get -o Acquire::Retries=10 -qq update
           retry sudo apt-get -o Acquire::Retries=10 -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
             gcc-aarch64-linux-gnu \
-            gcc-powerpc64-linux-gnu \
+            gcc-arm-linux-gnueabi \
             gcc-powerpc64le-linux-gnu \
             gcc-riscv64-linux-gnu \
             gettext

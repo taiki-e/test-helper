@@ -37,20 +37,25 @@ static TARGETS: &[Target] = &[
             "aarch64_be-unknown-linux-gnu",
             "aarch64-unknown-linux-gnu_ilp32",
             "aarch64_be-unknown-linux-gnu_ilp32",
+            "armv5te-unknown-linux-gnueabi",
+            "armeb-unknown-linux-gnueabi", // TODO: v6
             "powerpc64-unknown-linux-gnu",
             "powerpc64le-unknown-linux-gnu",
             "riscv32gc-unknown-linux-gnu",
             "riscv64gc-unknown-linux-gnu",
             // Linux (musl)
             "aarch64-unknown-linux-musl",
+            "armv5te-unknown-linux-musleabi",
             "powerpc64-unknown-linux-musl",
             "powerpc64le-unknown-linux-musl",
             "riscv32gc-unknown-linux-musl",
             "riscv64gc-unknown-linux-musl",
             // Linux (uClibc-ng)
             "aarch64-unknown-linux-uclibc",
+            "armv5te-unknown-linux-uclibceabi",
             // Android
             "aarch64-linux-android",
+            "arm-linux-androideabi",
             "riscv64-linux-android",
         ],
         headers: &[
@@ -66,13 +71,14 @@ static TARGETS: &[Target] = &[
             },
             Header {
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm64/include/uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/arm/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/riscv/include/uapi/asm/hwcap.h
                 path: "linux-headers:asm/hwcap.h",
                 types: &[],
                 // TODO: COMPAT_HWCAP.* for riscv
                 vars: &["HWCAP.*"],
                 functions: &[],
-                arch: &[aarch64, riscv32, riscv64],
+                arch: &[aarch64, arm, riscv32, riscv64],
                 os: &[],
                 env: &[],
             },
@@ -200,6 +206,7 @@ static TARGETS: &[Target] = &[
     Target {
         triples: &[
             "aarch64-unknown-freebsd",
+            "armv6-unknown-freebsd",
             "powerpc64-unknown-freebsd",
             "powerpc64le-unknown-freebsd",
             "riscv64gc-unknown-freebsd",
@@ -267,6 +274,7 @@ static TARGETS: &[Target] = &[
             },
             Header {
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/arm64/include/elf.h
+                // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/arm/include/elf.h
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/powerpc/include/elf.h
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/riscv/include/elf.h
                 path: "machine/elf.h",
@@ -274,7 +282,7 @@ static TARGETS: &[Target] = &[
                 vars: &["HWCAP.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, powerpc64],
+                arch: &[aarch64, arm, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -284,6 +292,7 @@ static TARGETS: &[Target] = &[
         triples: &[
             "aarch64-unknown-netbsd",
             "aarch64_be-unknown-netbsd",
+            "armv6-unknown-netbsd-eabihf",
             // "riscv64gc-unknown-netbsd",
         ],
         headers: &[
@@ -322,6 +331,7 @@ static TARGETS: &[Target] = &[
     Target {
         triples: &[
             "aarch64-unknown-openbsd",
+            // "armv7-unknown-openbsd", // TODO: not in rustc
             "powerpc64-unknown-openbsd",
             "riscv64gc-unknown-openbsd",
         ],
@@ -358,6 +368,7 @@ static TARGETS: &[Target] = &[
             },
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/cpu.h
                 path: "machine/cpu.h",
@@ -370,6 +381,7 @@ static TARGETS: &[Target] = &[
             },
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
                 path: "machine/elf.h",
@@ -377,7 +389,7 @@ static TARGETS: &[Target] = &[
                 vars: &["HWCAP.*", "PPC_FEATURE.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, powerpc64],
+                arch: &[aarch64, arm, powerpc64],
                 os: &[],
                 env: &[],
             },

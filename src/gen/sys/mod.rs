@@ -95,6 +95,46 @@ mod aarch64_be_linux_gnu_ilp32;
 pub use aarch64_be_linux_gnu_ilp32::*;
 #[cfg(
     all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv5te_linux_gnueabi;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use armv5te_linux_gnueabi::*;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod armeb_linux_gnueabi;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use armeb_linux_gnueabi::*;
+#[cfg(
+    all(
         target_arch = "powerpc64",
         target_os = "linux",
         target_env = "gnu",
@@ -193,6 +233,26 @@ mod aarch64_linux_musl;
     )
 )]
 pub use aarch64_linux_musl::*;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv5te_linux_musleabi;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use armv5te_linux_musleabi::*;
 #[cfg(
     all(
         target_arch = "powerpc64",
@@ -295,6 +355,26 @@ mod aarch64_linux_uclibc;
 pub use aarch64_linux_uclibc::*;
 #[cfg(
     all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv5te_linux_uclibceabi;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use armv5te_linux_uclibceabi::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "android",
         target_endian = "little",
@@ -311,6 +391,24 @@ mod aarch64_linux_android;
     )
 )]
 pub use aarch64_linux_android::*;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "android",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod arm_linux_androideabi;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "android",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use arm_linux_androideabi::*;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -457,6 +555,26 @@ mod aarch64_freebsd;
 pub use aarch64_freebsd::*;
 #[cfg(
     all(
+        target_arch = "arm",
+        target_os = "freebsd",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv6_freebsd;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "freebsd",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use armv6_freebsd::*;
+#[cfg(
+    all(
         target_arch = "powerpc64",
         target_os = "freebsd",
         target_endian = "big",
@@ -545,6 +663,24 @@ mod aarch64_be_netbsd;
     )
 )]
 pub use aarch64_be_netbsd::*;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv6_netbsd_eabihf;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use armv6_netbsd_eabihf::*;
 #[cfg(
     all(
         target_arch = "aarch64",
