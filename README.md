@@ -3,8 +3,8 @@
 This repository contains some helpers used on tests in projects managed by @taiki-e.
 Originally extracted from test-helper from portable-atomic repository.
 
-There are no stability guarantees for these actions and workflows, since they're
-supposed to only be used in infra managed by us.
+There are no stability guarantees for these helpers, since they're
+supposed to only be used in projects managed by us.
 
 ## License
 
