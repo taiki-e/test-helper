@@ -12,7 +12,6 @@ dlsym
 evbmips
 getauxval
 getisax
-gettext
 HWCAP
 hwprobe
 libpthread
