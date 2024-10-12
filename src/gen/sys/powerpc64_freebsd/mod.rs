@@ -523,6 +523,8 @@ pub use machine_cpu::PPC_FEATURE2_HAS_IEEE128;
 pub use machine_cpu::PPC_FEATURE2_DARN;
 pub use machine_cpu::PPC_FEATURE2_SCV;
 pub use machine_cpu::PPC_FEATURE2_HTM_NOSUSPEND;
+pub use machine_cpu::PPC_FEATURE2_ARCH_3_1;
+pub use machine_cpu::PPC_FEATURE2_MMA;
 pub use machine_cpu::PPC_FEATURE_BITMASK;
 pub use machine_cpu::PPC_FEATURE2_BITMASK;
 mod machine_elf;
