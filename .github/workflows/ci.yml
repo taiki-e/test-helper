@@ -35,6 +35,11 @@ concurrency:
 jobs:
   tidy:
     uses: taiki-e/github-actions/.github/workflows/tidy.yml@main
+    permissions:
+      contents: read
+      pull-requests: write # for gh pr edit --add-assignee
+      repository-projects: read # for gh pr edit --add-assignee
+    secrets: inherit
 
   codegen:
     runs-on: ubuntu-24.04 # old clang doesn't support AArch64 illumos # TODO: use ubuntu-latest once https://github.com/actions/runner-images/issues/10636 done
