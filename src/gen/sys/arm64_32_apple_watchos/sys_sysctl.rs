@@ -5,7 +5,48 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
+pub type u_int = ::std::os::raw::c_uint;
 pub const CTL_MAXNAME: u32 = 12;
+pub const CTL_HW: u32 = 6;
+pub const CTL_MACHDEP: u32 = 7;
+pub const HW_MACHINE: u32 = 1;
+pub const HW_MODEL: u32 = 2;
+pub const HW_NCPU: u32 = 3;
+pub const HW_BYTEORDER: u32 = 4;
+pub const HW_PHYSMEM: u32 = 5;
+pub const HW_USERMEM: u32 = 6;
+pub const HW_PAGESIZE: u32 = 7;
+pub const HW_DISKNAMES: u32 = 8;
+pub const HW_DISKSTATS: u32 = 9;
+pub const HW_EPOCH: u32 = 10;
+pub const HW_FLOATINGPT: u32 = 11;
+pub const HW_MACHINE_ARCH: u32 = 12;
+pub const HW_VECTORUNIT: u32 = 13;
+pub const HW_BUS_FREQ: u32 = 14;
+pub const HW_CPU_FREQ: u32 = 15;
+pub const HW_CACHELINE: u32 = 16;
+pub const HW_L1ICACHESIZE: u32 = 17;
+pub const HW_L1DCACHESIZE: u32 = 18;
+pub const HW_L2SETTINGS: u32 = 19;
+pub const HW_L2CACHESIZE: u32 = 20;
+pub const HW_L3SETTINGS: u32 = 21;
+pub const HW_L3CACHESIZE: u32 = 22;
+pub const HW_TB_FREQ: u32 = 23;
+pub const HW_MEMSIZE: u32 = 24;
+pub const HW_AVAILCPU: u32 = 25;
+pub const HW_TARGET: u32 = 26;
+pub const HW_PRODUCT: u32 = 27;
+pub const HW_MAXID: u32 = 28;
+extern "C" {
+    pub fn sysctl(
+        arg1: *mut ::std::os::raw::c_int,
+        arg2: u_int,
+        arg3: *mut ::core::ffi::c_void,
+        oldlenp: *mut usize,
+        arg4: *mut ::core::ffi::c_void,
+        newlen: usize,
+    ) -> ::std::os::raw::c_int;
+}
 extern "C" {
     pub fn sysctlbyname(
         arg1: *const ::std::os::raw::c_char,

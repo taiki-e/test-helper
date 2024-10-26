@@ -39,24 +39,56 @@ static TARGETS: &[Target] = &[
             "aarch64_be-unknown-linux-gnu_ilp32",
             "armv5te-unknown-linux-gnueabi",
             "armeb-unknown-linux-gnueabi", // TODO: v6
+            "csky-unknown-linux-gnuabiv2",
+            "i586-unknown-linux-gnu",
+            "loongarch64-unknown-linux-gnu",
+            "m68k-unknown-linux-gnu",
+            "mips-unknown-linux-gnu",
+            "mips64-unknown-linux-gnuabi64",
+            "mips64el-unknown-linux-gnuabi64",
+            "mipsel-unknown-linux-gnu",
+            "mipsisa32r6-unknown-linux-gnu",
+            "mipsisa32r6el-unknown-linux-gnu",
+            "mipsisa64r6-unknown-linux-gnuabi64",
+            "mipsisa64r6el-unknown-linux-gnuabi64",
+            "powerpc-unknown-linux-gnu",
             "powerpc64-unknown-linux-gnu",
             "powerpc64le-unknown-linux-gnu",
             "riscv32gc-unknown-linux-gnu",
             "riscv64gc-unknown-linux-gnu",
+            "s390x-unknown-linux-gnu",
+            "sparc-unknown-linux-gnu",
+            "sparc64-unknown-linux-gnu",
+            "x86_64-unknown-linux-gnu",
+            "x86_64-unknown-linux-gnux32",
             // Linux (musl)
             "aarch64-unknown-linux-musl",
             "armv5te-unknown-linux-musleabi",
+            "hexagon-unknown-linux-musl",
+            "i586-unknown-linux-musl",
+            "loongarch64-unknown-linux-musl",
+            "mips-unknown-linux-musl",
+            "mips64-unknown-linux-muslabi64",
+            "mips64el-unknown-linux-muslabi64",
+            "mipsel-unknown-linux-musl",
+            "powerpc-unknown-linux-musl",
             "powerpc64-unknown-linux-musl",
             "powerpc64le-unknown-linux-musl",
             "riscv32gc-unknown-linux-musl",
             "riscv64gc-unknown-linux-musl",
+            "s390x-unknown-linux-musl",
+            "x86_64-unknown-linux-musl",
             // Linux (uClibc-ng)
             "aarch64-unknown-linux-uclibc",
             "armv5te-unknown-linux-uclibceabi",
+            "mips-unknown-linux-uclibc",
+            "mipsel-unknown-linux-uclibc",
             // Android
             "aarch64-linux-android",
             "arm-linux-androideabi",
+            "i686-linux-android",
             "riscv64-linux-android",
+            "x86_64-linux-android",
         ],
         headers: &[
             Header {
@@ -65,20 +97,22 @@ static TARGETS: &[Target] = &[
                 types: &[],
                 vars: &["PPC_FEATURE.*"],
                 functions: &[],
-                arch: &[powerpc64],
+                arch: &[powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
             Header {
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm64/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm/include/uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/loongarch/include/uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/mips/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/riscv/include/uapi/asm/hwcap.h
                 path: "linux-headers:asm/hwcap.h",
                 types: &[],
                 // TODO: COMPAT_HWCAP.* for riscv
                 vars: &["HWCAP.*"],
                 functions: &[],
-                arch: &[aarch64, arm, riscv32, riscv64],
+                arch: &[aarch64, arm, loongarch64, mips, mips32r6, mips64, mips64r6, riscv32, riscv64],
                 os: &[],
                 env: &[],
             },
@@ -112,10 +146,30 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/torvalds/linux/blob/HEAD/include/uapi/linux/membarrier.h
+                path: "linux-headers:linux/membarrier.h",
+                types: &["membarrier.*"],
+                vars: &["membarrier.*"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/torvalds/linux/blob/HEAD/include/uapi/linux/prctl.h
                 path: "linux-headers:linux/prctl.h",
                 types: &[],
                 vars: &["PR_.*"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/torvalds/linux/blob/HEAD/include/uapi/linux/rseq.h
+                path: "linux-headers:linux/rseq.h",
+                types: &["rseq.*"],
+                vars: &["rseq.*"],
                 functions: &[],
                 arch: &[],
                 os: &[],
@@ -148,17 +202,70 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/bminor/glibc/blob/HEAD/bits/sched.h
+                // https://github.com/bminor/musl/blob/HEAD/include/sched.h
+                // https://github.com/wbx-github/uclibc-ng/blob/HEAD/libc/sysdeps/linux/common/bits/sched.h
+                // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sched.h
+                path: "sched.h",
+                types: &[],
+                vars: &[],
+                functions: &["sched_getcpu"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/bminor/glibc/blob/HEAD/misc/sys/auxv.h
                 // https://github.com/bminor/musl/blob/HEAD/include/sys/auxv.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/sys/auxv.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
-                vars: &[],
+                // HWCAP_S390_.*/HWCAP_SPARC_.* are not exposed from uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/s390/include/asm/elf.h
+                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/unix/sysv/linux/s390/bits/hwcap.h
+                // https://github.com/bminor/musl/blob/HEAD/arch/s390x/bits/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_32.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_64.h
+                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/sparc/bits/hwcap.h
+                vars: &["HWCAP_S390_.*", "HWCAP_SPARC_.*"],
                 functions: &["getauxval"],
                 arch: &[],
                 os: &[],
                 env: &[],
+            },
+            Header {
+                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/unix/sysv/linux/riscv/sys/hwprobe.h
+                path: "sys/hwprobe.h",
+                types: &[],
+                vars: &[],
+                functions: &["__riscv_hwprobe"],
+                arch: &[riscv32, riscv64],
+                os: &[linux],
+                env: &[gnu],
+            },
+            Header {
+                // https://github.com/bminor/glibc/blob/HEAD/include/sys/prctl.h
+                // https://github.com/bminor/musl/blob/HEAD/include/sys/prctl.h
+                // https://github.com/wbx-github/uclibc-ng/blob/HEAD/libc/sysdeps/linux/common/sys/prctl.h
+                // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/prctl.h
+                path: "sys/prctl.h",
+                types: &[],
+                vars: &[],
+                functions: &["prctl"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/unix/sysv/linux/sys/rseq.h
+                path: "sys/rseq.h",
+                types: &[],
+                vars: &["__rseq_.*", "RSEQ_SIG.*"],
+                functions: &[],
+                arch: &[],
+                os: &[linux],
+                env: &[gnu],
             },
             Header {
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/system_properties.h
@@ -195,8 +302,8 @@ static TARGETS: &[Target] = &[
                 // https://github.com/apple-oss-distributions/xnu/blob/HEAD/bsd/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &[],
-                vars: &["CTL_MAXNAME"],
-                functions: &["sysctlbyname"],
+                vars: &["CTL_HW", "CTL_MACHDEP", "CTL_MAXNAME", "HW_.*"],
+                functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -207,9 +314,12 @@ static TARGETS: &[Target] = &[
         triples: &[
             "aarch64-unknown-freebsd",
             "armv6-unknown-freebsd",
+            "i686-unknown-freebsd",
+            "powerpc-unknown-freebsd",
             "powerpc64-unknown-freebsd",
             "powerpc64le-unknown-freebsd",
             "riscv64gc-unknown-freebsd",
+            "x86_64-unknown-freebsd",
         ],
         headers: &[
             Header {
@@ -246,8 +356,8 @@ static TARGETS: &[Target] = &[
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &[],
-                vars: &["CTL_KERN", "KERN_PROC", "KERN_PROC_AUXV"],
-                functions: &[],
+                vars: &["CTL_SYSCTL.*", "CTL_KERN", "CTL_HW", "CTL_MACHDEP", "CTL_MAXNAME", "KERN_PROC", "KERN_PROC_AUXV", "HW_.*"],
+                functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -263,12 +373,22 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/freebsd/freebsd-src/blob/HEAD/include/unistd.h
+                path: "unistd.h",
+                types: &[],
+                vars: &[],
+                functions: &["getpid", "syscall", "__syscall"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/powerpc/include/cpu.h
                 path: "machine/cpu.h",
                 types: &[],
                 vars: &["PPC_FEATURE.*"],
                 functions: &[],
-                arch: &[powerpc64],
+                arch: &[powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -282,7 +402,7 @@ static TARGETS: &[Target] = &[
                 vars: &["HWCAP.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, arm, powerpc64],
+                arch: &[aarch64, arm, powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -293,9 +413,24 @@ static TARGETS: &[Target] = &[
             "aarch64-unknown-netbsd",
             "aarch64_be-unknown-netbsd",
             "armv6-unknown-netbsd-eabihf",
+            "i586-unknown-netbsd",
+            "mipsel-unknown-netbsd",
+            "powerpc-unknown-netbsd",
             // "riscv64gc-unknown-netbsd",
+            "sparc64-unknown-netbsd",
+            "x86_64-unknown-netbsd",
         ],
         headers: &[
+            Header {
+                // https://github.com/NetBSD/src/blob/HEAD/include/dlfcn.h
+                path: "dlfcn.h",
+                types: &[],
+                vars: &["RTLD_DEFAULT"],
+                functions: &["dlsym"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
             Header {
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/syscall.h
                 path: "sys/syscall.h",
@@ -310,8 +445,18 @@ static TARGETS: &[Target] = &[
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &["sysctlnode"],
-                vars: &["CTL_QUERY", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
-                functions: &["sysctlbyname"],
+                vars: &["CTL_QUERY", "CTL_HW", "CTL_MACHDEP", "CTL_MAXNAME", "SYSCTL_NAMELEN", "HW_.*", "SYSCTL_VERS_MASK", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
+                functions: &["sysctl", "sysctlbyname"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/NetBSD/src/blob/HEAD/include/unistd.h
+                path: "unistd.h",
+                types: &[],
+                vars: &[],
+                functions: &["syscall", "__syscall"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -326,14 +471,35 @@ static TARGETS: &[Target] = &[
                 os: &[],
                 env: &[],
             },
+            Header {
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/aarch64/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/arm/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/mips/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/powerpc/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/sparc/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/sparc64/include/cpu.h
+                path: "machine/cpu.h",
+                types: &[],
+                vars: &["CPU_.*"],
+                functions: &[],
+                arch: &[aarch64, arm, mips, mips32r6, mips64, mips64r6, powerpc, powerpc64, sparc, sparc64],
+                os: &[],
+                env: &[],
+            },
         ],
     },
     Target {
         triples: &[
             "aarch64-unknown-openbsd",
             // "armv7-unknown-openbsd", // TODO: not in rustc
+            // "i686-unknown-openbsd",
+            // "mips64-unknown-openbsd", // TODO: not in rustc
+            // "mips64el-unknown-openbsd", // TODO: not in rustc
+            "powerpc-unknown-openbsd",
             "powerpc64-unknown-openbsd",
             "riscv64gc-unknown-openbsd",
+            "sparc64-unknown-openbsd",
+            // "x86_64-unknown-openbsd",
         ],
         headers: &[
             Header {
@@ -357,10 +523,20 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/openbsd/src/blob/HEAD/sys/sys/syscall.h
+                path: "sys/syscall.h",
+                types: &[],
+                vars: &["SYS_.*"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &[],
-                vars: &["CTL_MACHDEP"],
+                vars: &["CTL_HW", "CTL_MACHDEP", "HW_.*"],
                 functions: &["sysctl"],
                 arch: &[],
                 os: &[],
@@ -369,8 +545,13 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/i386/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/mips64/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/macppc/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/sparc64/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/amd64/include/cpu.h
                 path: "machine/cpu.h",
                 types: &[],
                 vars: &["CPU_.*"],
@@ -382,14 +563,17 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/mips64/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/sparc64/include/elf.h
                 path: "machine/elf.h",
                 types: &[],
                 vars: &["HWCAP.*", "PPC_FEATURE.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, arm, powerpc64],
+                arch: &[aarch64, arm, mips64, mips64r6, powerpc, powerpc64, sparc64],
                 os: &[],
                 env: &[],
             },
@@ -398,27 +582,21 @@ static TARGETS: &[Target] = &[
     Target {
         triples: &[
             "aarch64-unknown-illumos",
+            "sparcv9-sun-solaris",
         ],
         headers: &[
             Header {
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv.h
                 // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv.h
+                // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv_aarch64.h
+                // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv_SPARC.h
                 path: "sys/auxv.h",
                 types: &[],
-                vars: &[],
+                vars: &["AV_AARCH64_.*", "AV_SPARC.*", "AV2_SPARC.*"],
                 functions: &["getisax"],
                 arch: &[],
-                os: &[],
-                env: &[],
-            },
-            Header {
-                // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv_aarch64.h
-                path: "sys/auxv_aarch64.h",
-                types: &[],
-                vars: &["AV_AARCH64.*"],
-                functions: &[],
-                arch: &[aarch64],
-                os: &[],
+                // TODO: solaris
+                os: &[illumos],
                 env: &[],
             },
         ],
@@ -549,6 +727,14 @@ pub(crate) fn gen() {
                 if !header.env.is_empty() && !header.env.contains(&target.env) {
                     continue;
                 }
+                // if target.os == linux
+                //     && target.env == gnu
+                //     && matches!(target.arch, csky | loongarch64)
+                //     && matches!(header.path, "dlfcn.h" | "sched.h" | "sys/prctl.h" | "sys/rseq.h")
+                // {
+                //     // TODO: glibc
+                //     continue;
+                // }
                 if target.os == linux
                     && target.env == gnu
                     && target.arch == aarch64
@@ -609,11 +795,22 @@ pub(crate) fn gen() {
                             ];
                         } else {
                             let headers_dir = libc_headers_dir(target, src_dir);
+                            // if target.env == gnu && !headers_dir.exists() {
+                            //     let glibc_dir = glibc_dir(target, src_dir);
+                            //     header_path = glibc_dir.join("include").join(header.path);
+                            //     include = vec![
+                            //         glibc_dir.join("include"),
+                            //         glibc_dir.join("sysdeps").join(glibc_arch(target)),
+                            //         glibc_dir,
+                            //         linux_headers_dir.join("include"),
+                            //     ];
+                            // } else {
                             header_path = headers_dir.join("include").join(header.path);
                             include = vec![
                                 headers_dir.join("include"),
                                 linux_headers_dir.join("include"),
                             ];
+                            // }
                         }
                         define!(_GNU_SOURCE);
                     }
@@ -666,7 +863,7 @@ pub(crate) fn gen() {
                             src_dir.join("zircon/system/public"),
                             src_dir.join("zircon/kernel/lib/libc/include"),
                         ];
-                        define!(_KERNEL);
+                        define!(_KERNEL); // TODO: rm
                     }
                     _ => todo!("{target:?}"),
                 }
@@ -868,6 +1065,32 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         cmd!("git", "checkout", ".").dir(&src_dir).stderr_capture().run().unwrap();
         src_dir
     }
+    // #[track_caller]
+    // fn curl(download_dir: &Utf8Path, name: &str, url: &str, paths: &str) -> Utf8PathBuf {
+    //     let src_dir = download_dir.join(name);
+    //     if src_dir.exists() {
+    //         return src_dir;
+    //     }
+    //     let file = &download_dir.join(Utf8Path::new(url).file_name().unwrap());
+    //     cmd!(
+    //         "curl",
+    //         "--proto",
+    //         "=https",
+    //         "--tlsv1.2",
+    //         "-fsSL",
+    //         "--retry",
+    //         "10",
+    //         "--retry-connrefused",
+    //         url,
+    //         "-o",
+    //         file
+    //     )
+    //     .run()
+    //     .unwrap();
+    //     fs::create_dir_all(&src_dir).unwrap();
+    //     cmd!("tar", "xf", file, "-C", &src_dir, paths).run().unwrap();
+    //     src_dir
+    // }
     #[track_caller]
     fn patch(target: &TargetSpec, src_dir: &Utf8Path) {
         let patch_dir = workspace_root().join("tools/codegen/patches");
@@ -996,14 +1219,26 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                                         cflags += " -mbig-endian";
                                     }
                                 }
-                                x86 => {
-                                    cc = "i686-linux-gnu-gcc".to_owned();
-                                    if target.llvm_target.starts_with("i586") {
-                                        cflags += " -march=pentium -m32";
+                                mips | mips32r6 | mips64 | mips64r6 => {
+                                    cc = "mips64el-linux-gnuabi64-gcc".to_owned();
+                                    if matches!(target.arch, mips | mips32r6) {
+                                        cflags += " -mabi=32";
+                                    } else if target.target_pointer_width == "32" {
+                                        cflags += " -mabi=n32";
+                                    }
+                                    match target.arch {
+                                        mips => cflags += " -mips32r2",
+                                        mips32r6 => cflags += " -mips32r6",
+                                        mips64 => cflags += " -mips64r2",
+                                        mips64r6 => cflags += " -mips64r6",
+                                        _ => unreachable!(),
                                     }
                                 }
-                                powerpc64 if target.target_endian == big => {
+                                powerpc | powerpc64 if target.target_endian == big => {
                                     cc = "powerpc64le-linux-gnu-gcc".to_owned();
+                                    if target.arch == powerpc {
+                                        cflags += " -m32";
+                                    }
                                     cflags += " -mbig-endian";
                                 }
                                 riscv32 => {
@@ -1014,6 +1249,17 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                                     cc = "sparc64-linux-gnu-gcc".to_owned();
                                     cflags += " -m32 -mv8plus";
                                 }
+                                x86 | x86_64 => {
+                                    cc = "x86_64-linux-gnu-gcc".to_owned();
+                                    if target.arch == x86 {
+                                        cflags += " -m32";
+                                        if target.llvm_target.starts_with("i586") {
+                                            cflags += " -march=pentium";
+                                        }
+                                    } else if target.target_pointer_width == "32" {
+                                        cflags += " -mx32";
+                                    }
+                                }
                                 _ => panic!(
                                     "{}-gcc or {}-gcc required",
                                     target.llvm_target.replace("-unknown", ""),
@@ -1022,6 +1268,69 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                             }
                         }
                     }
+                    // } else {
+                    //     panic!("{} not found", cc);
+                    // eprintln!("warning: {cc} not found");
+                    // let glibc_arch = glibc_arch(target);
+                    // let sysdeps_dir = &glibc_src_dir.join("sysdeps");
+                    // let sysdeps_arch_dir = &sysdeps_dir.join(glibc_arch);
+                    // match target.arch {
+                    //     s390x => {
+                    //         let file = "bits/hwcap.h";
+                    //         let src = sysdeps_dir.join("unix/sysv/linux/s390").join(file);
+                    //         let dst = sysdeps_arch_dir.join(file);
+                    //         symlink(src, dst).unwrap();
+                    //     }
+                    //     _ => {}
+                    // }
+                    // let mut parent_arch = glibc_arch;
+                    // let mut sources = vec![];
+                    // while let Some((p, _)) = parent_arch.rsplit_once('/') {
+                    //     parent_arch = p;
+                    //     sources.push(sysdeps_dir.join(parent_arch));
+                    // }
+                    // match &*target.target_pointer_width {
+                    //     // TODO: check
+                    //     "64" => sources.push(sysdeps_dir.join("wordsize-64")),
+                    //     "32" => sources.push(sysdeps_dir.join("wordsize-32")),
+                    //     _ => todo!("{target:?}"),
+                    // }
+                    // sources.push(sysdeps_dir.join("generic"));
+                    // for src in &sources {
+                    //     for e in fs::read_dir(src).unwrap().filter_map(Result::ok) {
+                    //         let src = &e.path();
+                    //         if src.is_dir() {
+                    //             let dir = src.file_name().unwrap().to_str().unwrap();
+                    //             let dst_dir = &sysdeps_arch_dir.join(dir);
+                    //             for e in fs::read_dir(src).unwrap().filter_map(Result::ok) {
+                    //                 let src = &e.path();
+                    //                 if src.extension() != Some(OsStr::new("h")) {
+                    //                     continue;
+                    //                 }
+                    //                 let file = src.file_name().unwrap().to_str().unwrap();
+                    //                 if !dst_dir.exists() {
+                    //                     fs::create_dir_all(dst_dir).unwrap();
+                    //                 }
+                    //                 let dst = dst_dir.join(file);
+                    //                 if !dst.exists() {
+                    //                     symlink(src, dst).unwrap();
+                    //                 }
+                    //             }
+                    //             continue;
+                    //         }
+                    //         if src.extension() != Some(OsStr::new("h")) {
+                    //             continue;
+                    //         }
+                    //         let file = src.file_name().unwrap().to_str().unwrap();
+                    //         let dst = sysdeps_arch_dir.join(file);
+                    //         if !dst.exists() {
+                    //             symlink(src, dst).unwrap();
+                    //         }
+                    //     }
+                    // }
+                    // patch(target, &src_dir);
+                    // headers_dir = glibc_src_dir;
+                    // }
                     // https://github.com/bminor/glibc/blob/HEAD/INSTALL
                     let build_dir = &glibc_src_dir.parent().unwrap().join("glibc-build");
                     if build_dir.exists() {
@@ -1160,6 +1469,37 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         freebsd => {
             src_dir = clone(download_dir, "freebsd/freebsd-src", None, &["/include/", "/sys/"]);
             // TODO: use https://github.com/freebsd/freebsd-src/blob/HEAD/Makefile?
+            // static FREEBSD_HEADERS_INSTALLED: Mutex<BTreeSet<&'static str>> =
+            //     Mutex::new(BTreeSet::new());
+            // // https://github.com/freebsd/freebsd-src/tree/HEAD/sys
+            // let (machine, machine_arch) = match target.arch {
+            //     aarch64 => ("arm64", "aarch64"),
+            //     _ => todo!("{target:?}"),
+            // };
+            // if FREEBSD_HEADERS_INSTALLED.lock().unwrap().insert(machine) {
+            //     let freebsd_headers_dir = &freebsd_headers_dir(target, src_dir);
+            //     if freebsd_headers_dir.exists() {
+            //         fs::remove_dir_all(freebsd_headers_dir)?;
+            //     }
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile.cross
+            //     // TODO: missing separator.
+            //     // let makefile = &src_dir.join("include").join("rpcsvc/Makefile");
+            //     // fs::write(makefile, fs::read_to_string(makefile)?.replace("    ", "\t"))?;
+            //     // https://github.com/freebsd/freebsd-src/blob/HEAD/include/Makefile
+            //     cmd!(
+            //         "bsdmake",
+            //         "installincludes",
+            //         format!("MACHINE={machine}"),
+            //         format!("MACHINE_ARCH={machine_arch}"),
+            //         format!("DESTDIR={freebsd_headers_dir}")
+            //     )
+            //     .env("MACHINE", machine)
+            //     .env("MACHINE_ARCH", machine_arch)
+            //     .env("DESTDIR", freebsd_headers_dir)
+            //     .dir(src_dir.join("include"))
+            //     .run()?;
+            // }
             for path in ["sys"] {
                 symlink(src_dir.join("sys").join(path), src_dir.join("include").join(path))
                     .unwrap();
@@ -1231,6 +1571,25 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         openbsd => {
             src_dir = clone(download_dir, "openbsd/src", None, &["/include/", "/sys/"]);
             // TODO: use https://github.com/openbsd/src/blob/HEAD/Makefile?
+            // static OPENBSD_HEADERS_INSTALLED: Mutex<BTreeSet<&'static str>> =
+            //     Mutex::new(BTreeSet::new());
+            // if OPENBSD_HEADERS_INSTALLED.lock().unwrap().insert(arch) {
+            //     let openbsd_headers_dir = &openbsd_headers_dir(target, src_dir);
+            //     if openbsd_headers_dir.exists() {
+            //         fs::remove_dir_all(openbsd_headers_dir)?;
+            //     }
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile.cross
+            //     cmd!(
+            //         "bsdmake",
+            //         "cross-includes",
+            //         format!("TARGET={arch}"),
+            //         format!("DESTDIR={openbsd_headers_dir}"),
+            //         "COMPILER_VERSION=clang",
+            //     )
+            //     .dir(src_dir)
+            //     .run()?;
+            // }
             for path in ["sys", "uvm"] {
                 symlink(src_dir.join("sys").join(path), src_dir.join("include").join(path))
                     .unwrap();
@@ -1258,6 +1617,19 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             }
             symlink(src_dir.join("include").join(arches[0]), src_dir.join("include/machine"))
                 .unwrap();
+            // TODO: alternative way
+            // let arch = openbsd_arch(target);
+            // let openbsd_snapshot_version = "7.3";
+            // curl(
+            //     download_dir,
+            //     &format!("headers/openbsd/{arch}"),
+            //     &format!(
+            //         "https://cdn.openbsd.org/pub/OpenBSD/snapshots/{arch}/comp{}.tgz",
+            //         openbsd_snapshot_version.replace('.', "")
+            //     ),
+            //     "./usr/include",
+            // )?
+            // .join("usr")
         }
         illumos => {
             if target.arch == aarch64 {
@@ -1311,6 +1683,12 @@ fn libc_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
 fn bionic_dir(src_dir: &Utf8Path) -> Utf8PathBuf {
     src_dir.join("../..").join(BIONIC_REPO)
 }
+// fn freebsd_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
+//     src_dir.join("../..").join("headers").join("freebsd").join(freebsd_arch(target))
+// }
+// fn openbsd_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
+//     src_dir.join("../..").join("headers").join("openbsd").join(openbsd_arch(target))
+// }
 
 fn linux_arch(target: &TargetSpec) -> &'static str {
     // https://github.com/torvalds/linux/tree/HEAD/arch
@@ -1331,6 +1709,29 @@ fn linux_arch(target: &TargetSpec) -> &'static str {
         _ => todo!("{target:?}"),
     }
 }
+// fn glibc_arch(target: &TargetSpec) -> &'static str {
+//     // https://github.com/bminor/glibc/tree/HEAD/sysdeps
+//     match target.arch {
+//         aarch64 => "aarch64",
+//         arm => "arm",
+//         csky => "csky",
+//         loongarch64 => "loongarch",
+//         m68k => "m68k/m680x0",
+//         mips | mips32r6 => "mips/mips32",
+//         mips64 | mips64r6 if target.target_pointer_width == "32" => "mips/mips64/n32",
+//         mips64 | mips64r6 if target.target_pointer_width == "64" => "mips/mips64/n64",
+//         powerpc => "powerpc/powerpc32",
+//         powerpc64 => "powerpc/powerpc64",
+//         riscv32 | riscv64 => "riscv",
+//         s390x => "s390/s390-64",
+//         sparc => "sparc/sparc32",
+//         sparc64 => "sparc/sparc64",
+//         x86 => "x86",
+//         x86_64 if target.target_pointer_width == "32" => "x86_64/x32",
+//         x86_64 if target.target_pointer_width == "64" => "x86_64/64",
+//         _ => todo!("{target:?}"),
+//     }
+// }
 fn musl_arch(target: &TargetSpec) -> &'static str {
     // https://github.com/bminor/musl/tree/HEAD/arch
     // https://github.com/quic/musl/tree/bcain/to-upstream

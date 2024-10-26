@@ -1,0 +1,13 @@
+diff --git a/sys/arch/powerpc/include/cpu.h b/sys/arch/powerpc/include/cpu.h
+index cc9278867..3e8fce615 100644
+--- a/sys/arch/powerpc/include/cpu.h
++++ b/sys/arch/powerpc/include/cpu.h
+@@ -490,7 +490,7 @@ bool	fix_unaligned(struct trapframe *, ksiginfo_t *);
+ #endif /* PPC_OEA64_BRIDGE */
+ #endif
+
+-void	__syncicache(void *, size_t);
++// void	__syncicache(void *, size_t);
+
+ /*
+  * CTL_MACHDEP definitions.

@@ -4,6 +4,9 @@
 // It is not intended for manual editing.
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
+mod dlfcn;
+pub use dlfcn::dlsym;
+pub use dlfcn::RTLD_DEFAULT;
 mod sys_syscall;
 pub use sys_syscall::SYS_MAXSYSARGS;
 pub use sys_syscall::SYS_syscall;
@@ -465,11 +468,37 @@ pub use sys_syscall::SYS_semtimedop;
 pub use sys_syscall::SYS_MAXSYSCALL;
 pub use sys_syscall::SYS_NSYSENT;
 mod sys_sysctl;
+pub use sys_sysctl::CTL_MAXNAME;
+pub use sys_sysctl::SYSCTL_NAMELEN;
+pub use sys_sysctl::SYSCTL_VERS_MASK;
 pub use sys_sysctl::SYSCTL_VERS_1;
 pub use sys_sysctl::SYSCTL_VERSION;
 pub use sys_sysctl::CTL_QUERY;
+pub use sys_sysctl::CTL_HW;
+pub use sys_sysctl::CTL_MACHDEP;
+pub use sys_sysctl::HW_MACHINE;
+pub use sys_sysctl::HW_MODEL;
+pub use sys_sysctl::HW_NCPU;
+pub use sys_sysctl::HW_BYTEORDER;
+pub use sys_sysctl::HW_PHYSMEM;
+pub use sys_sysctl::HW_USERMEM;
+pub use sys_sysctl::HW_PAGESIZE;
+pub use sys_sysctl::HW_DISKNAMES;
+pub use sys_sysctl::HW_IOSTATS;
+pub use sys_sysctl::HW_MACHINE_ARCH;
+pub use sys_sysctl::HW_ALIGNBYTES;
+pub use sys_sysctl::HW_CNMAGIC;
+pub use sys_sysctl::HW_PHYSMEM64;
+pub use sys_sysctl::HW_USERMEM64;
+pub use sys_sysctl::HW_IOSTATNAMES;
+pub use sys_sysctl::HW_NCPUONLINE;
+pub use sys_sysctl::sysctl;
 pub use sys_sysctl::sysctlbyname;
 pub use sys_sysctl::sysctlnode;
+mod unistd;
+pub use unistd::syscall;
+pub use unistd::__syscall;
 mod machine_armreg;
 pub use machine_armreg::aarch64_sysctl_cpu_id;
+mod machine_cpu;
 pub type c_char = u8;
