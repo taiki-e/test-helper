@@ -66,23 +66,12 @@ jobs:
           retry sudo apt-get -o Acquire::Retries=10 -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
             gcc-aarch64-linux-gnu \
             gcc-arm-linux-gnueabi \
-            gcc-i686-linux-gnu \
             gcc-m68k-linux-gnu \
-            gcc-mips-linux-gnu \
-            gcc-mips64-linux-gnuabi64 \
             gcc-mips64el-linux-gnuabi64 \
-            gcc-mipsel-linux-gnu \
-            gcc-mipsisa32r6-linux-gnu \
-            gcc-mipsisa32r6el-linux-gnu \
-            gcc-mipsisa64r6-linux-gnuabi64 \
-            gcc-mipsisa64r6el-linux-gnuabi64 \
-            gcc-powerpc-linux-gnu \
-            gcc-powerpc64-linux-gnu \
             gcc-powerpc64le-linux-gnu \
             gcc-riscv64-linux-gnu \
             gcc-s390x-linux-gnu \
             gcc-sparc64-linux-gnu \
-            gcc-x86-64-linux-gnux32 \
             gettext
           mkdir -p -- tmp
           retry docker create --name gcc-csky-linux-gnuabiv2 "ghcr.io/taiki-e/rust-cross-toolchain:csky-unknown-linux-gnuabiv2-dev-amd64"

@@ -1233,6 +1233,9 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                                         mips64r6 => cflags += " -mips64r6",
                                         _ => unreachable!(),
                                     }
+                                    if target.target_endian == big {
+                                        cflags += " -meb";
+                                    }
                                 }
                                 powerpc | powerpc64 if target.target_endian == big => {
                                     cc = "powerpc64le-linux-gnu-gcc".to_owned();
