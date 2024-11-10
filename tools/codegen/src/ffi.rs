@@ -53,6 +53,8 @@ static TARGETS: &[Target] = &[
             // Linux (uClibc-ng)
             "aarch64-unknown-linux-uclibc",
             "armv5te-unknown-linux-uclibceabi",
+            // L4Re (uClibc-ng)
+            "aarch64-unknown-l4re-uclibc",
             // Android
             "aarch64-linux-android",
             "arm-linux-androideabi",
@@ -125,6 +127,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/bminor/glibc/blob/HEAD/dlfcn/dlfcn.h
                 // https://github.com/bminor/musl/blob/HEAD/include/dlfcn.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/dlfcn.h
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/dlfcn.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/dlfcn.h
                 path: "dlfcn.h",
                 types: &[],
@@ -138,6 +141,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/bminor/glibc/blob/HEAD/elf/elf.h
                 // https://github.com/bminor/musl/blob/HEAD/include/elf.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/elf.h
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/elf.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/elf.h
                 path: "elf.h",
                 types: &["Elf.*_auxv_t"],
@@ -151,6 +155,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/bminor/glibc/blob/HEAD/misc/sys/auxv.h
                 // https://github.com/bminor/musl/blob/HEAD/include/sys/auxv.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/sys/auxv.h
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/sys/auxv.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
@@ -403,21 +408,12 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv.h
                 // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv.h
+                // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv_aarch64.h
                 path: "sys/auxv.h",
                 types: &[],
-                vars: &[],
+                vars: &["AV_AARCH64_.*"],
                 functions: &["getisax"],
                 arch: &[],
-                os: &[],
-                env: &[],
-            },
-            Header {
-                // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv_aarch64.h
-                path: "sys/auxv_aarch64.h",
-                types: &[],
-                vars: &["AV_AARCH64.*"],
-                functions: &[],
-                arch: &[aarch64],
                 os: &[],
                 env: &[],
             },
@@ -594,7 +590,7 @@ pub(crate) fn gen() {
                 let header_path;
                 let include;
                 match target.os {
-                    linux | android => {
+                    linux | l4re | android => {
                         let linux_headers_dir = linux_headers_dir(target, src_dir);
                         if let Some(path) = header.path.strip_prefix("linux-headers:") {
                             header_path = linux_headers_dir.join("include").join(path);
@@ -606,6 +602,14 @@ pub(crate) fn gen() {
                                 bionic_dir.join("include"),
                                 bionic_dir.join("kernel/uapi"),
                                 bionic_dir.join("kernel/android/uapi"),
+                            ];
+                        } else if target.os == l4re {
+                            let arch = l4re_arch(target);
+                            let libc_dir = src_dir.join("../../headers/l4re").join(arch);
+                            header_path = libc_dir.join("usr/include").join(header.path);
+                            include = vec![
+                                libc_dir.join("usr/include/l4-arch"),
+                                libc_dir.join("usr/include"),
                             ];
                         } else {
                             let headers_dir = libc_headers_dir(target, src_dir);
@@ -666,7 +670,7 @@ pub(crate) fn gen() {
                             src_dir.join("zircon/system/public"),
                             src_dir.join("zircon/kernel/lib/libc/include"),
                         ];
-                        define!(_KERNEL);
+                        define!(_KERNEL); // TODO: rm?
                     }
                     _ => todo!("{target:?}"),
                 }
@@ -869,6 +873,42 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         src_dir
     }
     #[track_caller]
+    fn curl(
+        download_dir: &Utf8Path,
+        name: &str,
+        url: &str,
+        paths: &str,
+        strip_components: &str,
+    ) -> Utf8PathBuf {
+        let src_dir = download_dir.join(name);
+        if src_dir.exists() {
+            return src_dir;
+        }
+        let file = &download_dir.join(Utf8Path::new(url).file_name().unwrap());
+        if !file.exists() {
+            cmd!(
+                "curl",
+                "--proto",
+                "=https",
+                "--tlsv1.2",
+                "-fsSL",
+                "--retry",
+                "10",
+                "--retry-connrefused",
+                url,
+                "-o",
+                file
+            )
+            .run()
+            .unwrap();
+        }
+        fs::create_dir_all(&src_dir).unwrap();
+        cmd!("tar", "xf", file, "--strip-components", strip_components, "-C", &src_dir, paths)
+            .run()
+            .unwrap();
+        src_dir
+    }
+    #[track_caller]
     fn patch(target: &TargetSpec, src_dir: &Utf8Path) {
         let patch_dir = workspace_root().join("tools/codegen/patches");
         for path in [
@@ -903,7 +943,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
     let src_dir;
     let mut patched = false;
     match target.os {
-        linux | android => {
+        linux | l4re | android => {
             src_dir = if target.arch == aarch64 && target.target_pointer_width == "32" {
                 clone(
                     download_dir,
@@ -952,14 +992,40 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 fs::write(
                     bionic_dir.join("libc/include/stddef.h"),
                     "\
-                    typedef long unsigned int size_t;\n\
-                    typedef long ptrdiff_t;\n\
+                    typedef __SIZE_TYPE__ size_t;\n\
+                    typedef __PTRDIFF_TYPE__ ptrdiff_t;\n\
                     ",
                 )
                 .unwrap();
                 fs::write(bionic_dir.join("libc/include/stdbool.h"), "#define bool _Bool\n")
                     .unwrap();
                 fs::write(bionic_dir.join("libc/include/float.h"), "").unwrap();
+            } else if target.os == l4re {
+                // https://os.inf.tu-dresden.de/download/snapshots/toolchain/
+                let gcc_version = "14";
+                let arch = l4re_arch(target);
+                let name = &format!("headers/l4re/{arch}");
+                let headers_dir = download_dir.join(name);
+                if !headers_dir.exists() {
+                    curl(
+                        download_dir,
+                        name,
+                        &format!(
+                            "https://os.inf.tu-dresden.de/download/snapshots/toolchain/toolchain-l4re-{arch}-gcc-{gcc_version}.tar.xz",
+                        ),
+                        &format!("./sysroots/{}-l4re/usr/include", target.arch),
+                        "3"
+                    );
+                }
+                fs::write(
+                    headers_dir.join("usr/include/stddef.h"),
+                    "\
+                    typedef __SIZE_TYPE__ size_t;\n\
+                    typedef __WCHAR_TYPE__ wchar_t;\n\
+                    ",
+                )
+                .unwrap();
+                patched = true;
             } else if target.env == gnu {
                 if target.arch == aarch64 && target.target_pointer_width == "32" {
                     clone(
@@ -974,52 +1040,87 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 let glibc_src_dir = &glibc_dir(target, &src_dir);
                 let headers_dir = &libc_headers_dir(target, &src_dir);
                 if !headers_dir.exists() {
-                    let mut cc = format!("{}-gcc", target.llvm_target.replace("-unknown", ""));
                     let mut cflags = String::new();
-                    if cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_err() {
+                    let mut cc = format!("{}-gcc", target.llvm_target.replace("-unknown", ""));
+                    let mut cc_found =
+                        cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+                    if !cc_found {
+                        cc += "-14";
+                        cc_found =
+                            cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+                    }
+                    if !cc_found {
                         cc = format!("{}-gcc", target.llvm_target);
-                        if cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_err() {
-                            // select alternative cc
-                            match target.arch {
-                                aarch64 => {
-                                    cc = "aarch64-linux-gnu-gcc".to_owned();
-                                    if target.target_pointer_width == "32" {
-                                        cflags += " -mabi=ilp32";
-                                    }
-                                    if target.target_endian == big {
-                                        cflags += " -mbig-endian";
-                                    }
+                        cc_found =
+                            cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+                    }
+                    if !cc_found {
+                        // select alternative cc
+                        match target.arch {
+                            aarch64 => {
+                                cc = "aarch64-linux-gnu-gcc".to_owned();
+                                if target.target_pointer_width == "32" {
+                                    cflags += " -mabi=ilp32";
                                 }
-                                arm if !target.llvm_target.ends_with("hf") => {
-                                    cc = "arm-linux-gnueabi-gcc".to_owned();
-                                    if target.target_endian == big {
-                                        cflags += " -mbig-endian";
-                                    }
-                                }
-                                x86 => {
-                                    cc = "i686-linux-gnu-gcc".to_owned();
-                                    if target.llvm_target.starts_with("i586") {
-                                        cflags += " -march=pentium -m32";
-                                    }
-                                }
-                                powerpc64 if target.target_endian == big => {
-                                    cc = "powerpc64le-linux-gnu-gcc".to_owned();
+                                if target.target_endian == big {
                                     cflags += " -mbig-endian";
                                 }
-                                riscv32 => {
-                                    cc = "riscv64-linux-gnu-gcc".to_owned();
-                                    cflags += " -march=rv32gc -mabi=ilp32d";
-                                }
-                                sparc => {
-                                    cc = "sparc64-linux-gnu-gcc".to_owned();
-                                    cflags += " -m32 -mv8plus";
-                                }
-                                _ => panic!(
-                                    "{}-gcc or {}-gcc required",
-                                    target.llvm_target.replace("-unknown", ""),
-                                    target.llvm_target
-                                ),
                             }
+                            arm if !target.llvm_target.ends_with("hf") => {
+                                cc = "arm-linux-gnueabi-gcc".to_owned();
+                                if target.target_endian == big {
+                                    cflags += " -mbig-endian";
+                                }
+                            }
+                            mips | mips32r6 | mips64 | mips64r6 => {
+                                cc = "mips64el-linux-gnuabi64-gcc".to_owned();
+                                if matches!(target.arch, mips | mips32r6) {
+                                    cflags += " -mabi=32";
+                                } else if target.target_pointer_width == "32" {
+                                    cflags += " -mabi=n32";
+                                }
+                                match target.arch {
+                                    mips => cflags += " -mips32r2",
+                                    mips32r6 => cflags += " -mips32r6",
+                                    mips64 => cflags += " -mips64r2",
+                                    mips64r6 => cflags += " -mips64r6",
+                                    _ => unreachable!(),
+                                }
+                                if target.target_endian == big {
+                                    cflags += " -meb";
+                                }
+                            }
+                            powerpc | powerpc64 if target.target_endian == big => {
+                                cc = "powerpc64le-linux-gnu-gcc".to_owned();
+                                if target.arch == powerpc {
+                                    cflags += " -m32";
+                                }
+                                cflags += " -mbig-endian";
+                            }
+                            riscv32 => {
+                                cc = "riscv64-linux-gnu-gcc".to_owned();
+                                cflags += " -march=rv32gc -mabi=ilp32d";
+                            }
+                            sparc => {
+                                cc = "sparc64-linux-gnu-gcc".to_owned();
+                                cflags += " -m32 -mv8plus";
+                            }
+                            x86 | x86_64 => {
+                                cc = "x86_64-linux-gnu-gcc".to_owned();
+                                if target.arch == x86 {
+                                    cflags += " -m32";
+                                    if target.llvm_target.starts_with("i586") {
+                                        cflags += " -march=pentium";
+                                    }
+                                } else if target.target_pointer_width == "32" {
+                                    cflags += " -mx32";
+                                }
+                            }
+                            _ => panic!(
+                                "{}-gcc or {}-gcc required",
+                                target.llvm_target.replace("-unknown", ""),
+                                target.llvm_target
+                            ),
                         }
                     }
                     // https://github.com/bminor/glibc/blob/HEAD/INSTALL
@@ -1047,8 +1148,8 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                     headers_dir.join("include/stddef.h"),
                     "\
                     #define NULL ((void*)0)\n\
-                    typedef long unsigned int size_t;\n\
-                    typedef long signed int ptrdiff_t;\n\
+                    typedef __SIZE_TYPE__ size_t;\n\
+                    typedef __PTRDIFF_TYPE__ ptrdiff_t;\n\
                     ",
                 )
                 .unwrap();
@@ -1132,7 +1233,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 fs::write(
                     headers_dir.join("include/stddef.h"),
                     "\
-                    typedef long unsigned int size_t;\n\
+                    typedef __SIZE_TYPE__ size_t;\n\
                     ",
                 )
                 .unwrap();
@@ -1337,8 +1438,8 @@ fn musl_arch(target: &TargetSpec) -> &'static str {
     match target.arch {
         aarch64 => "aarch64",
         arm => "arm",
-        x86 => "i386",
         hexagon => "hexagon",
+        x86 => "i386",
         loongarch64 => "loongarch64",
         m68k => "m68k",
         mips | mips32r6 => "mips",
@@ -1370,6 +1471,14 @@ fn uclibc_arch(target: &TargetSpec) -> &'static str {
         sparc64 => "sparc64",
         x86_64 => "x86_64",
         xtensa => "xtensa",
+        _ => todo!("{target:?}"),
+    }
+}
+fn l4re_arch(target: &TargetSpec) -> &'static str {
+    // https://os.inf.tu-dresden.de/download/snapshots/toolchain/
+    match target.arch {
+        aarch64 => "arm64",
+        x86_64 => "x86_64",
         _ => todo!("{target:?}"),
     }
 }

@@ -376,6 +376,26 @@ pub use armv5te_linux_uclibceabi::*;
 #[cfg(
     all(
         target_arch = "aarch64",
+        target_os = "l4re",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod aarch64_l4re_uclibc;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "l4re",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use aarch64_l4re_uclibc::*;
+#[cfg(
+    all(
+        target_arch = "aarch64",
         target_os = "android",
         target_endian = "little",
         target_pointer_width = "64"
