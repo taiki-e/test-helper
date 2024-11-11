@@ -577,7 +577,6 @@ pub use aarch64_freebsd::*;
     all(
         target_arch = "arm",
         target_os = "freebsd",
-        target_env = "gnu",
         target_endian = "little",
         target_pointer_width = "32"
     )
@@ -587,7 +586,6 @@ mod armv6_freebsd;
     all(
         target_arch = "arm",
         target_os = "freebsd",
-        target_env = "gnu",
         target_endian = "little",
         target_pointer_width = "32"
     )
