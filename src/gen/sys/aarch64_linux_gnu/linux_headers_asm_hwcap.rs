@@ -37,6 +37,7 @@ pub const HWCAP_SSBS: u32 = 268435456;
 pub const HWCAP_SB: u32 = 536870912;
 pub const HWCAP_PACA: u32 = 1073741824;
 pub const HWCAP_PACG: u32 = 2147483648;
+pub const HWCAP_GCS: u64 = 4294967296;
 pub const HWCAP2_DCPODP: u32 = 1;
 pub const HWCAP2_SVE2: u32 = 2;
 pub const HWCAP2_SVEAES: u32 = 4;
