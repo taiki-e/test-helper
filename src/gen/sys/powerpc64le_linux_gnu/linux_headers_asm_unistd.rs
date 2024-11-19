@@ -420,3 +420,7 @@ pub const __NR_lsm_get_self_attr: u32 = 459;
 pub const __NR_lsm_set_self_attr: u32 = 460;
 pub const __NR_lsm_list_modules: u32 = 461;
 pub const __NR_mseal: u32 = 462;
+pub const __NR_setxattrat: u32 = 463;
+pub const __NR_getxattrat: u32 = 464;
+pub const __NR_listxattrat: u32 = 465;
+pub const __NR_removexattrat: u32 = 466;
