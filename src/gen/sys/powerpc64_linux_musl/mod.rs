@@ -638,6 +638,8 @@ pub use linux_headers_linux_prctl::PR_MTE_TCF_MASK;
 pub use linux_headers_linux_prctl::PR_MTE_TAG_SHIFT;
 pub use linux_headers_linux_prctl::PR_MTE_TAG_MASK;
 pub use linux_headers_linux_prctl::PR_MTE_TCF_SHIFT;
+pub use linux_headers_linux_prctl::PR_PMLEN_SHIFT;
+pub use linux_headers_linux_prctl::PR_PMLEN_MASK;
 pub use linux_headers_linux_prctl::PR_SET_IO_FLUSHER;
 pub use linux_headers_linux_prctl::PR_GET_IO_FLUSHER;
 pub use linux_headers_linux_prctl::PR_SET_SYSCALL_USER_DISPATCH;
