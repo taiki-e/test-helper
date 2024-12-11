@@ -1476,6 +1476,7 @@ fn uclibc_arch(target: &TargetSpec) -> &'static str {
 }
 fn l4re_arch(target: &TargetSpec) -> &'static str {
     // https://os.inf.tu-dresden.de/download/snapshots/toolchain/
+    // https://github.com/kernkonzept/l4re-core/tree/HEAD/l4sys/include
     match target.arch {
         aarch64 => "arm64",
         x86_64 => "x86_64",
