@@ -435,4 +435,5 @@ pub const SYS_timerfd_settime: u32 = 587;
 pub const SYS_kcmp: u32 = 588;
 pub const SYS_getrlimitusage: u32 = 589;
 pub const SYS_fchroot: u32 = 590;
-pub const SYS_MAXSYSCALL: u32 = 591;
+pub const SYS_setcred: u32 = 591;
+pub const SYS_MAXSYSCALL: u32 = 592;
