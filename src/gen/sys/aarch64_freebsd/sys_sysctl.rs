@@ -5,6 +5,49 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
+pub const CTL_MAXNAME: u32 = 24;
+pub const CTL_SYSCTL: u32 = 0;
 pub const CTL_KERN: u32 = 1;
+pub const CTL_HW: u32 = 6;
+pub const CTL_MACHDEP: u32 = 7;
+pub const CTL_SYSCTL_DEBUG: u32 = 0;
+pub const CTL_SYSCTL_NAME: u32 = 1;
+pub const CTL_SYSCTL_NEXT: u32 = 2;
+pub const CTL_SYSCTL_NAME2OID: u32 = 3;
+pub const CTL_SYSCTL_OIDFMT: u32 = 4;
+pub const CTL_SYSCTL_OIDDESCR: u32 = 5;
+pub const CTL_SYSCTL_OIDLABEL: u32 = 6;
+pub const CTL_SYSCTL_NEXTNOSKIP: u32 = 7;
 pub const KERN_PROC: u32 = 14;
 pub const KERN_PROC_AUXV: u32 = 36;
+pub const HW_MACHINE: u32 = 1;
+pub const HW_MODEL: u32 = 2;
+pub const HW_NCPU: u32 = 3;
+pub const HW_BYTEORDER: u32 = 4;
+pub const HW_PHYSMEM: u32 = 5;
+pub const HW_USERMEM: u32 = 6;
+pub const HW_PAGESIZE: u32 = 7;
+pub const HW_DISKNAMES: u32 = 8;
+pub const HW_DISKSTATS: u32 = 9;
+pub const HW_FLOATINGPT: u32 = 10;
+pub const HW_MACHINE_ARCH: u32 = 11;
+pub const HW_REALMEM: u32 = 12;
+extern "C" {
+    pub fn sysctl(
+        arg1: *const ::std::os::raw::c_int,
+        arg2: ::std::os::raw::c_uint,
+        arg3: *mut ::core::ffi::c_void,
+        arg4: *mut usize,
+        arg5: *const ::core::ffi::c_void,
+        arg6: usize,
+    ) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn sysctlbyname(
+        arg1: *const ::std::os::raw::c_char,
+        arg2: *mut ::core::ffi::c_void,
+        arg3: *mut usize,
+        arg4: *const ::core::ffi::c_void,
+        arg5: usize,
+    ) -> ::std::os::raw::c_int;
+}

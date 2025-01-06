@@ -6,7 +6,41 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
 pub type u_int = ::std::os::raw::c_uint;
+pub const CTL_HW: u32 = 6;
 pub const CTL_MACHDEP: u32 = 7;
+pub const HW_MACHINE: u32 = 1;
+pub const HW_MODEL: u32 = 2;
+pub const HW_NCPU: u32 = 3;
+pub const HW_BYTEORDER: u32 = 4;
+pub const HW_PHYSMEM: u32 = 5;
+pub const HW_USERMEM: u32 = 6;
+pub const HW_PAGESIZE: u32 = 7;
+pub const HW_DISKNAMES: u32 = 8;
+pub const HW_DISKSTATS: u32 = 9;
+pub const HW_DISKCOUNT: u32 = 10;
+pub const HW_SENSORS: u32 = 11;
+pub const HW_CPUSPEED: u32 = 12;
+pub const HW_SETPERF: u32 = 13;
+pub const HW_VENDOR: u32 = 14;
+pub const HW_PRODUCT: u32 = 15;
+pub const HW_VERSION: u32 = 16;
+pub const HW_SERIALNO: u32 = 17;
+pub const HW_UUID: u32 = 18;
+pub const HW_PHYSMEM64: u32 = 19;
+pub const HW_USERMEM64: u32 = 20;
+pub const HW_NCPUFOUND: u32 = 21;
+pub const HW_ALLOWPOWERDOWN: u32 = 22;
+pub const HW_PERFPOLICY: u32 = 23;
+pub const HW_SMT: u32 = 24;
+pub const HW_NCPUONLINE: u32 = 25;
+pub const HW_POWER: u32 = 26;
+pub const HW_BATTERY: u32 = 27;
+pub const HW_UCOMNAMES: u32 = 28;
+pub const HW_MAXID: u32 = 30;
+pub const HW_BATTERY_CHARGEMODE: u32 = 1;
+pub const HW_BATTERY_CHARGESTART: u32 = 2;
+pub const HW_BATTERY_CHARGESTOP: u32 = 3;
+pub const HW_BATTERY_MAXID: u32 = 4;
 extern "C" {
     pub fn sysctl(
         arg1: *const ::std::os::raw::c_int,
