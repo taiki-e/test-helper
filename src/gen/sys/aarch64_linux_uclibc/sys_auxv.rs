@@ -5,6 +5,12 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
+pub const HWCAP_SPARC_FLUSH: u32 = 1;
+pub const HWCAP_SPARC_STBAR: u32 = 2;
+pub const HWCAP_SPARC_SWAP: u32 = 4;
+pub const HWCAP_SPARC_MULDIV: u32 = 8;
+pub const HWCAP_SPARC_V9: u32 = 16;
+pub const HWCAP_SPARC_ULTRA3: u32 = 32;
 extern "C" {
     pub fn getauxval(__type: ::std::os::raw::c_ulong) -> ::std::os::raw::c_ulong;
 }

@@ -11,7 +11,9 @@ dlfcn
 dlsym
 evbmips
 getauxval
+getcpu
 getisax
+getpid
 HWCAP
 hwprobe
 libpthread
@@ -23,7 +25,10 @@ machdep
 macppc
 MAXNAME
 mbig
+membarrier
 mipsn
+muslx
+NAMELEN
 nostdinc
 octeon
 osfmk
@@ -40,6 +45,7 @@ syscall
 sysctlbyname
 sysctlnode
 uapi
+uclibcabiv
 unistd
 unparse
 uscat

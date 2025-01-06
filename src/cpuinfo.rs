@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-#![cfg(any(target_arch = "aarch64", target_arch = "arm64ec", target_arch = "powerpc64"))]
+#![cfg(any(
+    target_arch = "aarch64",
+    target_arch = "arm",
+    target_arch = "arm64ec",
+    target_arch = "powerpc",
+    target_arch = "powerpc64",
+))]
 
 use std::{boxed::Box, path::Path, vec::Vec};
 
@@ -25,7 +31,7 @@ pub struct ProcCpuinfo {
     pub rcpc3: Option<bool>,
     pub lse128: Option<bool>,
 }
-#[cfg(target_arch = "powerpc64")]
+#[cfg(any(target_arch = "powerpc", target_arch = "powerpc64"))]
 #[derive(Debug, Clone, Copy)]
 pub struct ProcCpuinfo {
     pub power8: bool,
@@ -142,7 +148,7 @@ impl ProcCpuinfo {
             Err("unsupported OS".into())
         }
     }
-    #[cfg(target_arch = "powerpc64")]
+    #[cfg(any(target_arch = "powerpc", target_arch = "powerpc64"))]
     pub fn new() -> Result<Self> {
         if cfg!(any(target_os = "linux", target_os = "android", target_os = "netbsd")) {
             let text = fs::read_to_string("/proc/cpuinfo")?;
