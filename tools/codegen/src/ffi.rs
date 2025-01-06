@@ -526,7 +526,7 @@ pub(crate) fn gen() {
                     #[cfg(all(#cfg))]
                     mod #module_name;
                     #[cfg(all(#cfg))]
-                    pub use #module_name::*;
+                    pub use self::#module_name::*;
                 });
             }
             fs::create_dir_all(out_dir).unwrap();
@@ -750,7 +750,7 @@ pub(crate) fn gen() {
                 let uses = uses.iter();
                 modules.push(quote! {
                     mod #module_name;
-                    #(pub use #module_name::#uses;)*
+                    #(pub use self::#module_name::#uses;)*
                 });
             }
             // e.g., clang -E -dM -x c /dev/null -target aarch64-unknown-linux-gnu | grep -F __CHAR_

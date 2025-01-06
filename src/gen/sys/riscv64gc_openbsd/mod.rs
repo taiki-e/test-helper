@@ -5,20 +5,20 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 mod dlfcn;
-pub use dlfcn::RTLD_DEFAULT;
-pub use dlfcn::dlsym;
+pub use self::dlfcn::RTLD_DEFAULT;
+pub use self::dlfcn::dlsym;
 mod sys_auxv;
-pub use sys_auxv::AT_NULL;
-pub use sys_auxv::AT_IGNORE;
-pub use sys_auxv::AT_PAGESZ;
-pub use sys_auxv::AT_HWCAP;
-pub use sys_auxv::AT_HWCAP2;
-pub use sys_auxv::AT_COUNT;
-pub use sys_auxv::elf_aux_info;
+pub use self::sys_auxv::AT_NULL;
+pub use self::sys_auxv::AT_IGNORE;
+pub use self::sys_auxv::AT_PAGESZ;
+pub use self::sys_auxv::AT_HWCAP;
+pub use self::sys_auxv::AT_HWCAP2;
+pub use self::sys_auxv::AT_COUNT;
+pub use self::sys_auxv::elf_aux_info;
 mod sys_sysctl;
-pub use sys_sysctl::CTL_MACHDEP;
-pub use sys_sysctl::sysctl;
+pub use self::sys_sysctl::CTL_MACHDEP;
+pub use self::sys_sysctl::sysctl;
 mod machine_cpu;
-pub use machine_cpu::CPU_COMPATIBLE;
-pub use machine_cpu::CPU_MAXID;
+pub use self::machine_cpu::CPU_COMPATIBLE;
+pub use self::machine_cpu::CPU_MAXID;
 pub type c_char = u8;
