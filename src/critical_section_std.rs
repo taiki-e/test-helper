@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 // Based on https://github.com/rust-embedded/critical-section/blob/v1.1.1/src/std.rs,
-// but don't use `static mut` and compatible with Rust 1.56 that we run tests.
+// but don't use `static mut`, compatible with Rust 1.56 that we run tests,
+// and includes a fix for https://github.com/rust-embedded/critical-section/pull/46.
 
 #![allow(clippy::no_mangle_with_rust_abi)] // critical_section::set_impl uses #[no_mangle] with extern "Rust" function
 
@@ -66,7 +67,7 @@ unsafe impl critical_section::Impl for StdCriticalSection {
             // SAFETY: As per the acquire/release safety contract, release can only be called
             // if the critical section is acquired in the current thread,
             // in which case we know the GLOBAL_GUARD is initialized.
-            GLOBAL_GUARD.get().cast::<MutexGuard<'static, ()>>().drop_in_place();
+            drop(GLOBAL_GUARD.get().cast::<MutexGuard<'static, ()>>().read());
 
             // Note: it is fine to clear this flag *after* releasing the mutex because it's thread local.
             // No other thread can see its value, there's no potential for races.
