@@ -18,5 +18,5 @@ mod ffi;
 
 fn main() {
     #[cfg(unix)]
-    ffi::gen();
+    ffi::generate();
 }

@@ -484,7 +484,7 @@ struct Header {
     env: &'static [Env],
 }
 
-pub(crate) fn gen() {
+pub(crate) fn generate() {
     if !cfg!(all(target_os = "linux", target_arch = "x86_64")) {
         eprintln!("warning: codegen is only fully supported on x86_64 Linux");
         // TODO
