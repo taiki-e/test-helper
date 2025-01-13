@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 #![no_std]
+#![warn(unsafe_op_in_unsafe_fn)]
 #![allow(
     clippy::missing_panics_doc,
     clippy::new_without_default,
