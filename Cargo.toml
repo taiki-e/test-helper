@@ -2,7 +2,7 @@
 name = "test-helper"
 version = "0.0.0"
 edition = "2018"
-rust-version = "1.56"
+rust-version = "1.54" # For critical-section
 publish = false
 
 [features]
