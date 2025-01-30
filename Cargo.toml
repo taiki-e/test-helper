@@ -7,8 +7,10 @@ publish = false
 
 [features]
 std = []
-sys = ["std"]
+
+cli = ["std"]
 cpuinfo = ["std", "fs-err"]
+sys = ["std"]
 
 [dependencies]
 critical-section = { version = "1", optional = true, features = ["restore-state-bool"] }

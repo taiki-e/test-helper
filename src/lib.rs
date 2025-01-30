@@ -11,6 +11,8 @@
 #[cfg(feature = "std")]
 extern crate std;
 
+#[cfg(feature = "cli")]
+pub mod cli;
 #[cfg(feature = "cpuinfo")]
 pub mod cpuinfo;
 #[cfg(feature = "std")]
