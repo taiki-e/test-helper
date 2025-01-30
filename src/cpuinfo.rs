@@ -2,7 +2,7 @@
 
 #![cfg(any(target_arch = "aarch64", target_arch = "arm64ec", target_arch = "powerpc64"))]
 
-use std::{boxed::Box, path::Path, vec::Vec};
+use std::{boxed::Box, eprintln, path::Path, vec::Vec};
 
 use fs_err as fs;
 
@@ -35,21 +35,22 @@ pub struct ProcCpuinfo {
 impl ProcCpuinfo {
     #[cfg(any(target_arch = "aarch64", target_arch = "arm64ec"))]
     pub fn new() -> Result<Self> {
-        use std::process::Command;
+        use std::{format, process::Command};
         if cfg!(any(target_os = "linux", target_os = "android", target_os = "netbsd")) {
             let text = fs::read_to_string("/proc/cpuinfo")?;
+            // On qemu-user, there is no 'Features' section because the host's /proc/cpuinfo will be referred to.
+            // TODO: check whether a runner is set instead.
             let features = text
-                    .lines()
-                    // On qemu-user, there is no 'Features' section because the host's /proc/cpuinfo will be referred to.
-                    // TODO: check whether a runner is set instead.
-                    .find_map(|line| line.strip_prefix("Features")).ok_or("no 'Features' section in /proc/cpuinfo")?
-                    .split_once(':')
-                    .unwrap()
-                    .1
-                    .split(' ')
-                    .map(str::trim)
-                    .collect::<Vec<_>>();
-            std::eprintln!("Features={:?}", features);
+                .lines()
+                .find_map(|line| line.strip_prefix("Features"))
+                .ok_or("no 'Features' section in /proc/cpuinfo")?
+                .split_once(':')
+                .unwrap()
+                .1
+                .split(' ')
+                .map(str::trim)
+                .collect::<Vec<_>>();
+            eprintln!("Features={:?}", features);
             Ok(Self {
                 lse: features.contains(&"atomics"),
                 lse2: Some(features.contains(&"uscat")),
@@ -86,8 +87,8 @@ impl ProcCpuinfo {
                 .unwrap()
                 .split(',')
                 .collect::<Vec<_>>();
-            std::eprintln!("Instruction Set Attributes 0={:?}", isa0);
-            std::eprintln!("Memory Model Features 2={:?}", mmf2);
+            eprintln!("Instruction Set Attributes 0={:?}", isa0);
+            eprintln!("Memory Model Features 2={:?}", mmf2);
             Ok(Self {
                 lse: isa0.contains(&"Atomic"),
                 lse2: Some(mmf2.contains(&"AT")),
@@ -105,7 +106,7 @@ impl ProcCpuinfo {
                 .trim()
                 .split(',')
                 .collect::<Vec<_>>();
-            std::eprintln!("Features={:?}", features);
+            eprintln!("Features={:?}", features);
             Ok(Self {
                 lse: features.contains(&"Atomic"),
                 // /var/run/dmesg.boot on OpenBSD doesn't have field for lse2
@@ -118,11 +119,11 @@ impl ProcCpuinfo {
             let output = Command::new("sysctl").arg("hw.optional").output()?;
             assert!(output.status.success());
             let stdout = std::str::from_utf8(&output.stdout)?.trim();
-            std::eprintln!("{}", stdout);
+            eprintln!("{}", stdout);
             let sysctl = |name| {
                 stdout
                     .lines()
-                    .find_map(|s| s.strip_prefix(&std::format!("{}: ", name)))
+                    .find_map(|s| s.strip_prefix(&format!("{}: ", name)))
                     .unwrap_or("0")
                     .parse::<u32>()
                     .unwrap()
@@ -146,18 +147,19 @@ impl ProcCpuinfo {
     pub fn new() -> Result<Self> {
         if cfg!(any(target_os = "linux", target_os = "android", target_os = "netbsd")) {
             let text = fs::read_to_string("/proc/cpuinfo")?;
+            // On qemu-user, there is no 'cpu' section because the host's /proc/cpuinfo will be referred to.
+            // TODO: check whether a runner is set instead.
             let cpu = text
-                    .lines()
-                    // On qemu-user, there is no 'cpu' section because the host's /proc/cpuinfo will be referred to.
-                    // TODO: check whether a runner is set instead.
-                    .find_map(|line| line.strip_prefix("cpu")).ok_or("no 'cpu' section in /proc/cpuinfo")?
-                    .splitn(2, ':')
-                    .nth(1)
-                    .unwrap()
-                    .split(' ')
-                    .map(str::trim)
-                    .collect::<Vec<_>>();
-            std::eprintln!("cpu={:?}", cpu);
+                .lines()
+                .find_map(|line| line.strip_prefix("cpu"))
+                .ok_or("no 'cpu' section in /proc/cpuinfo")?
+                .splitn(2, ':')
+                .nth(1)
+                .unwrap()
+                .split(' ')
+                .map(str::trim)
+                .collect::<Vec<_>>();
+            eprintln!("cpu={:?}", cpu);
             let v = cpu.iter().find(|v| v.starts_with("POWER")).ok_or("cpu is not POWER")?;
             let power10 = v.starts_with("POWER10");
             let power9 = power10 || v.starts_with("POWER9");
@@ -179,7 +181,7 @@ impl ProcCpuinfo {
                 .unwrap()
                 .split(',')
                 .collect::<Vec<_>>();
-            std::eprintln!("features2={:?}", features2);
+            eprintln!("features2={:?}", features2);
             Ok(Self {
                 power8: features2.contains(&"ARCH207"),
                 power9: features2.contains(&"ARCH300"),
