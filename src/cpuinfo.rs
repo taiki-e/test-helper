@@ -153,9 +153,9 @@ impl ProcCpuinfo {
                 .lines()
                 .find_map(|line| line.strip_prefix("cpu"))
                 .ok_or("no 'cpu' section in /proc/cpuinfo")?
-                .splitn(2, ':')
-                .nth(1)
+                .split_once(':')
                 .unwrap()
+                .1
                 .split(' ')
                 .map(str::trim)
                 .collect::<Vec<_>>();
@@ -173,9 +173,9 @@ impl ProcCpuinfo {
                     line.split(|c: char| c.is_ascii_whitespace()).any(|f| f == "Features2")
                 })
                 .ok_or("no 'cpuN: Features2' section in /var/run/dmesg.boot")?
-                .splitn(2, '<')
-                .nth(1)
+                .split_once('<')
                 .unwrap()
+                .1
                 .trim()
                 .strip_suffix('>')
                 .unwrap()
