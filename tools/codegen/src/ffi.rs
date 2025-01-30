@@ -776,6 +776,8 @@ pub(crate) fn generate() {
             non_camel_case_types,
             non_upper_case_globals,
             unreachable_pub,
+            unknown_lints,
+            unnameable_types, // unnameable_types is available on Rust 1.79+
             clippy::cast_sign_loss,
             clippy::pub_underscore_fields,
             clippy::unnecessary_cast,
@@ -933,7 +935,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 _ => src_dir.to_owned(),
             };
             cmd!("patch", "-p1")
-                .stdin_file(fs::File::open(path).unwrap().into_parts().0)
+                .stdin_file(fs::File::open(path).unwrap().into_parts().0) // TODO: Buffering?
                 .dir(dir)
                 .run()
                 .unwrap();
