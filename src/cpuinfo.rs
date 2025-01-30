@@ -100,7 +100,7 @@ impl ProcCpuinfo {
             let features = text
                 .lines()
                 .filter_map(|line| line.strip_prefix("cpu0: "))
-                .last()
+                .next_back()
                 .ok_or("no 'cpu0' section in /var/run/dmesg.boot")?
                 .trim()
                 .split(',')
