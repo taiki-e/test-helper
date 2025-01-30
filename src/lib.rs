@@ -15,8 +15,7 @@ extern crate std;
 pub mod cli;
 #[cfg(feature = "cpuinfo")]
 pub mod cpuinfo;
-#[cfg(feature = "std")]
-#[cfg(feature = "critical-section")]
+#[cfg(feature = "critical-section-std")]
 mod critical_section_std;
 #[cfg(feature = "std")]
 pub mod once_lock;
