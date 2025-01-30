@@ -165,7 +165,7 @@ impl AssertOutput {
         }
         self
     }
-    /// Receives a line(`\n`)-separated list of patterns and asserts whether stdout contains each pattern.
+    /// Receives a line(`\n`)-separated list of patterns and asserts whether stderr contains each pattern.
     #[track_caller]
     pub fn stderr_not_contains(&self, pats: impl AsRef<str>) -> &Self {
         for pat in line_separated(pats.as_ref()) {

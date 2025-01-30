@@ -17,6 +17,8 @@ pub mod cli;
 pub mod cpuinfo;
 #[cfg(feature = "critical-section-std")]
 mod critical_section_std;
+#[cfg(feature = "git")]
+pub mod git;
 #[cfg(feature = "std")]
 pub mod once_lock;
 #[cfg(feature = "sys")]
