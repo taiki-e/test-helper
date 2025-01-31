@@ -11,6 +11,7 @@ std = []
 cli = ["std"]
 cpuinfo = ["std", "fs-err"]
 critical-section-std = ["std", "critical-section"]
+doc = ["std", "fs-err", "git"]
 git = ["std", "fs-err"]
 sys = ["std"]
 
