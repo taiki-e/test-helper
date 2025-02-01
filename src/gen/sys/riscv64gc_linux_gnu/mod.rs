@@ -84,6 +84,7 @@ pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_VECTOR_UNKNOWN
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_VECTOR_SLOW;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_VECTOR_FAST;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_VECTOR_UNSUPPORTED;
+pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_WHICH_CPUS;
 mod linux_headers_asm_unistd;
 pub use self::linux_headers_asm_unistd::__NR_io_setup;
