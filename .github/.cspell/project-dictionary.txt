@@ -19,7 +19,6 @@ linaro
 loongson
 lrcpc
 mabi
-machdep
 macppc
 MAXNAME
 mbig
@@ -41,5 +40,4 @@ sysctlbyname
 sysctlnode
 uapi
 unistd
-unparse
 uscat
