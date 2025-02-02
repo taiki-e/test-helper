@@ -353,7 +353,6 @@ pub const SYS_renameat: u32 = 501;
 pub const SYS_symlinkat: u32 = 502;
 pub const SYS_unlinkat: u32 = 503;
 pub const SYS_posix_openpt: u32 = 504;
-pub const SYS_gssd_syscall: u32 = 505;
 pub const SYS_jail_get: u32 = 506;
 pub const SYS_jail_set: u32 = 507;
 pub const SYS_jail_remove: u32 = 508;
