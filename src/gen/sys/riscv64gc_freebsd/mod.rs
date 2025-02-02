@@ -358,7 +358,6 @@ pub use self::sys_syscall::SYS_renameat;
 pub use self::sys_syscall::SYS_symlinkat;
 pub use self::sys_syscall::SYS_unlinkat;
 pub use self::sys_syscall::SYS_posix_openpt;
-pub use self::sys_syscall::SYS_gssd_syscall;
 pub use self::sys_syscall::SYS_jail_get;
 pub use self::sys_syscall::SYS_jail_set;
 pub use self::sys_syscall::SYS_jail_remove;
