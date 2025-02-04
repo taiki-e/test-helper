@@ -13,6 +13,8 @@ extern crate std;
 
 #[cfg(feature = "cli")]
 pub mod cli;
+#[cfg(feature = "codegen")]
+pub mod codegen;
 #[cfg(feature = "cpuinfo")]
 pub mod cpuinfo;
 #[cfg(feature = "critical-section-std")]

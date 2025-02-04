@@ -1,6 +1,6 @@
 # Test helper
 
-This repository contains some helpers used on tests in projects managed by @taiki-e.
+This repository contains some helpers used by tests and internal tools in projects managed by @taiki-e.
 Originally extracted from test-helper from portable-atomic repository.
 
 There are no stability guarantees for these helpers, since they're
