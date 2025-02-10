@@ -753,6 +753,14 @@ pub(crate) fn generate() {
                 if !header.env.is_empty() && !header.env.contains(&target.env) {
                     continue;
                 }
+                // if target.os == linux
+                //     && target.env == gnu
+                //     && matches!(target.arch, csky | loongarch64)
+                //     && matches!(header.path, "dlfcn.h" | "sched.h" | "sys/prctl.h" | "sys/rseq.h")
+                // {
+                //     // TODO: glibc
+                //     continue;
+                // }
                 if target.os == linux
                     && target.env == gnu
                     && target.arch == aarch64
@@ -821,11 +829,22 @@ pub(crate) fn generate() {
                             ];
                         } else {
                             let headers_dir = libc_headers_dir(target, src_dir);
+                            // if target.env == gnu && !headers_dir.exists() {
+                            //     let glibc_dir = glibc_dir(target, src_dir);
+                            //     header_path = glibc_dir.join("include").join(header.path);
+                            //     include = vec![
+                            //         glibc_dir.join("include"),
+                            //         glibc_dir.join("sysdeps").join(glibc_arch(target)),
+                            //         glibc_dir,
+                            //         linux_headers_dir.join("include"),
+                            //     ];
+                            // } else {
                             header_path = headers_dir.join("include").join(header.path);
                             include = vec![
                                 headers_dir.join("include"),
                                 linux_headers_dir.join("include"),
                             ];
+                            // }
                         }
                         define!(_GNU_SOURCE);
                     }
@@ -1083,6 +1102,32 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         cmd!("git", "checkout", ".").dir(&src_dir).stderr_capture().run().unwrap();
         src_dir
     }
+    // #[track_caller]
+    // fn curl(download_dir: &Utf8Path, name: &str, url: &str, paths: &str) -> Utf8PathBuf {
+    //     let src_dir = download_dir.join(name);
+    //     if src_dir.exists() {
+    //         return src_dir;
+    //     }
+    //     let file = &download_dir.join(Utf8Path::new(url).file_name().unwrap());
+    //     cmd!(
+    //         "curl",
+    //         "--proto",
+    //         "=https",
+    //         "--tlsv1.2",
+    //         "-fsSL",
+    //         "--retry",
+    //         "10",
+    //         "--retry-connrefused",
+    //         url,
+    //         "-o",
+    //         file
+    //     )
+    //     .run()
+    //     .unwrap();
+    //     fs::create_dir_all(&src_dir).unwrap();
+    //     cmd!("tar", "xf", file, "-C", &src_dir, paths).run().unwrap();
+    //     src_dir
+    // }
     #[track_caller]
     fn curl(
         download_dir: &Utf8Path,
@@ -1334,6 +1379,69 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                             ),
                         }
                     }
+                    // } else {
+                    //     panic!("{} not found", cc);
+                    // eprintln!("warning: {cc} not found");
+                    // let glibc_arch = glibc_arch(target);
+                    // let sysdeps_dir = &glibc_src_dir.join("sysdeps");
+                    // let sysdeps_arch_dir = &sysdeps_dir.join(glibc_arch);
+                    // match target.arch {
+                    //     s390x => {
+                    //         let file = "bits/hwcap.h";
+                    //         let src = sysdeps_dir.join("unix/sysv/linux/s390").join(file);
+                    //         let dst = sysdeps_arch_dir.join(file);
+                    //         symlink(src, dst).unwrap();
+                    //     }
+                    //     _ => {}
+                    // }
+                    // let mut parent_arch = glibc_arch;
+                    // let mut sources = vec![];
+                    // while let Some((p, _)) = parent_arch.rsplit_once('/') {
+                    //     parent_arch = p;
+                    //     sources.push(sysdeps_dir.join(parent_arch));
+                    // }
+                    // match &*target.target_pointer_width {
+                    //     // TODO: check
+                    //     "64" => sources.push(sysdeps_dir.join("wordsize-64")),
+                    //     "32" => sources.push(sysdeps_dir.join("wordsize-32")),
+                    //     _ => todo!("{target:?}"),
+                    // }
+                    // sources.push(sysdeps_dir.join("generic"));
+                    // for src in &sources {
+                    //     for e in fs::read_dir(src).unwrap().filter_map(Result::ok) {
+                    //         let src = &e.path();
+                    //         if src.is_dir() {
+                    //             let dir = src.file_name().unwrap().to_str().unwrap();
+                    //             let dst_dir = &sysdeps_arch_dir.join(dir);
+                    //             for e in fs::read_dir(src).unwrap().filter_map(Result::ok) {
+                    //                 let src = &e.path();
+                    //                 if src.extension() != Some(OsStr::new("h")) {
+                    //                     continue;
+                    //                 }
+                    //                 let file = src.file_name().unwrap().to_str().unwrap();
+                    //                 if !dst_dir.exists() {
+                    //                     fs::create_dir_all(dst_dir).unwrap();
+                    //                 }
+                    //                 let dst = dst_dir.join(file);
+                    //                 if !dst.exists() {
+                    //                     symlink(src, dst).unwrap();
+                    //                 }
+                    //             }
+                    //             continue;
+                    //         }
+                    //         if src.extension() != Some(OsStr::new("h")) {
+                    //             continue;
+                    //         }
+                    //         let file = src.file_name().unwrap().to_str().unwrap();
+                    //         let dst = sysdeps_arch_dir.join(file);
+                    //         if !dst.exists() {
+                    //             symlink(src, dst).unwrap();
+                    //         }
+                    //     }
+                    // }
+                    // patch(target, &src_dir);
+                    // headers_dir = glibc_src_dir;
+                    // }
                     // https://github.com/bminor/glibc/blob/HEAD/INSTALL
                     let build_dir = &glibc_src_dir.parent().unwrap().join("glibc-build");
                     if build_dir.exists() {
@@ -1472,6 +1580,37 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         freebsd => {
             src_dir = clone(download_dir, "freebsd/freebsd-src", None, &["/include/", "/sys/"]);
             // TODO: use https://github.com/freebsd/freebsd-src/blob/HEAD/Makefile?
+            // static FREEBSD_HEADERS_INSTALLED: Mutex<BTreeSet<&'static str>> =
+            //     Mutex::new(BTreeSet::new());
+            // // https://github.com/freebsd/freebsd-src/tree/HEAD/sys
+            // let (machine, machine_arch) = match target.arch {
+            //     aarch64 => ("arm64", "aarch64"),
+            //     _ => todo!("{target:?}"),
+            // };
+            // if FREEBSD_HEADERS_INSTALLED.lock().unwrap().insert(machine) {
+            //     let freebsd_headers_dir = &freebsd_headers_dir(target, src_dir);
+            //     if freebsd_headers_dir.exists() {
+            //         fs::remove_dir_all(freebsd_headers_dir)?;
+            //     }
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile.cross
+            //     // TODO: missing separator.
+            //     // let makefile = &src_dir.join("include").join("rpcsvc/Makefile");
+            //     // fs::write(makefile, fs::read_to_string(makefile)?.replace("    ", "\t"))?;
+            //     // https://github.com/freebsd/freebsd-src/blob/HEAD/include/Makefile
+            //     cmd!(
+            //         "bsdmake",
+            //         "installincludes",
+            //         format!("MACHINE={machine}"),
+            //         format!("MACHINE_ARCH={machine_arch}"),
+            //         format!("DESTDIR={freebsd_headers_dir}")
+            //     )
+            //     .env("MACHINE", machine)
+            //     .env("MACHINE_ARCH", machine_arch)
+            //     .env("DESTDIR", freebsd_headers_dir)
+            //     .dir(src_dir.join("include"))
+            //     .run()?;
+            // }
             for path in ["sys"] {
                 symlink(src_dir.join("sys").join(path), src_dir.join("include").join(path))
                     .unwrap();
@@ -1543,6 +1682,25 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         openbsd => {
             src_dir = clone(download_dir, "openbsd/src", None, &["/include/", "/sys/"]);
             // TODO: use https://github.com/openbsd/src/blob/HEAD/Makefile?
+            // static OPENBSD_HEADERS_INSTALLED: Mutex<BTreeSet<&'static str>> =
+            //     Mutex::new(BTreeSet::new());
+            // if OPENBSD_HEADERS_INSTALLED.lock().unwrap().insert(arch) {
+            //     let openbsd_headers_dir = &openbsd_headers_dir(target, src_dir);
+            //     if openbsd_headers_dir.exists() {
+            //         fs::remove_dir_all(openbsd_headers_dir)?;
+            //     }
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile
+            //     // https://github.com/openbsd/src/blob/HEAD/Makefile.cross
+            //     cmd!(
+            //         "bsdmake",
+            //         "cross-includes",
+            //         format!("TARGET={arch}"),
+            //         format!("DESTDIR={openbsd_headers_dir}"),
+            //         "COMPILER_VERSION=clang",
+            //     )
+            //     .dir(src_dir)
+            //     .run()?;
+            // }
             for path in ["sys", "uvm"] {
                 symlink(src_dir.join("sys").join(path), src_dir.join("include").join(path))
                     .unwrap();
@@ -1570,6 +1728,19 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             }
             symlink(src_dir.join("include").join(arches[0]), src_dir.join("include/machine"))
                 .unwrap();
+            // TODO: alternative way
+            // let arch = openbsd_arch(target);
+            // let openbsd_snapshot_version = "7.3";
+            // curl(
+            //     download_dir,
+            //     &format!("headers/openbsd/{arch}"),
+            //     &format!(
+            //         "https://cdn.openbsd.org/pub/OpenBSD/snapshots/{arch}/comp{}.tgz",
+            //         openbsd_snapshot_version.replace('.', "")
+            //     ),
+            //     "./usr/include",
+            // )?
+            // .join("usr")
         }
         illumos => {
             if target.arch == aarch64 {
@@ -1623,6 +1794,12 @@ fn libc_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
 fn bionic_dir(src_dir: &Utf8Path) -> Utf8PathBuf {
     src_dir.join("../..").join(BIONIC_REPO)
 }
+// fn freebsd_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
+//     src_dir.join("../..").join("headers").join("freebsd").join(freebsd_arch(target))
+// }
+// fn openbsd_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
+//     src_dir.join("../..").join("headers").join("openbsd").join(openbsd_arch(target))
+// }
 
 fn linux_arch(target: &TargetSpec) -> &'static str {
     // https://github.com/torvalds/linux/tree/HEAD/arch
@@ -1643,6 +1820,29 @@ fn linux_arch(target: &TargetSpec) -> &'static str {
         _ => todo!("{target:?}"),
     }
 }
+// fn glibc_arch(target: &TargetSpec) -> &'static str {
+//     // https://github.com/bminor/glibc/tree/HEAD/sysdeps
+//     match target.arch {
+//         aarch64 => "aarch64",
+//         arm => "arm",
+//         csky => "csky",
+//         loongarch64 => "loongarch",
+//         m68k => "m68k/m680x0",
+//         mips | mips32r6 => "mips/mips32",
+//         mips64 | mips64r6 if target.target_pointer_width == "32" => "mips/mips64/n32",
+//         mips64 | mips64r6 if target.target_pointer_width == "64" => "mips/mips64/n64",
+//         powerpc => "powerpc/powerpc32",
+//         powerpc64 => "powerpc/powerpc64",
+//         riscv32 | riscv64 => "riscv",
+//         s390x => "s390/s390-64",
+//         sparc => "sparc/sparc32",
+//         sparc64 => "sparc/sparc64",
+//         x86 => "x86",
+//         x86_64 if target.target_pointer_width == "32" => "x86_64/x32",
+//         x86_64 if target.target_pointer_width == "64" => "x86_64/64",
+//         _ => todo!("{target:?}"),
+//     }
+// }
 fn musl_arch(target: &TargetSpec) -> &'static str {
     // https://github.com/bminor/musl/tree/HEAD/arch
     // https://github.com/quic/musl/tree/bcain/to-upstream
