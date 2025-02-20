@@ -60,4 +60,6 @@ pub use self::machine_elf::PPC_FEATURE2_HAS_IEEE128;
 pub use self::machine_elf::PPC_FEATURE2_DARN;
 pub use self::machine_elf::PPC_FEATURE2_SCV;
 pub use self::machine_elf::PPC_FEATURE2_HTM_NOSUSPEND;
+pub use self::machine_elf::PPC_FEATURE2_ARCH_3_1;
+pub use self::machine_elf::PPC_FEATURE2_MMA;
 pub type c_char = u8;
