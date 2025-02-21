@@ -24,8 +24,15 @@ pub fn assert_diff(expected_path: impl AsRef<Path>, actual: impl AsRef<[u8]>) {
     let expected = fs::read(expected_path).unwrap();
     if expected != actual {
         if env::var_os("CI").is_some() {
+            let color = if env::var_os("GITHUB_ACTIONS").is_some() {
+                &["-c", "color.ui=always"][..]
+            } else {
+                &[]
+            };
             let mut child = Command::new("git")
-                .args(["--no-pager", "diff", "--no-index", "--"])
+                .arg("--no-pager")
+                .args(color)
+                .args(["diff", "--no-index", "--"])
                 .arg(expected_path)
                 .arg("-")
                 .stdin(Stdio::piped())
