@@ -15,7 +15,6 @@ pub trait CommandExt {
     fn assert_failure(&mut self) -> AssertOutput;
 }
 impl CommandExt for Command {
-    #[must_use]
     #[track_caller]
     fn spawn_with_stdin(&mut self, stdin: impl AsRef<[u8]>) -> Child {
         let mut child = self
