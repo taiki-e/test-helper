@@ -138,6 +138,186 @@ mod armeb_linux_gnueabi;
 pub use self::armeb_linux_gnueabi::*;
 #[cfg(
     all(
+        target_arch = "loongarch64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod loongarch64_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "loongarch64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::loongarch64_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod mips_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mips_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod mips64_linux_gnuabi64;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::mips64_linux_gnuabi64::*;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod mips64el_linux_gnuabi64;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::mips64el_linux_gnuabi64::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod mipsel_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mipsel_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "mips32r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod mipsisa32r6_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "mips32r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mipsisa32r6_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "mips32r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod mipsisa32r6el_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "mips32r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mipsisa32r6el_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "mips64r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod mipsisa64r6_linux_gnuabi64;
+#[cfg(
+    all(
+        target_arch = "mips64r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::mipsisa64r6_linux_gnuabi64::*;
+#[cfg(
+    all(
+        target_arch = "mips64r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod mipsisa64r6el_linux_gnuabi64;
+#[cfg(
+    all(
+        target_arch = "mips64r6",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::mipsisa64r6el_linux_gnuabi64::*;
+#[cfg(
+    all(
         target_arch = "powerpc",
         target_os = "linux",
         target_env = "gnu",
@@ -278,6 +458,106 @@ mod armv5te_linux_musleabi;
 pub use self::armv5te_linux_musleabi::*;
 #[cfg(
     all(
+        target_arch = "loongarch64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod loongarch64_linux_musl;
+#[cfg(
+    all(
+        target_arch = "loongarch64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::loongarch64_linux_musl::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod mips_linux_musl;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mips_linux_musl::*;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod mips64_linux_muslabi64;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::mips64_linux_muslabi64::*;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod mips64el_linux_muslabi64;
+#[cfg(
+    all(
+        target_arch = "mips64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::mips64el_linux_muslabi64::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod mipsel_linux_musl;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mipsel_linux_musl::*;
+#[cfg(
+    all(
         target_arch = "powerpc",
         target_os = "linux",
         target_env = "musl",
@@ -416,6 +696,46 @@ mod armv5te_linux_uclibceabi;
     )
 )]
 pub use self::armv5te_linux_uclibceabi::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod mips_linux_uclibc;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mips_linux_uclibc::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod mipsel_linux_uclibc;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mipsel_linux_uclibc::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -760,6 +1080,24 @@ mod armv6_netbsd_eabihf;
     )
 )]
 pub use self::armv6_netbsd_eabihf::*;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod mipsel_netbsd;
+#[cfg(
+    all(
+        target_arch = "mips",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::mipsel_netbsd::*;
 #[cfg(
     all(
         target_arch = "powerpc",
