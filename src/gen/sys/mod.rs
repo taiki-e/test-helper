@@ -418,6 +418,26 @@ mod riscv64gc_linux_gnu;
 pub use self::riscv64gc_linux_gnu::*;
 #[cfg(
     all(
+        target_arch = "s390x",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod s390x_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "s390x",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::s390x_linux_gnu::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "linux",
         target_env = "musl",
@@ -656,6 +676,26 @@ mod riscv64gc_linux_musl;
     )
 )]
 pub use self::riscv64gc_linux_musl::*;
+#[cfg(
+    all(
+        target_arch = "s390x",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod s390x_linux_musl;
+#[cfg(
+    all(
+        target_arch = "s390x",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::s390x_linux_musl::*;
 #[cfg(
     all(
         target_arch = "aarch64",
