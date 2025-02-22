@@ -39,6 +39,15 @@ static TARGETS: &[Target] = &[
             "aarch64_be-unknown-linux-gnu_ilp32",
             "armv5te-unknown-linux-gnueabi",
             "armeb-unknown-linux-gnueabi", // TODO: v6
+            "loongarch64-unknown-linux-gnu",
+            "mips-unknown-linux-gnu",
+            "mips64-unknown-linux-gnuabi64",
+            "mips64el-unknown-linux-gnuabi64",
+            "mipsel-unknown-linux-gnu",
+            "mipsisa32r6-unknown-linux-gnu",
+            "mipsisa32r6el-unknown-linux-gnu",
+            "mipsisa64r6-unknown-linux-gnuabi64",
+            "mipsisa64r6el-unknown-linux-gnuabi64",
             "powerpc-unknown-linux-gnu",
             "powerpc64-unknown-linux-gnu",
             "powerpc64le-unknown-linux-gnu",
@@ -47,6 +56,15 @@ static TARGETS: &[Target] = &[
             // Linux (musl)
             "aarch64-unknown-linux-musl",
             "armv5te-unknown-linux-musleabi",
+            "loongarch64-unknown-linux-musl",
+            "mips-unknown-linux-musl",
+            "mips64-unknown-linux-muslabi64",
+            "mips64el-unknown-linux-muslabi64",
+            "mipsel-unknown-linux-musl",
+            // "mipsisa32r6-unknown-linux-musl",
+            // "mipsisa32r6el-unknown-linux-musl",
+            // "mipsisa64r6-unknown-linux-muslabi64",
+            // "mipsisa64r6el-unknown-linux-muslabi64",
             "powerpc-unknown-linux-musl",
             "powerpc64-unknown-linux-musl",
             "powerpc64le-unknown-linux-musl",
@@ -55,6 +73,10 @@ static TARGETS: &[Target] = &[
             // Linux (uClibc-ng)
             "aarch64-unknown-linux-uclibc",
             "armv5te-unknown-linux-uclibceabi",
+            "mips-unknown-linux-uclibc",
+            "mipsel-unknown-linux-uclibc",
+            // "mipsisa32r6-unknown-linux-uclibc",
+            // "mipsisa32r6el-unknown-linux-uclibc",
             // "powerpc-unknown-linux-uclibc",
             // "riscv32gc-unknown-linux-uclibc",
             // "riscv64gc-unknown-linux-uclibc",
@@ -79,13 +101,15 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm64/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm/include/uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/loongarch/include/uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/mips/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/riscv/include/uapi/asm/hwcap.h
                 path: "linux-headers:asm/hwcap.h",
                 types: &[],
                 // TODO: COMPAT_HWCAP.* for riscv
                 vars: &["HWCAP.*"],
                 functions: &[],
-                arch: &[aarch64, arm, riscv32, riscv64],
+                arch: &[aarch64, arm, loongarch64, mips, mips32r6, mips64, mips64r6, riscv32, riscv64],
                 os: &[],
                 env: &[],
             },
@@ -304,6 +328,7 @@ static TARGETS: &[Target] = &[
             "aarch64-unknown-netbsd",
             "aarch64_be-unknown-netbsd",
             "armv6-unknown-netbsd-eabihf",
+            "mipsel-unknown-netbsd",
             "powerpc-unknown-netbsd",
             // "riscv64gc-unknown-netbsd",
         ],
@@ -341,6 +366,7 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/aarch64/include/cpu.h
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/arm/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/mips/include/cpu.h
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/powerpc/include/cpu.h
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/riscv/include/cpu.h
                 path: "machine/cpu.h",
@@ -357,6 +383,7 @@ static TARGETS: &[Target] = &[
         triples: &[
             "aarch64-unknown-openbsd",
             // "armv7-unknown-openbsd", // TODO: not in rustc
+            // "mips64-unknown-openbsd", // TODO: not in rustc
             "powerpc-unknown-openbsd",
             "powerpc64-unknown-openbsd",
             "riscv64gc-unknown-openbsd",
@@ -395,6 +422,7 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/mips64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/macppc/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/cpu.h
@@ -409,6 +437,7 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/mips64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
@@ -417,7 +446,7 @@ static TARGETS: &[Target] = &[
                 vars: &["HWCAP.*", "PPC_FEATURE.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, arm, powerpc, powerpc64],
+                arch: &[aarch64, arm, mips64, mips64r6, powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -443,7 +472,9 @@ static TARGETS: &[Target] = &[
         ],
     },
     Target {
-        triples: &["powerpc64-ibm-aix"],
+        triples: &[
+            "powerpc64-ibm-aix",
+        ],
         // TODO: There is no way to access to AIX headers.
         headers: &[],
     },
@@ -1070,10 +1101,21 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                     let mut cc = format!("{}-gcc", target.llvm_target.replace("-unknown", ""));
                     let mut cc_found =
                         cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
-                    if !cc_found {
-                        cc += "-14";
-                        cc_found =
-                            cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+                    for suffix in ["-14", "-13"] {
+                        if !cc_found {
+                            cc += suffix;
+                            cc_found = cmd!(&cc, "--version")
+                                .stdout_capture()
+                                .stderr_capture()
+                                .run()
+                                .is_ok();
+                            if cc_found {
+                                break;
+                            }
+                            for _ in 0..suffix.len() {
+                                cc.pop();
+                            }
+                        }
                     }
                     if !cc_found {
                         cc = format!("{}-gcc", target.llvm_target);
@@ -1362,14 +1404,14 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 symlink(src_dir.join("sys").join(path), src_dir.join("include").join(path))
                     .unwrap();
             }
+            // https://www.openbsd.org/plat.html
             // https://github.com/openbsd/src/tree/HEAD/sys/arch
             let arches = match target.arch {
                 x86_64 => &["amd64"][..],
-                arm if target.llvm_target.starts_with("armv7") => &["armv7", "arm"],
-                arm => &["arm"],
                 aarch64 => &["arm64"],
+                arm => &["armv7", "arm"],
                 x86 => &["i386"],
-                mips64 | mips64r6 => &["mips64"], // loongson or octeon
+                mips64 | mips64r6 => &["mips64"], // "loongson" or "octeon"
                 powerpc => &["macppc", "powerpc"],
                 powerpc64 => &["powerpc64"],
                 riscv64 => &["riscv64"],

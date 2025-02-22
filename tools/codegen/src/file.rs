@@ -146,6 +146,9 @@ pub(crate) fn write_raw(
 
     let mut out = header(function_name).into_bytes();
     out.extend_from_slice(contents.as_ref());
+    while out.ends_with(b"\n\n") {
+        out.pop();
+    }
     if path.is_file() && fs::read(path)? == out {
         return Ok(());
     }
