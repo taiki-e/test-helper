@@ -12,6 +12,7 @@
     unknown_lints,
     unnameable_types,
     clippy::cast_sign_loss,
+    clippy::ptr_as_ptr,
     clippy::pub_underscore_fields,
     clippy::unnecessary_cast,
 )]
@@ -137,6 +138,26 @@ mod armeb_linux_gnueabi;
 pub use self::armeb_linux_gnueabi::*;
 #[cfg(
     all(
+        target_arch = "powerpc",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod powerpc_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::powerpc_linux_gnu::*;
+#[cfg(
+    all(
         target_arch = "powerpc64",
         target_os = "linux",
         target_env = "gnu",
@@ -255,6 +276,26 @@ mod armv5te_linux_musleabi;
     )
 )]
 pub use self::armv5te_linux_musleabi::*;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod powerpc_linux_musl;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::powerpc_linux_musl::*;
 #[cfg(
     all(
         target_arch = "powerpc64",
@@ -595,6 +636,24 @@ mod armv6_freebsd;
 pub use self::armv6_freebsd::*;
 #[cfg(
     all(
+        target_arch = "powerpc",
+        target_os = "freebsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod powerpc_freebsd;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "freebsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::powerpc_freebsd::*;
+#[cfg(
+    all(
         target_arch = "powerpc64",
         target_os = "freebsd",
         target_endian = "big",
@@ -703,6 +762,24 @@ mod armv6_netbsd_eabihf;
 pub use self::armv6_netbsd_eabihf::*;
 #[cfg(
     all(
+        target_arch = "powerpc",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod powerpc_netbsd;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::powerpc_netbsd::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "openbsd",
         target_endian = "little",
@@ -719,6 +796,24 @@ mod aarch64_openbsd;
     )
 )]
 pub use self::aarch64_openbsd::*;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "openbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod powerpc_openbsd;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "openbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::powerpc_openbsd::*;
 #[cfg(
     all(
         target_arch = "powerpc64",

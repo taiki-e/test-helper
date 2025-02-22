@@ -71,6 +71,7 @@ pub union sysctlnode__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: *mut sysctlnode,
 }
 #[repr(C)]
@@ -88,6 +89,7 @@ pub union sysctlnode__bindgen_ty_1__bindgen_ty_2__bindgen_ty_1 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_1__bindgen_ty_2__bindgen_ty_1__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: *mut ::core::ffi::c_void,
 }
 #[repr(C)]
@@ -99,6 +101,7 @@ pub union sysctlnode__bindgen_ty_1__bindgen_ty_2__bindgen_ty_2 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_1__bindgen_ty_2__bindgen_ty_2__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: usize,
 }
 #[repr(C)]
@@ -110,6 +113,7 @@ pub union sysctlnode__bindgen_ty_2 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_2__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: usize,
 }
 #[repr(C)]
@@ -121,6 +125,7 @@ pub union sysctlnode__bindgen_ty_3 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_3__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: sysctlfn,
 }
 #[repr(C)]
@@ -132,6 +137,7 @@ pub union sysctlnode__bindgen_ty_4 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_4__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: *mut sysctlnode,
 }
 #[repr(C)]
@@ -143,5 +149,6 @@ pub union sysctlnode__bindgen_ty_5 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct sysctlnode__bindgen_ty_5__bindgen_ty_1 {
+    pub __sysc_spad: u32,
     pub __sysc_sdatum: *const ::std::os::raw::c_char,
 }
