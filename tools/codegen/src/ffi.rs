@@ -39,6 +39,7 @@ static TARGETS: &[Target] = &[
             "aarch64_be-unknown-linux-gnu_ilp32",
             "armv5te-unknown-linux-gnueabi",
             "armeb-unknown-linux-gnueabi", // TODO: v6
+            "powerpc-unknown-linux-gnu",
             "powerpc64-unknown-linux-gnu",
             "powerpc64le-unknown-linux-gnu",
             "riscv32gc-unknown-linux-gnu",
@@ -46,6 +47,7 @@ static TARGETS: &[Target] = &[
             // Linux (musl)
             "aarch64-unknown-linux-musl",
             "armv5te-unknown-linux-musleabi",
+            "powerpc-unknown-linux-musl",
             "powerpc64-unknown-linux-musl",
             "powerpc64le-unknown-linux-musl",
             "riscv32gc-unknown-linux-musl",
@@ -53,6 +55,9 @@ static TARGETS: &[Target] = &[
             // Linux (uClibc-ng)
             "aarch64-unknown-linux-uclibc",
             "armv5te-unknown-linux-uclibceabi",
+            // "powerpc-unknown-linux-uclibc",
+            // "riscv32gc-unknown-linux-uclibc",
+            // "riscv64gc-unknown-linux-uclibc",
             // L4Re (uClibc-ng)
             "aarch64-unknown-l4re-uclibc",
             // Android
@@ -67,7 +72,7 @@ static TARGETS: &[Target] = &[
                 types: &[],
                 vars: &["PPC_FEATURE.*"],
                 functions: &[],
-                arch: &[powerpc64],
+                arch: &[powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -212,6 +217,7 @@ static TARGETS: &[Target] = &[
         triples: &[
             "aarch64-unknown-freebsd",
             "armv6-unknown-freebsd",
+            "powerpc-unknown-freebsd",
             "powerpc64-unknown-freebsd",
             "powerpc64le-unknown-freebsd",
             "riscv64gc-unknown-freebsd",
@@ -273,7 +279,7 @@ static TARGETS: &[Target] = &[
                 types: &[],
                 vars: &["PPC_FEATURE.*"],
                 functions: &[],
-                arch: &[powerpc64],
+                arch: &[powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -287,7 +293,7 @@ static TARGETS: &[Target] = &[
                 vars: &["HWCAP.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, arm, powerpc64],
+                arch: &[aarch64, arm, powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -298,6 +304,7 @@ static TARGETS: &[Target] = &[
             "aarch64-unknown-netbsd",
             "aarch64_be-unknown-netbsd",
             "armv6-unknown-netbsd-eabihf",
+            "powerpc-unknown-netbsd",
             // "riscv64gc-unknown-netbsd",
         ],
         headers: &[
@@ -315,8 +322,8 @@ static TARGETS: &[Target] = &[
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &["sysctlnode"],
-                vars: &["CTL_QUERY", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
-                functions: &["sysctlbyname"],
+                vars: &["CTL_MACHDEP", "CTL_QUERY", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
+                functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -331,12 +338,26 @@ static TARGETS: &[Target] = &[
                 os: &[],
                 env: &[],
             },
+            Header {
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/aarch64/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/arm/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/powerpc/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/riscv/include/cpu.h
+                path: "machine/cpu.h",
+                types: &[],
+                vars: &["CPU_.*"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
         ],
     },
     Target {
         triples: &[
             "aarch64-unknown-openbsd",
             // "armv7-unknown-openbsd", // TODO: not in rustc
+            "powerpc-unknown-openbsd",
             "powerpc64-unknown-openbsd",
             "riscv64gc-unknown-openbsd",
         ],
@@ -374,6 +395,7 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/macppc/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/cpu.h
                 path: "machine/cpu.h",
@@ -387,6 +409,7 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/arm/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
                 path: "machine/elf.h",
@@ -394,7 +417,7 @@ static TARGETS: &[Target] = &[
                 vars: &["HWCAP.*", "PPC_FEATURE.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, arm, powerpc64],
+                arch: &[aarch64, arm, powerpc, powerpc64],
                 os: &[],
                 env: &[],
             },
@@ -779,6 +802,7 @@ pub(crate) fn generate() {
             unknown_lints,
             unnameable_types, // unnameable_types is available on Rust 1.79+
             clippy::cast_sign_loss,
+            clippy::ptr_as_ptr,
             clippy::pub_underscore_fields,
             clippy::unnecessary_cast,
         )]
