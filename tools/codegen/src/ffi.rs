@@ -53,6 +53,7 @@ static TARGETS: &[Target] = &[
             "powerpc64le-unknown-linux-gnu",
             "riscv32gc-unknown-linux-gnu",
             "riscv64gc-unknown-linux-gnu",
+            "s390x-unknown-linux-gnu",
             // Linux (musl)
             "aarch64-unknown-linux-musl",
             "armv5te-unknown-linux-musleabi",
@@ -61,25 +62,26 @@ static TARGETS: &[Target] = &[
             "mips64-unknown-linux-muslabi64",
             "mips64el-unknown-linux-muslabi64",
             "mipsel-unknown-linux-musl",
-            // "mipsisa32r6-unknown-linux-musl",
-            // "mipsisa32r6el-unknown-linux-musl",
-            // "mipsisa64r6-unknown-linux-muslabi64",
-            // "mipsisa64r6el-unknown-linux-muslabi64",
+            // "mipsisa32r6-unknown-linux-musl", // TODO: not in rustc
+            // "mipsisa32r6el-unknown-linux-musl", // TODO: not in rustc
+            // "mipsisa64r6-unknown-linux-muslabi64", // TODO: not in rustc
+            // "mipsisa64r6el-unknown-linux-muslabi64", // TODO: not in rustc
             "powerpc-unknown-linux-musl",
             "powerpc64-unknown-linux-musl",
             "powerpc64le-unknown-linux-musl",
             "riscv32gc-unknown-linux-musl",
             "riscv64gc-unknown-linux-musl",
+            "s390x-unknown-linux-musl",
             // Linux (uClibc-ng)
             "aarch64-unknown-linux-uclibc",
             "armv5te-unknown-linux-uclibceabi",
             "mips-unknown-linux-uclibc",
             "mipsel-unknown-linux-uclibc",
-            // "mipsisa32r6-unknown-linux-uclibc",
-            // "mipsisa32r6el-unknown-linux-uclibc",
-            // "powerpc-unknown-linux-uclibc",
-            // "riscv32gc-unknown-linux-uclibc",
-            // "riscv64gc-unknown-linux-uclibc",
+            // "mipsisa32r6-unknown-linux-uclibc", // TODO: not in rustc
+            // "mipsisa32r6el-unknown-linux-uclibc", // TODO: not in rustc
+            // "powerpc-unknown-linux-uclibc", // TODO: not in rustc
+            // "riscv32gc-unknown-linux-uclibc", // TODO: not in rustc
+            // "riscv64gc-unknown-linux-uclibc", // TODO: not in rustc
             // L4Re (uClibc-ng)
             "aarch64-unknown-l4re-uclibc",
             // Android
@@ -188,7 +190,11 @@ static TARGETS: &[Target] = &[
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
-                vars: &[],
+                // HWCAP_S390_.* are not exposed from uapi/asm/hwcap.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/s390/include/asm/elf.h
+                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/unix/sysv/linux/s390/bits/hwcap.h
+                // https://github.com/bminor/musl/blob/HEAD/arch/s390x/bits/hwcap.h
+                vars: &["HWCAP_S390_.*"],
                 functions: &["getauxval"],
                 arch: &[],
                 os: &[],
@@ -328,8 +334,13 @@ static TARGETS: &[Target] = &[
             "aarch64-unknown-netbsd",
             "aarch64_be-unknown-netbsd",
             "armv6-unknown-netbsd-eabihf",
+            // "armeb-unknown-netbsd-eabihf", // TODO: not in rustc
+            // "mips-unknown-netbsd", // TODO: not in rustc
             "mipsel-unknown-netbsd",
+            // "mips64-unknown-netbsd", // TODO: not in rustc
+            // "mips64el-unknown-netbsd", // TODO: not in rustc
             "powerpc-unknown-netbsd",
+            // "powerpc64-unknown-netbsd", // TODO: not in rustc
             // "riscv64gc-unknown-netbsd",
         ],
         headers: &[
@@ -384,6 +395,7 @@ static TARGETS: &[Target] = &[
             "aarch64-unknown-openbsd",
             // "armv7-unknown-openbsd", // TODO: not in rustc
             // "mips64-unknown-openbsd", // TODO: not in rustc
+            // "mips64el-unknown-openbsd", // TODO: not in rustc
             "powerpc-unknown-openbsd",
             "powerpc64-unknown-openbsd",
             "riscv64gc-unknown-openbsd",
@@ -1411,7 +1423,10 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 aarch64 => &["arm64"],
                 arm => &["armv7", "arm"],
                 x86 => &["i386"],
-                mips64 | mips64r6 => &["mips64"], // "loongson" or "octeon"
+                mips64 | mips64r6 => match target.target_endian {
+                    big => &["octeon", "mips64"],
+                    little => &["loongson", "mips64"],
+                },
                 powerpc => &["macppc", "powerpc"],
                 powerpc64 => &["powerpc64"],
                 riscv64 => &["riscv64"],
