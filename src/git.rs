@@ -40,9 +40,8 @@ pub fn assert_diff(expected_path: impl AsRef<Path>, actual: impl AsRef<[u8]>) {
                 .unwrap();
             child.stdin.as_mut().unwrap().write_all(actual).unwrap();
             assert!(!child.wait().unwrap().success());
-            // patch -p1 <<'EOF' ... EOF
             panic!(
-                "assertion failed; please run test locally and commit resulting changes, or apply above diff as patch"
+                "assertion failed; please run test locally and commit resulting changes, or apply the above diff as patch (e.g., `patch -p1 <<'EOF' ... EOF`)"
             );
         } else {
             fs::write(expected_path, actual).unwrap();
