@@ -80,3 +80,16 @@ pub fn ls_files(dir: impl AsRef<Path>, filters: &[&str]) -> Vec<(String, PathBuf
         })
         .collect()
 }
+
+#[track_caller]
+pub fn copy_tracked_files(from: impl AsRef<Path>, to: impl AsRef<Path>) {
+    let from = from.as_ref();
+    let to = to.as_ref();
+    for (file_name, from) in ls_files(from, &[]) {
+        let to = &to.join(file_name);
+        if !to.parent().unwrap().is_dir() {
+            fs::create_dir_all(to.parent().unwrap()).unwrap();
+        }
+        fs::copy(from, to).unwrap();
+    }
+}
