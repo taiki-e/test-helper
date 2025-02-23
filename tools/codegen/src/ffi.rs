@@ -1083,7 +1083,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                             "https://os.inf.tu-dresden.de/download/snapshots/toolchain/toolchain-l4re-{arch}-gcc-{gcc_version}.tar.xz",
                         ),
                         &format!("./sysroots/{}-l4re/usr/include", target.arch),
-                        "3"
+                        "3",
                     );
                 }
                 fs::write(

@@ -10,7 +10,7 @@ use std::{
 
 use fs_err as fs;
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote, ToTokens as _};
+use quote::{ToTokens as _, format_ident, quote};
 use syn::visit_mut::{self, VisitMut};
 
 pub const GEN_TESTS_DIR: &str = "src/gen/tests";
