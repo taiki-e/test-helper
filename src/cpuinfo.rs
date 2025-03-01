@@ -8,11 +8,10 @@ use fs_err as fs;
 
 type Result<T, E = Box<dyn std::error::Error + Send + Sync>> = std::result::Result<T, E>;
 
-/// CPU feature detection by reading a file or calling a command.
+/// CPU feature detection by reading a file.
 ///
 /// - On Linux/NetBSD, reading `/proc/cpuinfo`.
 /// - On FreeBSD/OpenBSD, reading `/var/run/dmesg.boot`.
-/// - On macOS, calling `sysctl hw.optional` command.
 ///
 /// This is used for testing to ensure that the result of the CPU feature
 /// detection we are using matches the information we get from the other
@@ -35,7 +34,6 @@ pub struct ProcCpuinfo {
 impl ProcCpuinfo {
     #[cfg(any(target_arch = "aarch64", target_arch = "arm64ec"))]
     pub fn new() -> Result<Self> {
-        use std::{format, process::Command};
         if cfg!(any(target_os = "linux", target_os = "android", target_os = "netbsd")) {
             let text = fs::read_to_string("/proc/cpuinfo")?;
             // On qemu-user, there is no 'Features' section because the host's /proc/cpuinfo will be referred to.
@@ -114,26 +112,6 @@ impl ProcCpuinfo {
                 // TODO
                 lse128: None,
                 rcpc3: None,
-            })
-        } else if cfg!(target_os = "macos") {
-            let output = Command::new("sysctl").arg("hw.optional").output()?;
-            assert!(output.status.success());
-            let stdout = std::str::from_utf8(&output.stdout)?.trim();
-            eprintln!("{}", stdout);
-            let sysctl = |name| {
-                stdout
-                    .lines()
-                    .find_map(|s| s.strip_prefix(&format!("{}: ", name)))
-                    .unwrap_or("0")
-                    .parse::<u32>()
-                    .unwrap()
-            };
-            Ok(Self {
-                lse: sysctl("hw.optional.arm.FEAT_LSE") != 0
-                    || sysctl("hw.optional.armv8_1_atomics") != 0,
-                lse2: Some(sysctl("hw.optional.arm.FEAT_LSE2") != 0),
-                lse128: Some(sysctl("hw.optional.arm.FEAT_LSE128") != 0),
-                rcpc3: Some(sysctl("hw.optional.arm.FEAT_LRCPC3") != 0),
             })
         } else {
             if !cfg!(windows) {
