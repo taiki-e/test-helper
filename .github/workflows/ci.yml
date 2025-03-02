@@ -90,6 +90,7 @@ jobs:
             gcc-powerpc64le-linux-gnu
             gcc-riscv64-linux-gnu
             gcc-s390x-linux-gnu
+            gcc-sparc64-linux-gnu
             gettext
           )
           retry sudo apt-get -o Acquire::Retries=10 -qq update

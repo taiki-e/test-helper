@@ -54,6 +54,8 @@ static TARGETS: &[Target] = &[
             "riscv32gc-unknown-linux-gnu",
             "riscv64gc-unknown-linux-gnu",
             "s390x-unknown-linux-gnu",
+            "sparc-unknown-linux-gnu",
+            "sparc64-unknown-linux-gnu",
             // Linux (musl)
             "aarch64-unknown-linux-musl",
             "armv5te-unknown-linux-musleabi",
@@ -82,6 +84,8 @@ static TARGETS: &[Target] = &[
             // "powerpc-unknown-linux-uclibc", // TODO: not in rustc
             // "riscv32gc-unknown-linux-uclibc", // TODO: not in rustc
             // "riscv64gc-unknown-linux-uclibc", // TODO: not in rustc
+            // "sparc-unknown-linux-uclibc", // TODO: not in rustc
+            // "sparc64-unknown-linux-uclibc", // TODO: not in rustc
             // L4Re (uClibc-ng)
             "aarch64-unknown-l4re-uclibc",
             // Android
@@ -190,11 +194,14 @@ static TARGETS: &[Target] = &[
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
-                // HWCAP_S390_.* are not exposed from uapi/asm/hwcap.h
+                // HWCAP_S390_.*/HWCAP_SPARC_.* are not exposed from uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/s390/include/asm/elf.h
                 // https://github.com/bminor/glibc/blob/HEAD/sysdeps/unix/sysv/linux/s390/bits/hwcap.h
                 // https://github.com/bminor/musl/blob/HEAD/arch/s390x/bits/hwcap.h
-                vars: &["HWCAP_S390_.*"],
+                // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_32.h
+                // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_64.h
+                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/sparc/bits/hwcap.h
+                vars: &["HWCAP[^_]*_S390_.*", "HWCAP[^_]*_SPARC_.*"],
                 functions: &["getauxval"],
                 arch: &[],
                 os: &[],
@@ -342,6 +349,8 @@ static TARGETS: &[Target] = &[
             "powerpc-unknown-netbsd",
             // "powerpc64-unknown-netbsd", // TODO: not in rustc
             // "riscv64gc-unknown-netbsd",
+            // "sparc-unknown-netbsd", // TODO: not in rustc
+            "sparc64-unknown-netbsd",
         ],
         headers: &[
             Header {
@@ -380,6 +389,8 @@ static TARGETS: &[Target] = &[
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/mips/include/cpu.h
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/powerpc/include/cpu.h
                 // https://github.com/NetBSD/src/blob/HEAD/sys/arch/riscv/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/sparc/include/cpu.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/arch/sparc64/include/cpu.h
                 path: "machine/cpu.h",
                 types: &[],
                 vars: &["CPU_.*"],
@@ -399,6 +410,7 @@ static TARGETS: &[Target] = &[
             "powerpc-unknown-openbsd",
             "powerpc64-unknown-openbsd",
             "riscv64gc-unknown-openbsd",
+            "sparc64-unknown-openbsd",
         ],
         headers: &[
             Header {
@@ -438,6 +450,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/macppc/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/cpu.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/cpu.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/sparc64/include/cpu.h
                 path: "machine/cpu.h",
                 types: &[],
                 vars: &["CPU_.*"],
@@ -453,12 +466,13 @@ static TARGETS: &[Target] = &[
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/sparc64/include/elf.h
                 path: "machine/elf.h",
                 types: &[],
                 vars: &["HWCAP.*", "PPC_FEATURE.*"],
                 functions: &[],
                 // TODO: riscv
-                arch: &[aarch64, arm, mips64, mips64r6, powerpc, powerpc64],
+                arch: &[aarch64, arm, mips64, mips64r6, powerpc, powerpc64, sparc64],
                 os: &[],
                 env: &[],
             },
@@ -466,6 +480,7 @@ static TARGETS: &[Target] = &[
     },
     Target {
         triples: &[
+            "sparcv9-sun-solaris",
             "aarch64-unknown-illumos",
         ],
         headers: &[
@@ -473,9 +488,10 @@ static TARGETS: &[Target] = &[
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv.h
                 // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv.h
                 // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv_aarch64.h
+                // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv_SPARC.h
                 path: "sys/auxv.h",
                 types: &[],
-                vars: &["AV_AARCH64_.*"],
+                vars: &["AV.*"],
                 functions: &["getisax"],
                 arch: &[],
                 os: &[],
@@ -551,8 +567,8 @@ struct Header {
 }
 
 pub(crate) fn generate() {
-    if !cfg!(all(target_os = "linux", target_arch = "x86_64")) {
-        eprintln!("warning: codegen is only fully supported on x86_64 Linux");
+    if !cfg!(all(target_os = "linux", any(target_arch = "x86_64", target_arch = "aarch64"))) {
+        eprintln!("warning: codegen is only fully supported on x86_64/aarch64 Linux");
         // TODO
         return;
     }
@@ -561,6 +577,7 @@ pub(crate) fn generate() {
     fs::create_dir_all(download_dir).unwrap();
     let out_dir = &workspace_root.join("src/gen/sys");
     if out_dir.exists() {
+        // TODO
         fs::remove_dir_all(out_dir).unwrap();
     }
     let raw_line = file::header(function_name!());
@@ -721,6 +738,10 @@ pub(crate) fn generate() {
                             },
                             _ => {}
                         }
+                    }
+                    solaris => {
+                        header_path = src_dir.join("usr/include").join(header.path);
+                        include = vec![src_dir.join("usr/include")];
                     }
                     illumos => {
                         header_path = src_dir.join("usr/src/uts/common").join(header.path);
@@ -972,9 +993,15 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             .unwrap();
         }
         fs::create_dir_all(&src_dir).unwrap();
-        cmd!("tar", "xf", file, "--strip-components", strip_components, "-C", &src_dir, paths)
-            .run()
-            .unwrap();
+        if file.extension() == Some("deb") {
+            assert_eq!(strip_components, "0");
+            assert_eq!(paths, "");
+            cmd!("dpkg", "-x", file, &src_dir).run().unwrap();
+        } else {
+            cmd!("tar", "xf", file, "--strip-components", strip_components, "-C", &src_dir, paths)
+                .run()
+                .unwrap();
+        }
         src_dir
     }
     #[track_caller]
@@ -1443,13 +1470,35 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             symlink(src_dir.join("include").join(arches[0]), src_dir.join("include/machine"))
                 .unwrap();
         }
+        solaris => {
+            // For now, refers dilos2's system-header package as with std: https://github.com/rust-lang/rust/blob/1.85.0/src/ci/docker/host-x86_64/dist-various-2/Dockerfile#L31
+            let (arch, system_header) = match target.arch {
+                // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-sparc/Packages
+                sparc64 => (
+                    "solaris-sparc",
+                    "pool/main/s/system-header/system-header_2.0.3.11_solaris-sparc.deb",
+                ),
+                // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-i386/Packages
+                x86_64 => {
+                    ("solaris-i386", "pool/main/d/dg2/system-header_2.0.3.36_solaris-i386.deb")
+                }
+                _ => todo!("{target:?}"),
+            };
+            src_dir = curl(
+                download_dir,
+                &format!("dilos2/{arch}"),
+                &format!("https://apt.dilos.org/dilos/{system_header}"),
+                "",
+                "0",
+            );
+        }
         illumos => {
+            let mut repository = "illumos/illumos-gate";
             if target.arch == aarch64 {
                 // TODO: use illumos/illumos-gate once merged to upstream
-                src_dir = clone(download_dir, "richlowe/illumos-gate", None, &["/usr/"]);
-            } else {
-                todo!("{target:?}")
+                repository = "richlowe/illumos-gate";
             }
+            src_dir = clone(download_dir, repository, None, &["/usr/"]);
         }
         fuchsia => {
             src_dir = clone(download_dir, "https://fuchsia.googlesource.com/fuchsia", None, &[]);
