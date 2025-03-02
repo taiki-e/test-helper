@@ -2,7 +2,7 @@
 
 #![cfg(any(target_arch = "aarch64", target_arch = "arm64ec", target_arch = "powerpc64"))]
 
-use std::{boxed::Box, eprintln, path::Path, vec::Vec};
+use std::{boxed::Box, path::Path, vec::Vec};
 
 use fs_err as fs;
 
@@ -48,7 +48,7 @@ impl ProcCpuinfo {
                 .split(' ')
                 .map(str::trim)
                 .collect::<Vec<_>>();
-            eprintln!("Features={:?}", features);
+            eprintln_nocapture!("/proc/cpuinfo: Features={:?}", features);
             Ok(Self {
                 lse: features.contains(&"atomics"),
                 lse2: Some(features.contains(&"uscat")),
@@ -85,8 +85,12 @@ impl ProcCpuinfo {
                 .unwrap()
                 .split(',')
                 .collect::<Vec<_>>();
-            eprintln!("Instruction Set Attributes 0={:?}", isa0);
-            eprintln!("Memory Model Features 2={:?}", mmf2);
+            eprintln_nocapture!(
+                "/var/run/dmesg.boot: Instruction Set Attributes 0={:?}, \
+                                      Memory Model Features 2={:?}",
+                isa0,
+                mmf2,
+            );
             Ok(Self {
                 lse: isa0.contains(&"Atomic"),
                 lse2: Some(mmf2.contains(&"AT")),
@@ -104,7 +108,7 @@ impl ProcCpuinfo {
                 .trim()
                 .split(',')
                 .collect::<Vec<_>>();
-            eprintln!("Features={:?}", features);
+            eprintln_nocapture!("/var/run/dmesg.boot: Features={:?}", features);
             Ok(Self {
                 lse: features.contains(&"Atomic"),
                 // /var/run/dmesg.boot on OpenBSD doesn't have field for lse2
@@ -137,7 +141,7 @@ impl ProcCpuinfo {
                 .split(' ')
                 .map(str::trim)
                 .collect::<Vec<_>>();
-            eprintln!("cpu={:?}", cpu);
+            eprintln_nocapture!("/proc/cpuinfo: cpu={:?}", cpu);
             let v = cpu.iter().find(|v| v.starts_with("POWER")).ok_or("cpu is not POWER")?;
             let power10 = v.starts_with("POWER10");
             let power9 = power10 || v.starts_with("POWER9");
@@ -159,7 +163,7 @@ impl ProcCpuinfo {
                 .unwrap()
                 .split(',')
                 .collect::<Vec<_>>();
-            eprintln!("features2={:?}", features2);
+            eprintln_nocapture!("/var/run/dmesg.boot: Features2={:?}", features2);
             Ok(Self {
                 power8: features2.contains(&"ARCH207"),
                 power9: features2.contains(&"ARCH300"),

@@ -11,6 +11,10 @@
 #[cfg(feature = "std")]
 extern crate std;
 
+#[cfg(feature = "std")]
+#[macro_use]
+mod macros;
+
 #[cfg(feature = "cli")]
 pub mod cli;
 #[cfg(feature = "codegen")]
