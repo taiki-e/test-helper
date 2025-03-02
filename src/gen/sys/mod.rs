@@ -438,6 +438,46 @@ mod s390x_linux_gnu;
 pub use self::s390x_linux_gnu::*;
 #[cfg(
     all(
+        target_arch = "sparc",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod sparc_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "sparc",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::sparc_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod sparc64_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::sparc64_linux_gnu::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "linux",
         target_env = "musl",
@@ -1158,6 +1198,24 @@ mod powerpc_netbsd;
 pub use self::powerpc_netbsd::*;
 #[cfg(
     all(
+        target_arch = "sparc64",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod sparc64_netbsd;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::sparc64_netbsd::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "openbsd",
         target_endian = "little",
@@ -1228,6 +1286,42 @@ mod riscv64gc_openbsd;
     )
 )]
 pub use self::riscv64gc_openbsd::*;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "openbsd",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod sparc64_openbsd;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "openbsd",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::sparc64_openbsd::*;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "solaris",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod sparcv9_sun_solaris;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "solaris",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::sparcv9_sun_solaris::*;
 #[cfg(
     all(
         target_arch = "aarch64",
