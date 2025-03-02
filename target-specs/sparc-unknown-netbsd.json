@@ -1,0 +1,26 @@
+{
+  "arch": "sparc",
+  "cpu": "v8",
+  "crt-objects-fallback": "false",
+  "data-layout": "E-m:e-p:32:32-i64:64-i128:128-f128:64-n32-S64",
+  "default-dwarf-version": 2,
+  "dynamic-linking": true,
+  "has-rpath": true,
+  "has-thread-local": true,
+  "linker-flavor": "gnu-cc",
+  "llvm-target": "sparc-unknown-netbsd",
+  "max-atomic-width": 32,
+  "no-default-libraries": false,
+  "os": "netbsd",
+  "position-independent-executables": true,
+  "pre-link-args": {
+    "gnu-cc": ["-m32"],
+    "gnu-lld-cc": ["-m32"]
+  },
+  "relro-level": "full",
+  "target-endian": "big",
+  "target-family": ["unix"],
+  "target-mcount": "__mcount",
+  "target-pointer-width": "32",
+  "use-ctors-section": true
+}

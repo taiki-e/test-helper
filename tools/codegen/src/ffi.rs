@@ -81,11 +81,11 @@ static TARGETS: &[Target] = &[
             "mipsel-unknown-linux-uclibc",
             // "mipsisa32r6-unknown-linux-uclibc", // TODO: not in rustc
             // "mipsisa32r6el-unknown-linux-uclibc", // TODO: not in rustc
-            // "powerpc-unknown-linux-uclibc", // TODO: not in rustc
+            "powerpc-unknown-linux-uclibc",
             // "riscv32gc-unknown-linux-uclibc", // TODO: not in rustc
             // "riscv64gc-unknown-linux-uclibc", // TODO: not in rustc
-            // "sparc-unknown-linux-uclibc", // TODO: not in rustc
-            // "sparc64-unknown-linux-uclibc", // TODO: not in rustc
+            "sparc-unknown-linux-uclibc",
+            "sparc64-unknown-linux-uclibc",
             // L4Re (uClibc-ng)
             "aarch64-unknown-l4re-uclibc",
             // Android
@@ -236,6 +236,8 @@ static TARGETS: &[Target] = &[
             "aarch64-apple-visionos",
             "aarch64-apple-watchos",
             "arm64_32-apple-watchos",
+            // "armv7k-apple-watchos",
+            // "armv7s-apple-ios",
         ],
         headers: &[
             Header {
@@ -341,15 +343,15 @@ static TARGETS: &[Target] = &[
             "aarch64-unknown-netbsd",
             "aarch64_be-unknown-netbsd",
             "armv6-unknown-netbsd-eabihf",
-            // "armeb-unknown-netbsd-eabihf", // TODO: not in rustc
+            "armebv6-unknown-netbsd-eabihf",
             // "mips-unknown-netbsd", // TODO: not in rustc
             "mipsel-unknown-netbsd",
             // "mips64-unknown-netbsd", // TODO: not in rustc
-            // "mips64el-unknown-netbsd", // TODO: not in rustc
+            // "mips64el-unknown-netbsd", // TODO: not in rustc https://github.com/NetBSD/pkgsrc/blob/c57db65bc56140bd6176f5b95e0af10461a483c8/lang/rust/patches/patch-compiler_rustc__target_src_spec_targets_mips64el__unknown__netbsd.rs is n32 ABI...
             "powerpc-unknown-netbsd",
-            // "powerpc64-unknown-netbsd", // TODO: not in rustc
+            "powerpc64-unknown-netbsd",
             // "riscv64gc-unknown-netbsd",
-            // "sparc-unknown-netbsd", // TODO: not in rustc
+            "sparc-unknown-netbsd",
             "sparc64-unknown-netbsd",
         ],
         headers: &[
@@ -404,7 +406,7 @@ static TARGETS: &[Target] = &[
     Target {
         triples: &[
             "aarch64-unknown-openbsd",
-            // "armv7-unknown-openbsd", // TODO: not in rustc
+            "armv7-unknown-openbsd",
             // "mips64-unknown-openbsd", // TODO: not in rustc
             // "mips64el-unknown-openbsd", // TODO: not in rustc
             "powerpc-unknown-openbsd",
@@ -1142,106 +1144,14 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 let glibc_src_dir = &glibc_dir(target, &src_dir);
                 let headers_dir = &libc_headers_dir(target, &src_dir);
                 if !headers_dir.exists() {
-                    let mut cflags = String::new();
-                    let mut cc = format!("{}-gcc", target.llvm_target.replace("-unknown", ""));
-                    let mut cc_found =
-                        cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
-                    for suffix in ["-14", "-13"] {
-                        if !cc_found {
-                            cc += suffix;
-                            cc_found = cmd!(&cc, "--version")
-                                .stdout_capture()
-                                .stderr_capture()
-                                .run()
-                                .is_ok();
-                            if cc_found {
-                                break;
-                            }
-                            for _ in 0..suffix.len() {
-                                cc.pop();
-                            }
-                        }
-                    }
-                    if !cc_found {
-                        cc = format!("{}-gcc", target.llvm_target);
-                        cc_found =
-                            cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
-                    }
-                    if !cc_found {
-                        // select alternative cc
-                        match target.arch {
-                            aarch64 => {
-                                cc = "aarch64-linux-gnu-gcc".to_owned();
-                                if target.target_pointer_width == "32" {
-                                    cflags += " -mabi=ilp32";
-                                }
-                                if target.target_endian == big {
-                                    cflags += " -mbig-endian";
-                                }
-                            }
-                            arm if !target.llvm_target.ends_with("hf") => {
-                                cc = "arm-linux-gnueabi-gcc".to_owned();
-                                if target.target_endian == big {
-                                    cflags += " -mbig-endian";
-                                }
-                            }
-                            mips | mips32r6 | mips64 | mips64r6 => {
-                                cc = "mips64el-linux-gnuabi64-gcc".to_owned();
-                                if matches!(target.arch, mips | mips32r6) {
-                                    cflags += " -mabi=32";
-                                } else if target.target_pointer_width == "32" {
-                                    cflags += " -mabi=n32";
-                                }
-                                match target.arch {
-                                    mips => cflags += " -mips32r2",
-                                    mips32r6 => cflags += " -mips32r6",
-                                    mips64 => cflags += " -mips64r2",
-                                    mips64r6 => cflags += " -mips64r6",
-                                    _ => unreachable!(),
-                                }
-                                if target.target_endian == big {
-                                    cflags += " -meb";
-                                }
-                            }
-                            powerpc | powerpc64 if target.target_endian == big => {
-                                cc = "powerpc64le-linux-gnu-gcc".to_owned();
-                                if target.arch == powerpc {
-                                    cflags += " -m32";
-                                }
-                                cflags += " -mbig-endian";
-                            }
-                            riscv32 => {
-                                cc = "riscv64-linux-gnu-gcc".to_owned();
-                                cflags += " -march=rv32gc -mabi=ilp32d";
-                            }
-                            sparc => {
-                                cc = "sparc64-linux-gnu-gcc".to_owned();
-                                cflags += " -m32 -mv8plus";
-                            }
-                            x86 | x86_64 => {
-                                cc = "x86_64-linux-gnu-gcc".to_owned();
-                                if target.arch == x86 {
-                                    cflags += " -m32";
-                                    if target.llvm_target.starts_with("i586") {
-                                        cflags += " -march=pentium";
-                                    }
-                                } else if target.target_pointer_width == "32" {
-                                    cflags += " -mx32";
-                                }
-                            }
-                            _ => panic!(
-                                "{}-gcc or {}-gcc required",
-                                target.llvm_target.replace("-unknown", ""),
-                                target.llvm_target
-                            ),
-                        }
-                    }
+                    let (cc, cflags) = linux_gcc(target);
                     // https://github.com/bminor/glibc/blob/HEAD/INSTALL
                     let build_dir = &glibc_src_dir.parent().unwrap().join("glibc-build");
                     if build_dir.exists() {
                         fs::remove_dir_all(build_dir).unwrap();
                     }
-                    fs::create_dir_all(build_dir).unwrap();
+                    // /bin/sh: 1: cannot create /home/runner/work/test-helper/test-helper/tools/codegen/tmp/cache/bminor/glibc-build/elf/dso-sort-tests-all4.def: Directory nonexistent
+                    fs::create_dir_all(build_dir.join("elf")).unwrap();
                     cmd!(
                         "bash",
                         "../glibc/configure",
@@ -1303,16 +1213,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 }
                 let headers_dir = &libc_headers_dir(target, &src_dir);
                 if !headers_dir.exists() {
-                    let (cc, cflags) = &match target.arch {
-                        arm => ("arm-linux-gnueabi-gcc".to_owned(), ""),
-                        _ => (
-                            format!(
-                                "{}-gcc",
-                                target.llvm_target.replace("-unknown", "").replace("uclibc", "gnu")
-                            ),
-                            "",
-                        ),
-                    };
+                    let (cc, cflags) = linux_gcc(target);
                     // https://github.com/wbx-github/uclibc-ng/blob/HEAD/Makefile.in
                     cmd!(
                         "make",
@@ -1407,6 +1308,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 symlink(src_dir.join("sys").join(path), src_dir.join("include").join(path))
                     .unwrap();
             }
+            // https://wiki.netbsd.org/ports
             // https://github.com/NetBSD/src/tree/HEAD/sys/arch
             let arches = match target.arch {
                 aarch64 => &["aarch64", "arm"][..],
@@ -1477,26 +1379,29 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 .unwrap();
         }
         solaris => {
-            // For now, refers dilos2's system-header package as with std: https://github.com/rust-lang/rust/blob/1.85.0/src/ci/docker/host-x86_64/dist-various-2/Dockerfile#L31
-            let (arch, system_header) = match target.arch {
-                // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-sparc/Packages
-                sparc64 => (
-                    "solaris-sparc",
-                    "pool/main/s/system-header/system-header_2.0.3.11_solaris-sparc.deb",
-                ),
-                // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-i386/Packages
-                x86_64 => {
-                    ("solaris-i386", "pool/main/d/dg2/system-header_2.0.3.36_solaris-i386.deb")
-                }
-                _ => todo!("{target:?}"),
-            };
-            src_dir = curl(
-                download_dir,
-                &format!("dilos2/{arch}"),
-                &format!("https://apt.dilos.org/dilos/{system_header}"),
-                "",
-                "0",
-            );
+            let arch = solaris_arch(target);
+            let name = &format!("headers/solaris/{arch}");
+            let headers_dir = download_dir.join(name);
+            src_dir = headers_dir.clone();
+            if headers_dir.exists() {
+                patched = true;
+            } else {
+                // For now, refers dilos2's system-header package as with std: https://github.com/rust-lang/rust/blob/1.85.0/src/ci/docker/host-x86_64/dist-various-2/Dockerfile#L31
+                let system_header = match target.arch {
+                    // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-sparc/Packages
+                    sparc64 => "pool/main/s/system-header/system-header_2.0.3.11_solaris-sparc.deb",
+                    // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-i386/Packages
+                    x86_64 => "pool/main/d/dg2/system-header_2.0.3.36_solaris-i386.deb",
+                    _ => todo!("{target:?}"),
+                };
+                curl(
+                    download_dir,
+                    name,
+                    &format!("https://apt.dilos.org/dilos/{system_header}"),
+                    "",
+                    "0",
+                );
+            }
         }
         illumos => {
             let mut repository = "illumos/illumos-gate";
@@ -1521,6 +1426,103 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         patch(target, &src_dir);
     }
     src_dir
+}
+
+fn linux_gcc(target: &TargetSpec) -> (String, String) {
+    assert_eq!(target.os, linux);
+    let mut llvm_target = target.llvm_target.clone();
+    if target.env != gnu {
+        llvm_target = llvm_target.replace(target.env.as_str(), "gnu");
+    }
+    let mut cflags = String::new();
+    let mut cc = format!("{}-gcc", llvm_target.replace("-unknown", ""));
+    let mut cc_found = cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+    for suffix in ["-14", "-13"] {
+        if !cc_found {
+            cc += suffix;
+            cc_found = cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+            if cc_found {
+                break;
+            }
+            for _ in 0..suffix.len() {
+                cc.pop();
+            }
+        }
+    }
+    if !cc_found {
+        cc = format!("{}-gcc", llvm_target);
+        cc_found = cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
+    }
+    if !cc_found {
+        // select alternative cc
+        match target.arch {
+            aarch64 => {
+                cc = "aarch64-linux-gnu-gcc".to_owned();
+                if target.target_pointer_width == "32" {
+                    cflags += " -mabi=ilp32";
+                }
+                if target.target_endian == big {
+                    cflags += " -mbig-endian";
+                }
+            }
+            arm if !llvm_target.ends_with("hf") => {
+                cc = "arm-linux-gnueabi-gcc".to_owned();
+                if target.target_endian == big {
+                    cflags += " -mbig-endian";
+                }
+            }
+            mips | mips32r6 | mips64 | mips64r6 => {
+                cc = "mips64el-linux-gnuabi64-gcc".to_owned();
+                if matches!(target.arch, mips | mips32r6) {
+                    cflags += " -mabi=32";
+                } else if target.target_pointer_width == "32" {
+                    cflags += " -mabi=n32";
+                }
+                match target.arch {
+                    mips => cflags += " -mips32r2",
+                    mips32r6 => cflags += " -mips32r6",
+                    mips64 => cflags += " -mips64r2",
+                    mips64r6 => cflags += " -mips64r6",
+                    _ => unreachable!(),
+                }
+                if target.target_endian == big {
+                    cflags += " -meb";
+                }
+            }
+            powerpc | powerpc64 if target.target_endian == big => {
+                cc = "powerpc64le-linux-gnu-gcc".to_owned();
+                if target.arch == powerpc {
+                    cflags += " -m32";
+                }
+                cflags += " -mbig-endian";
+            }
+            riscv32 => {
+                cc = "riscv64-linux-gnu-gcc".to_owned();
+                cflags += " -march=rv32gc -mabi=ilp32d";
+            }
+            sparc => {
+                cc = "sparc64-linux-gnu-gcc".to_owned();
+                cflags += " -m32 -mv8plus";
+            }
+            x86 | x86_64 => {
+                cc = "x86_64-linux-gnu-gcc".to_owned();
+                if target.arch == x86 {
+                    cflags += " -m32";
+                    if llvm_target.starts_with("i586") {
+                        cflags += " -march=pentium";
+                    }
+                } else if target.target_pointer_width == "32" {
+                    cflags += " -mx32";
+                }
+            }
+            _ => panic!(
+                "{}-gcc or {}-gcc required",
+                llvm_target.replace("-unknown", ""),
+                llvm_target
+            ),
+        }
+    }
+    (cc, cflags)
 }
 
 fn linux_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
@@ -1618,6 +1620,13 @@ fn l4re_arch(target: &TargetSpec) -> &'static str {
     match target.arch {
         aarch64 => "arm64",
         x86_64 => "x86_64",
+        _ => todo!("{target:?}"),
+    }
+}
+fn solaris_arch(target: &TargetSpec) -> &'static str {
+    match target.arch {
+        sparc64 => "sparc",
+        x86_64 => "i386",
         _ => todo!("{target:?}"),
     }
 }

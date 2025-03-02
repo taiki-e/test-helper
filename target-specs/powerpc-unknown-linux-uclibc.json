@@ -1,0 +1,29 @@
+{
+  "arch": "powerpc",
+  "crt-objects-fallback": "false",
+  "crt-static-respected": true,
+  "data-layout": "E-m:e-p:32:32-Fn32-i64:64-n32",
+  "dynamic-linking": true,
+  "env": "uclibc",
+  "features": "+secure-plt",
+  "has-rpath": true,
+  "has-thread-local": true,
+  "linker-flavor": "gnu-cc",
+  "llvm-target": "powerpc-unknown-linux-uclibc",
+  "max-atomic-width": 32,
+  "os": "linux",
+  "position-independent-executables": true,
+  "pre-link-args": {
+    "gnu-cc": ["-m32"],
+    "gnu-lld-cc": ["-m32"]
+  },
+  "relro-level": "full",
+  "stack-probes": {
+    "kind": "inline"
+  },
+  "supported-split-debuginfo": ["packed", "unpacked", "off"],
+  "target-endian": "big",
+  "target-family": ["unix"],
+  "target-mcount": "_mcount",
+  "target-pointer-width": "32"
+}

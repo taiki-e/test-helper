@@ -818,6 +818,66 @@ mod mipsel_linux_uclibc;
 pub use self::mipsel_linux_uclibc::*;
 #[cfg(
     all(
+        target_arch = "powerpc",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod powerpc_linux_uclibc;
+#[cfg(
+    all(
+        target_arch = "powerpc",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::powerpc_linux_uclibc::*;
+#[cfg(
+    all(
+        target_arch = "sparc",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod sparc_linux_uclibc;
+#[cfg(
+    all(
+        target_arch = "sparc",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::sparc_linux_uclibc::*;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod sparc64_linux_uclibc;
+#[cfg(
+    all(
+        target_arch = "sparc64",
+        target_os = "linux",
+        target_env = "uclibc",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::sparc64_linux_uclibc::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "l4re",
         target_env = "uclibc",
@@ -1162,6 +1222,24 @@ mod armv6_netbsd_eabihf;
 pub use self::armv6_netbsd_eabihf::*;
 #[cfg(
     all(
+        target_arch = "arm",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod armebv6_netbsd_eabihf;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::armebv6_netbsd_eabihf::*;
+#[cfg(
+    all(
         target_arch = "mips",
         target_os = "netbsd",
         target_endian = "little",
@@ -1198,6 +1276,42 @@ mod powerpc_netbsd;
 pub use self::powerpc_netbsd::*;
 #[cfg(
     all(
+        target_arch = "powerpc64",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod powerpc64_netbsd;
+#[cfg(
+    all(
+        target_arch = "powerpc64",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::powerpc64_netbsd::*;
+#[cfg(
+    all(
+        target_arch = "sparc",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod sparc_netbsd;
+#[cfg(
+    all(
+        target_arch = "sparc",
+        target_os = "netbsd",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::sparc_netbsd::*;
+#[cfg(
+    all(
         target_arch = "sparc64",
         target_os = "netbsd",
         target_endian = "big",
@@ -1232,6 +1346,24 @@ mod aarch64_openbsd;
     )
 )]
 pub use self::aarch64_openbsd::*;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "openbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv7_openbsd;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "openbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::armv7_openbsd::*;
 #[cfg(
     all(
         target_arch = "powerpc",

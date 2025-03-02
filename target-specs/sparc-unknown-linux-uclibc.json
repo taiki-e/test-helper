@@ -1,21 +1,26 @@
 {
-  "arch": "aarch64",
+  "arch": "sparc",
+  "cpu": "v9",
   "crt-objects-fallback": "false",
   "crt-static-respected": true,
-  "data-layout": "e-m:e-p270:32:32-p271:32:32-p272:64:64-i8:8:32-i16:16:32-i64:64-i128:128-n32:64-S128-Fn32",
+  "data-layout": "E-m:e-p:32:32-i64:64-i128:128-f128:64-n32-S64",
   "dynamic-linking": true,
   "env": "uclibc",
-  "features": "+v8a",
+  "features": "+v8plus",
   "has-rpath": true,
   "has-thread-local": true,
+  "late-link-args": {
+    "gnu-cc": ["-mcpu=v9", "-m32"],
+    "gnu-lld-cc": ["-mcpu=v9", "-m32"]
+  },
   "linker-flavor": "gnu-cc",
-  "llvm-target": "aarch64-unknown-linux-uclibc",
-  "max-atomic-width": 128,
+  "llvm-target": "sparc-unknown-linux-uclibc",
+  "max-atomic-width": 32,
   "os": "linux",
   "position-independent-executables": true,
   "relro-level": "full",
   "supported-split-debuginfo": ["packed", "unpacked", "off"],
+  "target-endian": "big",
   "target-family": ["unix"],
-  "target-mcount": "\u0001_mcount",
-  "target-pointer-width": "64"
+  "target-pointer-width": "32"
 }
