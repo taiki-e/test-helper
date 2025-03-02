@@ -385,7 +385,7 @@ pub use self::powerpc64le_linux_gnu::*;
         target_pointer_width = "32"
     )
 )]
-mod riscv32gc_linux_gnu;
+mod riscv32_linux_gnu;
 #[cfg(
     all(
         target_arch = "riscv32",
@@ -395,7 +395,7 @@ mod riscv32gc_linux_gnu;
         target_pointer_width = "32"
     )
 )]
-pub use self::riscv32gc_linux_gnu::*;
+pub use self::riscv32_linux_gnu::*;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -405,7 +405,7 @@ pub use self::riscv32gc_linux_gnu::*;
         target_pointer_width = "64"
     )
 )]
-mod riscv64gc_linux_gnu;
+mod riscv64_linux_gnu;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -415,7 +415,7 @@ mod riscv64gc_linux_gnu;
         target_pointer_width = "64"
     )
 )]
-pub use self::riscv64gc_linux_gnu::*;
+pub use self::riscv64_linux_gnu::*;
 #[cfg(
     all(
         target_arch = "s390x",
@@ -685,7 +685,7 @@ pub use self::powerpc64le_linux_musl::*;
         target_pointer_width = "32"
     )
 )]
-mod riscv32gc_linux_musl;
+mod riscv32_linux_musl;
 #[cfg(
     all(
         target_arch = "riscv32",
@@ -695,7 +695,7 @@ mod riscv32gc_linux_musl;
         target_pointer_width = "32"
     )
 )]
-pub use self::riscv32gc_linux_musl::*;
+pub use self::riscv32_linux_musl::*;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -705,7 +705,7 @@ pub use self::riscv32gc_linux_musl::*;
         target_pointer_width = "64"
     )
 )]
-mod riscv64gc_linux_musl;
+mod riscv64_linux_musl;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -715,7 +715,7 @@ mod riscv64gc_linux_musl;
         target_pointer_width = "64"
     )
 )]
-pub use self::riscv64gc_linux_musl::*;
+pub use self::riscv64_linux_musl::*;
 #[cfg(
     all(
         target_arch = "s390x",
@@ -898,7 +898,7 @@ pub use self::riscv64_linux_android::*;
         target_pointer_width = "64"
     )
 )]
-mod aarch64_apple_darwin;
+mod aarch64_darwin;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -907,7 +907,7 @@ mod aarch64_apple_darwin;
         target_pointer_width = "64"
     )
 )]
-pub use self::aarch64_apple_darwin::*;
+pub use self::aarch64_darwin::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -916,7 +916,7 @@ pub use self::aarch64_apple_darwin::*;
         target_pointer_width = "64"
     )
 )]
-mod aarch64_apple_ios;
+mod aarch64_ios;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -925,7 +925,7 @@ mod aarch64_apple_ios;
         target_pointer_width = "64"
     )
 )]
-pub use self::aarch64_apple_ios::*;
+pub use self::aarch64_ios::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -934,7 +934,7 @@ pub use self::aarch64_apple_ios::*;
         target_pointer_width = "64"
     )
 )]
-mod aarch64_apple_tvos;
+mod aarch64_tvos;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -943,7 +943,7 @@ mod aarch64_apple_tvos;
         target_pointer_width = "64"
     )
 )]
-pub use self::aarch64_apple_tvos::*;
+pub use self::aarch64_tvos::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -952,7 +952,7 @@ pub use self::aarch64_apple_tvos::*;
         target_pointer_width = "64"
     )
 )]
-mod aarch64_apple_visionos;
+mod aarch64_visionos;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -961,7 +961,7 @@ mod aarch64_apple_visionos;
         target_pointer_width = "64"
     )
 )]
-pub use self::aarch64_apple_visionos::*;
+pub use self::aarch64_visionos::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -970,7 +970,7 @@ pub use self::aarch64_apple_visionos::*;
         target_pointer_width = "64"
     )
 )]
-mod aarch64_apple_watchos;
+mod aarch64_watchos;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -979,7 +979,7 @@ mod aarch64_apple_watchos;
         target_pointer_width = "64"
     )
 )]
-pub use self::aarch64_apple_watchos::*;
+pub use self::aarch64_watchos::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -988,7 +988,7 @@ pub use self::aarch64_apple_watchos::*;
         target_pointer_width = "32"
     )
 )]
-mod arm64_32_apple_watchos;
+mod arm64_32_watchos;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -997,7 +997,7 @@ mod arm64_32_apple_watchos;
         target_pointer_width = "32"
     )
 )]
-pub use self::arm64_32_apple_watchos::*;
+pub use self::arm64_32_watchos::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -1096,7 +1096,7 @@ pub use self::powerpc64le_freebsd::*;
         target_pointer_width = "64"
     )
 )]
-mod riscv64gc_freebsd;
+mod riscv64_freebsd;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -1105,7 +1105,7 @@ mod riscv64gc_freebsd;
         target_pointer_width = "64"
     )
 )]
-pub use self::riscv64gc_freebsd::*;
+pub use self::riscv64_freebsd::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -1276,7 +1276,7 @@ pub use self::powerpc64_openbsd::*;
         target_pointer_width = "64"
     )
 )]
-mod riscv64gc_openbsd;
+mod riscv64_openbsd;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -1285,7 +1285,7 @@ mod riscv64gc_openbsd;
         target_pointer_width = "64"
     )
 )]
-pub use self::riscv64gc_openbsd::*;
+pub use self::riscv64_openbsd::*;
 #[cfg(
     all(
         target_arch = "sparc64",
@@ -1312,7 +1312,7 @@ pub use self::sparc64_openbsd::*;
         target_pointer_width = "64"
     )
 )]
-mod sparcv9_sun_solaris;
+mod sparcv9_solaris;
 #[cfg(
     all(
         target_arch = "sparc64",
@@ -1321,7 +1321,7 @@ mod sparcv9_sun_solaris;
         target_pointer_width = "64"
     )
 )]
-pub use self::sparcv9_sun_solaris::*;
+pub use self::sparcv9_solaris::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -1348,7 +1348,7 @@ pub use self::aarch64_illumos::*;
         target_pointer_width = "64"
     )
 )]
-mod powerpc64_ibm_aix;
+mod powerpc64_aix;
 #[cfg(
     all(
         target_arch = "powerpc64",
@@ -1357,7 +1357,7 @@ mod powerpc64_ibm_aix;
         target_pointer_width = "64"
     )
 )]
-pub use self::powerpc64_ibm_aix::*;
+pub use self::powerpc64_aix::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -1384,7 +1384,7 @@ pub use self::aarch64_fuchsia::*;
         target_pointer_width = "64"
     )
 )]
-mod riscv64gc_fuchsia;
+mod riscv64_fuchsia;
 #[cfg(
     all(
         target_arch = "riscv64",
@@ -1393,4 +1393,4 @@ mod riscv64gc_fuchsia;
         target_pointer_width = "64"
     )
 )]
-pub use self::riscv64gc_fuchsia::*;
+pub use self::riscv64_fuchsia::*;

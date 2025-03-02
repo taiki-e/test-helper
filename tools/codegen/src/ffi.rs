@@ -588,7 +588,13 @@ pub(crate) fn generate() {
         for &triple in triples {
             eprintln!("\ninfo: generating bindings for {triple}");
             let target = &target_spec_json(triple);
-            let module_name = triple.replace("-unknown", "").replace(['-', '.'], "_");
+            let mut module_name = triple
+                .replace(&*format!("-{}-", target.vendor.as_deref().unwrap_or("unknown")), "-")
+                .replace(['-', '.'], "_");
+            if target.arch.as_str().starts_with("riscv") {
+                module_name = module_name
+                    .replace(&*format!("{}gc", target.arch.as_str()), target.arch.as_str())
+            }
             let out_dir = &out_dir.join(&module_name);
             {
                 let module_name = format_ident!("{}", module_name);
@@ -996,7 +1002,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         if file.extension() == Some("deb") {
             assert_eq!(strip_components, "0");
             assert_eq!(paths, "");
-            cmd!("dpkg", "-x", file, &src_dir).run().unwrap();
+            cmd!("dpkg-deb", "-x", file, &src_dir).run().unwrap();
         } else {
             cmd!("tar", "xf", file, "--strip-components", strip_components, "-C", &src_dir, paths)
                 .run()
