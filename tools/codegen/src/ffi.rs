@@ -1450,7 +1450,7 @@ fn linux_gcc(target: &TargetSpec) -> (String, String) {
         }
     }
     if !cc_found {
-        cc = format!("{}-gcc", llvm_target);
+        cc = format!("{llvm_target}-gcc");
         cc_found = cmd!(&cc, "--version").stdout_capture().stderr_capture().run().is_ok();
     }
     if !cc_found {
