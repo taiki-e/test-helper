@@ -595,7 +595,7 @@ pub(crate) fn generate() {
                 .replace(['-', '.'], "_");
             if target.arch.as_str().starts_with("riscv") {
                 module_name = module_name
-                    .replace(&*format!("{}gc", target.arch.as_str()), target.arch.as_str())
+                    .replace(&*format!("{}gc", target.arch.as_str()), target.arch.as_str());
             }
             let out_dir = &out_dir.join(&module_name);
             {
