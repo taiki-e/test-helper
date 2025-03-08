@@ -37,6 +37,7 @@ pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ISA_SHA512;
 pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ISA_I8MM;
 pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ISA_SVE;
 pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ISA_ARM32;
+pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ISA_MOPS;
 pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ISA_SHA2;
 pub use self::zircon_system_public_zircon_features::ZX_ARM64_FEATURE_ADDRESS_TAGGING_TBI;
 pub type c_char = u8;
