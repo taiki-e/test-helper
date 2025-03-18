@@ -879,26 +879,6 @@ pub use self::sparc64_linux_uclibc::*;
 #[cfg(
     all(
         target_arch = "aarch64",
-        target_os = "l4re",
-        target_env = "uclibc",
-        target_endian = "little",
-        target_pointer_width = "64"
-    )
-)]
-mod aarch64_l4re_uclibc;
-#[cfg(
-    all(
-        target_arch = "aarch64",
-        target_os = "l4re",
-        target_env = "uclibc",
-        target_endian = "little",
-        target_pointer_width = "64"
-    )
-)]
-pub use self::aarch64_l4re_uclibc::*;
-#[cfg(
-    all(
-        target_arch = "aarch64",
         target_os = "android",
         target_endian = "little",
         target_pointer_width = "64"
@@ -950,6 +930,62 @@ mod riscv64_linux_android;
     )
 )]
 pub use self::riscv64_linux_android::*;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "l4re",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod aarch64_l4re_uclibc;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "l4re",
+        target_env = "uclibc",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::aarch64_l4re_uclibc::*;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "trusty",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod aarch64_trusty;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "trusty",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::aarch64_trusty::*;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "trusty",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod armv7_trusty;
+#[cfg(
+    all(
+        target_arch = "arm",
+        target_os = "trusty",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::armv7_trusty::*;
 #[cfg(
     all(
         target_arch = "aarch64",

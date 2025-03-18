@@ -13,8 +13,8 @@ pub const AT_HWCAP2: u32 = 26;
 pub const AT_COUNT: u32 = 27;
 extern "C" {
     pub fn elf_aux_info(
-        aux: ::std::os::raw::c_int,
+        aux: ::core::ffi::c_int,
         buf: *mut ::core::ffi::c_void,
-        buflen: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        buflen: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }

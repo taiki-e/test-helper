@@ -5,6 +5,10 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
+pub const RTLD_DEFAULT: *mut ::std::os::raw::c_void = ::core::ptr::null_mut();
 extern "C" {
-    pub fn syscall(__sysno: ::std::os::raw::c_long, ...) -> ::std::os::raw::c_long;
+    pub fn dlsym(
+        arg1: *mut ::core::ffi::c_void,
+        arg2: *const ::std::os::raw::c_char,
+    ) -> *mut ::core::ffi::c_void;
 }

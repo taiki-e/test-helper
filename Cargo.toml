@@ -17,7 +17,7 @@ cpuinfo = ["std", "fs-err"]
 critical-section-std = ["std", "critical-section"]
 doc = ["std", "git", "fs-err"]
 git = ["std", "fs-err"]
-sys = ["std"]
+sys = []
 
 [dependencies]
 critical-section = { version = "1", optional = true, features = ["restore-state-bool"] }
@@ -44,6 +44,7 @@ non_ascii_idents = "warn"
 rust_2018_idioms = "warn"
 single_use_lifetimes = "warn"
 unexpected_cfgs = { level = "warn", check-cfg = [
+    'cfg(target_os,values("trusty"))', # 1.82+ https://github.com/rust-lang/rust/pull/129490
 ] }
 unnameable_types = "warn"
 unreachable_pub = "warn"

@@ -86,8 +86,6 @@ static TARGETS: &[Target] = &[
             // "riscv64gc-unknown-linux-uclibc", // TODO: not in rustc
             "sparc-unknown-linux-uclibc",
             "sparc64-unknown-linux-uclibc",
-            // L4Re (uClibc-ng)
-            "aarch64-unknown-l4re-uclibc",
             // Android
             "aarch64-linux-android",
             "arm-linux-androideabi",
@@ -162,7 +160,6 @@ static TARGETS: &[Target] = &[
                 // https://github.com/bminor/glibc/blob/HEAD/dlfcn/dlfcn.h
                 // https://github.com/bminor/musl/blob/HEAD/include/dlfcn.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/dlfcn.h
-                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/dlfcn.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/dlfcn.h
                 path: "dlfcn.h",
                 types: &[],
@@ -176,7 +173,6 @@ static TARGETS: &[Target] = &[
                 // https://github.com/bminor/glibc/blob/HEAD/elf/elf.h
                 // https://github.com/bminor/musl/blob/HEAD/include/elf.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/elf.h
-                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/elf.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/elf.h
                 path: "elf.h",
                 types: &["Elf.*_auxv_t"],
@@ -190,7 +186,6 @@ static TARGETS: &[Target] = &[
                 // https://github.com/bminor/glibc/blob/HEAD/misc/sys/auxv.h
                 // https://github.com/bminor/musl/blob/HEAD/include/sys/auxv.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/sys/auxv.h
-                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/sys/auxv.h
                 // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
@@ -222,6 +217,42 @@ static TARGETS: &[Target] = &[
                 types: &[],
                 vars: &[],
                 functions: &["syscall"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+        ],
+    },
+    Target {
+        triples: &[
+            // L4Re (uClibc-ng)
+            "aarch64-unknown-l4re-uclibc",
+            // Trusty (musl)
+            "aarch64-unknown-trusty",
+            "armv7-unknown-trusty",
+        ],
+        headers: &[
+            Header {
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/dlfcn.h
+                // https://android.googlesource.com/trusty/external/musl/+/refs/heads/main/include/dlfcn.h
+                path: "dlfcn.h",
+                types: &[],
+                vars: &["RTLD_DEFAULT"],
+                functions: &["dlsym"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/sys/auxv.h
+                // https://android.googlesource.com/trusty/external/musl/+/refs/heads/main/include/sys/auxv.h
+                path: "sys/auxv.h",
+                types: &[],
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/libc/sysdeps/linux/aarch64/bits/hwcap.h
+                // https://android.googlesource.com/trusty/external/musl/+/refs/heads/main/arch/aarch64/bits/hwcap.h
+                // https://android.googlesource.com/trusty/external/musl/+/refs/heads/main/arch/arm/bits/hwcap.h
+                vars: &["AT_.*", "HWCAP.*"],
+                functions: &["getauxval"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -589,7 +620,7 @@ pub(crate) fn generate() {
     for &Target { triples, headers } in TARGETS {
         for &triple in triples {
             eprintln!("\ninfo: generating bindings for {triple}");
-            let target = &target_spec_json(triple);
+            let (ref target, is_custom) = target_spec_json(triple);
             let mut module_name = triple
                 .replace(&*format!("-{}-", target.vendor.as_deref().unwrap_or("unknown")), "-")
                 .replace(['-', '.'], "_");
@@ -661,7 +692,7 @@ pub(crate) fn generate() {
                         .file_stem()
                         .unwrap()
                 );
-                let out_path = out_dir.join(&out_file);
+                let out_path = &out_dir.join(&out_file);
 
                 let target_flag = &*format!("--target={}", target.llvm_target);
                 let mut clang_args = vec![target_flag, "-nostdinc"];
@@ -681,7 +712,7 @@ pub(crate) fn generate() {
                 let header_path;
                 let include;
                 match target.os {
-                    linux | l4re | android => {
+                    linux | android => {
                         let linux_headers_dir = linux_headers_dir(target, src_dir);
                         if let Some(path) = header.path.strip_prefix("linux-headers:") {
                             header_path = linux_headers_dir.join("include").join(path);
@@ -694,14 +725,6 @@ pub(crate) fn generate() {
                                 bionic_dir.join("kernel/uapi"),
                                 bionic_dir.join("kernel/android/uapi"),
                             ];
-                        } else if target.os == l4re {
-                            let arch = l4re_arch(target);
-                            let libc_dir = src_dir.join("../../headers/l4re").join(arch);
-                            header_path = libc_dir.join("usr/include").join(header.path);
-                            include = vec![
-                                libc_dir.join("usr/include/l4-arch"),
-                                libc_dir.join("usr/include"),
-                            ];
                         } else {
                             let headers_dir = libc_headers_dir(target, src_dir);
                             header_path = headers_dir.join("include").join(header.path);
@@ -711,6 +734,22 @@ pub(crate) fn generate() {
                             ];
                         }
                         define!(_GNU_SOURCE);
+                    }
+                    l4re => {
+                        let headers_dir = src_dir;
+                        header_path = headers_dir.join("usr/include").join(header.path);
+                        include = vec![
+                            headers_dir.join("usr/include/l4-arch"),
+                            headers_dir.join("usr/include"),
+                        ];
+                        // define!(_GNU_SOURCE); // RTLD_DEFAULT needs this
+                    }
+                    trusty => {
+                        let headers_dir = src_dir
+                            .join("../../../../headers/trusty/musl")
+                            .join(target.llvm_target.replace("-unknown", ""));
+                        header_path = headers_dir.join("include").join(header.path);
+                        include = vec![headers_dir.join("include")];
                     }
                     _ if target.vendor.as_deref() == Some("apple") => {
                         header_path = src_dir.join("bsd").join(header.path);
@@ -765,7 +804,7 @@ pub(crate) fn generate() {
                             src_dir.join("zircon/system/public"),
                             src_dir.join("zircon/kernel/lib/libc/include"),
                         ];
-                        define!(_KERNEL); // TODO: rm?
+                        define!(_KERNEL); // TODO: Needed to avoid `'stdatomic.h' file not found` error from zircon/system/public/zircon/types.h
                     }
                     _ => todo!("{target:?}"),
                 }
@@ -780,7 +819,14 @@ pub(crate) fn generate() {
                     .disable_header_comment()
                     .generate_comments(false)
                     .layout_tests(false)
-                    .rust_target(bindgen::RustTarget::Stable_1_36)
+                    .rust_target(if is_custom {
+                        // targets without std support
+                        bindgen::RustTarget::Stable_1_64
+                    } else {
+                        // oldest version that portable-atomic uses asm-based code is
+                        // Rust 1.46 (nightly-2020-06-21): https://github.com/taiki-e/portable-atomic/pull/52
+                        bindgen::RustTarget::Stable_1_40
+                    })
                     .use_core()
                     .formatter(bindgen::Formatter::Prettyplease)
                     .header(header_path.as_str())
@@ -794,6 +840,11 @@ pub(crate) fn generate() {
                 bindings.write_to_file(out_path).unwrap_or_else(|e| {
                     panic!("failed to write_to_file for {}: {}", header.path, e)
                 });
+                if is_custom {
+                    // TODO: Workaround for bindgen bug
+                    let f = fs::read_to_string(out_path).unwrap();
+                    fs::write(out_path, f.replace("::std::os::raw::", "::core::ffi::")).unwrap();
+                }
 
                 files.push((out_file, functions, types, vars));
             }
@@ -901,6 +952,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
     ) -> Utf8PathBuf {
         let name = repository.strip_suffix(".git").unwrap_or(repository);
         let name = name.replace("https://fuchsia.googlesource.com/", "fuchsia/");
+        let name = name.replace("https://android.googlesource.com/", "android/");
         let name = name.replace("https://git.linaro.org/toolchain/", "linaro-toolchain/");
         let name =
             name.replace("https://git.kernel.org/pub/scm/linux/kernel/git/arm64/", "linux-arm64/");
@@ -1047,7 +1099,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
     let src_dir;
     let mut patched = false;
     match target.os {
-        linux | l4re | android => {
+        linux | android => {
             src_dir = if target.arch == aarch64 && target.target_pointer_width == "32" {
                 clone(
                     download_dir,
@@ -1104,32 +1156,6 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 fs::write(bionic_dir.join("libc/include/stdbool.h"), "#define bool _Bool\n")
                     .unwrap();
                 fs::write(bionic_dir.join("libc/include/float.h"), "").unwrap();
-            } else if target.os == l4re {
-                // https://os.inf.tu-dresden.de/download/snapshots/toolchain/
-                let gcc_version = "14";
-                let arch = l4re_arch(target);
-                let name = &format!("headers/l4re/{arch}");
-                let headers_dir = download_dir.join(name);
-                if !headers_dir.exists() {
-                    curl(
-                        download_dir,
-                        name,
-                        &format!(
-                            "https://os.inf.tu-dresden.de/download/snapshots/toolchain/toolchain-l4re-{arch}-gcc-{gcc_version}.tar.xz",
-                        ),
-                        &format!("./sysroots/{}-l4re/usr/include", target.arch),
-                        "3",
-                    );
-                }
-                fs::write(
-                    headers_dir.join("usr/include/stddef.h"),
-                    "\
-                    typedef __SIZE_TYPE__ size_t;\n\
-                    typedef __WCHAR_TYPE__ wchar_t;\n\
-                    ",
-                )
-                .unwrap();
-                patched = true;
             } else if target.env == gnu {
                 if target.arch == aarch64 && target.target_pointer_width == "32" {
                     clone(
@@ -1186,22 +1212,8 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                     clone(download_dir, MUSL_REPO, None, &["/arch/", "/include/", "/tools/"]);
                     src_dir.join("../..").join(MUSL_REPO)
                 };
-                let musl_arch = musl_arch(target);
-                let headers_dir = &libc_headers_dir(target, &src_dir);
-                if !headers_dir.exists() {
-                    // https://github.com/bminor/musl/blob/HEAD/Makefile
-                    cmd!(
-                        "make",
-                        "install-headers",
-                        format!("ARCH={musl_arch}"),
-                        format!("DESTDIR={headers_dir}"),
-                        "prefix=/",
-                    )
-                    .dir(musl_src_dir)
-                    .stdout_capture()
-                    .run()
-                    .unwrap();
-                }
+                let headers_dir = &libc_headers_dir(target, musl_src_dir);
+                musl_install_headers(target, musl_src_dir, headers_dir);
                 patched = true;
             } else if target.env == uclibc {
                 clone(download_dir, UCLIBC_REPO, None, &[]);
@@ -1253,6 +1265,46 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 .unwrap();
                 patched = true;
             }
+        }
+        l4re => {
+            // https://os.inf.tu-dresden.de/download/snapshots/toolchain/
+            let gcc_version = "14";
+            let arch = l4re_arch(target);
+            let name = &format!("headers/l4re/{arch}");
+            let headers_dir = download_dir.join(name);
+            if !headers_dir.exists() {
+                curl(
+                    download_dir,
+                    name,
+                    &format!(
+                        "https://os.inf.tu-dresden.de/download/snapshots/toolchain/toolchain-l4re-{arch}-gcc-{gcc_version}.tar.xz",
+                    ),
+                    &format!("./sysroots/{}-l4re/usr/include", target.arch),
+                    "3",
+                );
+            }
+            fs::write(
+                headers_dir.join("usr/include/stddef.h"),
+                "\
+                 typedef __SIZE_TYPE__ size_t;\n\
+                 typedef __WCHAR_TYPE__ wchar_t;\n\
+                 ",
+            )
+            .unwrap();
+            src_dir = headers_dir;
+            patched = true;
+        }
+        trusty => {
+            src_dir = clone(
+                download_dir,
+                "https://android.googlesource.com/trusty/external/musl",
+                None,
+                &[],
+            );
+            let headers_dir = &src_dir
+                .join("../../../../headers/trusty/musl")
+                .join(target.llvm_target.replace("-unknown", ""));
+            musl_install_headers(target, &src_dir, headers_dir);
         }
         _ if target.vendor.as_deref() == Some("apple") => {
             clone(download_dir, "apple-oss-distributions/Libc", None, &["/include/"]);
@@ -1426,6 +1478,24 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         patch(target, &src_dir);
     }
     src_dir
+}
+
+fn musl_install_headers(target: &TargetSpec, musl_src_dir: &Utf8Path, headers_dir: &Utf8Path) {
+    if !headers_dir.exists() {
+        let musl_arch = musl_arch(target);
+        // https://github.com/bminor/musl/blob/HEAD/Makefile
+        cmd!(
+            "make",
+            "install-headers",
+            format!("ARCH={musl_arch}"),
+            format!("DESTDIR={headers_dir}"),
+            "prefix=/",
+        )
+        .dir(musl_src_dir)
+        .stdout_capture()
+        .run()
+        .unwrap();
+    }
 }
 
 fn linux_gcc(target: &TargetSpec) -> (String, String) {
@@ -1640,8 +1710,9 @@ fn illumos_arch(target: &TargetSpec) -> &'static str {
 }
 
 #[track_caller]
-fn target_spec_json(target: &str) -> TargetSpec {
+fn target_spec_json(target: &str) -> (TargetSpec, bool) {
     let spec_path = workspace_root().join("target-specs").join(target).with_extension("json");
-    let target = if spec_path.exists() { spec_path.as_str() } else { target };
-    target_spec_json::target_spec_json(Command::new("rustc"), target).unwrap()
+    let is_custom = spec_path.exists();
+    let target = if is_custom { spec_path.as_str() } else { target };
+    (target_spec_json::target_spec_json(Command::new("rustc"), target).unwrap(), is_custom)
 }
