@@ -27,6 +27,8 @@ mipsn
 nostdinc
 octeon
 osfmk
+PBYTE
+PDWORD
 prctl
 quic
 rcpc
@@ -43,3 +45,4 @@ sysctlnode
 uapi
 unistd
 uscat
+WINAPI

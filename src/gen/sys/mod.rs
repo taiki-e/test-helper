@@ -1562,3 +1562,23 @@ mod riscv64_fuchsia;
     )
 )]
 pub use self::riscv64_fuchsia::*;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "windows",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod aarch64_windows_gnullvm;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "windows",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::aarch64_windows_gnullvm::*;

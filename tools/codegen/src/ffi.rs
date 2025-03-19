@@ -578,6 +578,33 @@ static TARGETS: &[Target] = &[
             },
         ],
     },
+    Target {
+        triples: &[
+            "aarch64-pc-windows-gnullvm",
+        ],
+        headers: &[
+            Header {
+                // https://github.com/mingw-w64/mingw-w64/blob/HEAD/mingw-w64-headers/include/processthreadsapi.h
+                path: "processthreadsapi.h",
+                types: &[],
+                vars: &[],
+                functions: &["IsProcessorFeaturePresent"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/mingw-w64/mingw-w64/blob/HEAD/mingw-w64-headers/include/winnt.h
+                path: "winnt.h",
+                types: &[],
+                vars: &["PF_ARM_*"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+        ],
+    },
 ];
 
 #[derive(Clone, Copy)]
@@ -805,6 +832,32 @@ pub(crate) fn generate() {
                             src_dir.join("zircon/kernel/lib/libc/include"),
                         ];
                         define!(_KERNEL); // TODO: Needed to avoid `'stdatomic.h' file not found` error from zircon/system/public/zircon/types.h
+                    }
+                    windows if target.env == gnu => {
+                        let mingw_w64_headers_dir =
+                            &src_dir.join("../..").join("headers").join("mingw-w64");
+                        header_path = mingw_w64_headers_dir.join("usr/include").join(header.path);
+                        include = vec![mingw_w64_headers_dir.join("usr/include")];
+                        match target.arch {
+                            aarch64 => define!(_ARM64_),
+                            arm => define!(_ARM_),
+                            arm64ec => define!(_ARM64EC_),
+                            x86 => define!(_X86_),
+                            x86_64 => define!(_AMD64_),
+                            _ => todo!("{target:?}"),
+                        }
+                        // Needed to avoid "error: unknown type name '..'"
+                        // https://learn.microsoft.com/en-us/windows/win32/winprog/windows-data-types
+                        define!(CONST, "const");
+                        define!(BYTE, "unsigned char");
+                        define!(PBYTE, "BYTE *");
+                        define!(WORD, "unsigned short");
+                        define!(DWORD, "unsigned long");
+                        define!(PDWORD, "DWORD *");
+                        define!(UCHAR, "unsigned char");
+                        define!(ULONG, "unsigned long");
+                        define!(WINAPI, ""); // TODO: Needed to avoid "error: expected ';' after top level declarator"
+                        define!(_RTL_RUN_ONCE_DEF); // Needed to avoid "error: redefinition of 'WINAPI' as different kind of symbol"
                     }
                     _ => todo!("{target:?}"),
                 }
@@ -1471,6 +1524,29 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 "#define size_t unsigned long",
             )
             .unwrap();
+        }
+        windows if target.env == gnu => {
+            src_dir = clone(download_dir, "mingw-w64/mingw-w64", None, &["/mingw-w64-headers/"]);
+            let mingw_w64_headers_dir = &src_dir.join("../..").join("headers").join("mingw-w64");
+            if !mingw_w64_headers_dir.exists() {
+                // https://github.com/mingw-w64/mingw-w64/blob/HEAD/mingw-w64-headers/configure
+                cmd!(
+                    "sh",
+                    "configure",
+                    format!("--prefix={mingw_w64_headers_dir}/usr"),
+                    "--disable-crt",
+                )
+                .dir(src_dir.join("mingw-w64-headers"))
+                .stdout_capture()
+                .run()
+                .unwrap();
+                cmd!("make").dir(src_dir.join("mingw-w64-headers")).stdout_capture().run().unwrap();
+                cmd!("make", "install")
+                    .dir(src_dir.join("mingw-w64-headers"))
+                    .stdout_capture()
+                    .run()
+                    .unwrap();
+            }
         }
         _ => todo!("{target:?}"),
     }
