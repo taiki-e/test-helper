@@ -19,8 +19,6 @@ mod macros;
 pub mod cli;
 #[cfg(feature = "codegen")]
 pub mod codegen;
-#[cfg(feature = "cpuinfo")]
-pub mod cpuinfo;
 #[cfg(feature = "critical-section-std")]
 mod critical_section_std;
 #[cfg(feature = "doc")]
