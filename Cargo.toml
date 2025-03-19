@@ -13,7 +13,6 @@ std = []
 
 codegen = ["std", "git", "fs-err", "proc-macro2", "quote", "syn"]
 cli = ["std"]
-cpuinfo = ["std", "fs-err"]
 critical-section-std = ["std", "critical-section"]
 doc = ["std", "git", "fs-err"]
 git = ["std", "fs-err"]

@@ -17,7 +17,6 @@ hwprobe
 libpthread
 linaro
 loongson
-lrcpc
 mabi
 macppc
 MAXNAME
@@ -28,7 +27,6 @@ octeon
 osfmk
 prctl
 quic
-rcpc
 reentrancy
 richlowe
 rseq
@@ -41,4 +39,3 @@ sysctlbyname
 sysctlnode
 uapi
 unistd
-uscat
