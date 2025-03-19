@@ -7,7 +7,6 @@ auxvec
 bminor
 cputable
 DESTDIR
-dilos
 dlfcn
 dlsym
 evbmips

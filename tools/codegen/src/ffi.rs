@@ -1438,18 +1438,13 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             if headers_dir.exists() {
                 patched = true;
             } else {
-                // For now, refers dilos2's system-header package as with std: https://github.com/rust-lang/rust/blob/1.85.0/src/ci/docker/host-x86_64/dist-various-2/Dockerfile#L31
-                let system_header = match target.arch {
-                    // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-sparc/Packages
-                    sparc64 => "pool/main/s/system-header/system-header_2.0.3.11_solaris-sparc.deb",
-                    // https://apt.dilos.org/dilos/dists/dilos2/main/binary-solaris-i386/Packages
-                    x86_64 => "pool/main/d/dg2/system-header_2.0.3.36_solaris-i386.deb",
-                    _ => todo!("{target:?}"),
-                };
                 curl(
                     download_dir,
                     name,
-                    &format!("https://apt.dilos.org/dilos/{system_header}"),
+                    &format!(
+                        // https://github.com/rust-lang/rust/pull/138699
+                        "https://github.com/psumbera/solaris-sysroot/releases/download/v2025-02-21/solaris-11.4.42.111.0-{arch}-sysroot-v2025-02-21.tar.bz2"
+                    ),
                     "",
                     "0",
                 );
