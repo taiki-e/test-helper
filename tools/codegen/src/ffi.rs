@@ -953,7 +953,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let name = repository.strip_suffix(".git").unwrap_or(repository);
         let name = name.replace("https://fuchsia.googlesource.com/", "fuchsia/");
         let name = name.replace("https://android.googlesource.com/", "android/");
-        let name = name.replace("https://git.linaro.org/toolchain/", "linaro-toolchain/");
+        let name = name.replace("https://git.codelinaro.org/clo/le/", "linaro/");
         let name =
             name.replace("https://git.kernel.org/pub/scm/linux/kernel/git/arm64/", "linux-arm64/");
         assert!(!name.contains("://"), "{}", name);
@@ -1160,8 +1160,8 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 if target.arch == aarch64 && target.target_pointer_width == "32" {
                     clone(
                         download_dir,
-                        "https://git.linaro.org/toolchain/glibc.git",
-                        Some("arm/ilp32"),
+                        "https://git.codelinaro.org/clo/le/glibc.git",
+                        Some("drains/arm/ilp32"),
                         &[],
                     );
                 } else {
@@ -1599,7 +1599,7 @@ fn linux_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
 }
 fn glibc_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
     if target.arch == aarch64 && target.target_pointer_width == "32" {
-        src_dir.join("../..").join("linaro-toolchain/glibc")
+        src_dir.join("../..").join("linaro/glibc")
     } else {
         src_dir.join("../..").join(GLIBC_REPO)
     }
