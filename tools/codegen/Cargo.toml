@@ -7,7 +7,7 @@ publish = false
 [dependencies]
 bindgen = { default-features = false, features = ["prettyplease", "runtime"], git = "https://github.com/taiki-e/rust-bindgen.git", branch = "dev" } # https://github.com/rust-lang/rust-bindgen/pull/2369 + avoid https://github.com/rust-lang/cargo/issues/10623 + avoid bug on generate c str option
 camino = "1"
-duct = "0.13"
+duct = "1.0"
 fs-err = "3"
 globset = { version = "0.4", default-features = false }
 prettyplease = "0.2"
