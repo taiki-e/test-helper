@@ -440,6 +440,7 @@ pub use self::sys_syscall::SYS_kcmp;
 pub use self::sys_syscall::SYS_getrlimitusage;
 pub use self::sys_syscall::SYS_fchroot;
 pub use self::sys_syscall::SYS_setcred;
+pub use self::sys_syscall::SYS_exterrctl;
 pub use self::sys_syscall::SYS_MAXSYSCALL;
 mod sys_sysctl;
 pub use self::sys_sysctl::CTL_KERN;
