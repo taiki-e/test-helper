@@ -485,6 +485,8 @@ pub use self::sys_elf_common::AT_KPRELOAD;
 pub use self::sys_elf_common::AT_USRSTACKBASE;
 pub use self::sys_elf_common::AT_USRSTACKLIM;
 pub use self::sys_elf_common::AT_CHERI_STATS;
+pub use self::sys_elf_common::AT_HWCAP3;
+pub use self::sys_elf_common::AT_HWCAP4;
 pub use self::sys_elf_common::AT_COUNT;
 mod machine_cpu;
 pub use self::machine_cpu::PPC_FEATURE_32;
