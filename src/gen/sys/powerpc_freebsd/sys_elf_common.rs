@@ -43,4 +43,6 @@ pub const AT_KPRELOAD: u32 = 34;
 pub const AT_USRSTACKBASE: u32 = 35;
 pub const AT_USRSTACKLIM: u32 = 36;
 pub const AT_CHERI_STATS: u32 = 37;
-pub const AT_COUNT: u32 = 38;
+pub const AT_HWCAP3: u32 = 38;
+pub const AT_HWCAP4: u32 = 39;
+pub const AT_COUNT: u32 = 40;
