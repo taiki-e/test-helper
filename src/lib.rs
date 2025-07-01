@@ -11,6 +11,9 @@
 #[cfg(feature = "std")]
 extern crate std;
 
+#[cfg(feature = "sys")]
+pub use memoffset;
+
 #[cfg(feature = "std")]
 #[macro_use]
 mod macros;
@@ -30,3 +33,5 @@ pub mod once_lock;
 #[cfg(feature = "sys")]
 #[path = "gen/sys/mod.rs"]
 pub mod sys;
+#[cfg(feature = "sys")]
+mod sys_macros;
