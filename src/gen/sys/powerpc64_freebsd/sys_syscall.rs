@@ -436,4 +436,6 @@ pub const SYS_getrlimitusage: u32 = 589;
 pub const SYS_fchroot: u32 = 590;
 pub const SYS_setcred: u32 = 591;
 pub const SYS_exterrctl: u32 = 592;
-pub const SYS_MAXSYSCALL: u32 = 593;
+pub const SYS_inotify_add_watch_at: u32 = 593;
+pub const SYS_inotify_rm_watch: u32 = 594;
+pub const SYS_MAXSYSCALL: u32 = 595;
