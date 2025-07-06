@@ -642,7 +642,7 @@ pub(crate) fn generate() {
                 }
                 let endian = target.target_endian.as_str();
                 cfg.extend(quote! { , target_endian = #endian });
-                let width = &target.target_pointer_width;
+                let width = target.target_pointer_width.to_string();
                 cfg.extend(quote! { , target_pointer_width = #width });
                 target_modules.push(quote! {
                     #[cfg(all(#cfg))]
@@ -670,7 +670,7 @@ pub(crate) fn generate() {
                 if target.os == linux
                     && target.env == gnu
                     && target.arch == aarch64
-                    && target.target_pointer_width == "32"
+                    && target.target_pointer_width == 32
                     && matches!(header.path, "sys/rseq.h")
                 {
                     // TODO: ilp32 fork is old
@@ -1077,7 +1077,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             let dir = match target.os {
                 linux => {
                     if target.env == gnu {
-                        if target.arch == aarch64 && target.target_pointer_width == "32" {
+                        if target.arch == aarch64 && target.target_pointer_width == 32 {
                             return;
                         }
                         glibc_dir(target, src_dir)
@@ -1100,7 +1100,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
     let mut patched = false;
     match target.os {
         linux | android => {
-            src_dir = if target.arch == aarch64 && target.target_pointer_width == "32" {
+            src_dir = if target.arch == aarch64 && target.target_pointer_width == 32 {
                 clone(
                     download_dir,
                     "https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git",
@@ -1157,7 +1157,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                     .unwrap();
                 fs::write(bionic_dir.join("libc/include/float.h"), "").unwrap();
             } else if target.env == gnu {
-                if target.arch == aarch64 && target.target_pointer_width == "32" {
+                if target.arch == aarch64 && target.target_pointer_width == 32 {
                     clone(
                         download_dir,
                         "https://git.codelinaro.org/clo/le/glibc.git",
@@ -1523,7 +1523,7 @@ fn linux_gcc(target: &TargetSpec) -> (String, String) {
         match target.arch {
             aarch64 => {
                 cc = "aarch64-linux-gnu-gcc".to_owned();
-                if target.target_pointer_width == "32" {
+                if target.target_pointer_width == 32 {
                     cflags += " -mabi=ilp32";
                 }
                 if target.target_endian == big {
@@ -1540,7 +1540,7 @@ fn linux_gcc(target: &TargetSpec) -> (String, String) {
                 cc = "mips64el-linux-gnuabi64-gcc".to_owned();
                 if matches!(target.arch, mips | mips32r6) {
                     cflags += " -mabi=32";
-                } else if target.target_pointer_width == "32" {
+                } else if target.target_pointer_width == 32 {
                     cflags += " -mabi=n32";
                 }
                 match target.arch {
@@ -1576,7 +1576,7 @@ fn linux_gcc(target: &TargetSpec) -> (String, String) {
                     if llvm_target.starts_with("i586") {
                         cflags += " -march=pentium";
                     }
-                } else if target.target_pointer_width == "32" {
+                } else if target.target_pointer_width == 32 {
                     cflags += " -mx32";
                 }
             }
@@ -1591,14 +1591,14 @@ fn linux_gcc(target: &TargetSpec) -> (String, String) {
 }
 
 fn linux_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
-    if target.arch == aarch64 && target.target_pointer_width == "32" {
+    if target.arch == aarch64 && target.target_pointer_width == 32 {
         src_dir.join("../..").join("headers").join("linux").join("arm64-ilp32")
     } else {
         src_dir.join("../..").join("headers").join("linux").join(linux_arch(target))
     }
 }
 fn glibc_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
-    if target.arch == aarch64 && target.target_pointer_width == "32" {
+    if target.arch == aarch64 && target.target_pointer_width == 32 {
         src_dir.join("../..").join("linaro/glibc")
     } else {
         src_dir.join("../..").join(GLIBC_REPO)
@@ -1648,15 +1648,15 @@ fn musl_arch(target: &TargetSpec) -> &'static str {
         loongarch64 => "loongarch64",
         m68k => "m68k",
         mips | mips32r6 => "mips",
-        mips64 | mips64r6 if target.target_pointer_width == "64" => "mips64",
-        mips64 | mips64r6 if target.target_pointer_width == "32" => "mipsn32",
+        mips64 | mips64r6 if target.target_pointer_width == 64 => "mips64",
+        mips64 | mips64r6 if target.target_pointer_width == 32 => "mipsn32",
         powerpc => "powerpc",
         powerpc64 => "powerpc64",
         riscv32 => "riscv32",
         riscv64 => "riscv64",
         s390x => "s390x",
-        x86_64 if target.target_pointer_width == "32" => "x32",
-        x86_64 if target.target_pointer_width == "64" => "x86_64",
+        x86_64 if target.target_pointer_width == 32 => "x32",
+        x86_64 if target.target_pointer_width == 64 => "x86_64",
         _ => todo!("{target:?}"),
     }
 }
