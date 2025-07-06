@@ -22,7 +22,7 @@
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_linux_gnu;
@@ -32,7 +32,7 @@ mod aarch64_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_linux_gnu::*;
@@ -42,7 +42,7 @@ pub use self::aarch64_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_be_linux_gnu;
@@ -52,7 +52,7 @@ mod aarch64_be_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_be_linux_gnu::*;
@@ -62,7 +62,7 @@ pub use self::aarch64_be_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod aarch64_linux_gnu_ilp32;
@@ -72,7 +72,7 @@ mod aarch64_linux_gnu_ilp32;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::aarch64_linux_gnu_ilp32::*;
@@ -82,7 +82,7 @@ pub use self::aarch64_linux_gnu_ilp32::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod aarch64_be_linux_gnu_ilp32;
@@ -92,7 +92,7 @@ mod aarch64_be_linux_gnu_ilp32;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::aarch64_be_linux_gnu_ilp32::*;
@@ -102,7 +102,7 @@ pub use self::aarch64_be_linux_gnu_ilp32::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv5te_linux_gnueabi;
@@ -112,7 +112,7 @@ mod armv5te_linux_gnueabi;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv5te_linux_gnueabi::*;
@@ -122,7 +122,7 @@ pub use self::armv5te_linux_gnueabi::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armeb_linux_gnueabi;
@@ -132,7 +132,7 @@ mod armeb_linux_gnueabi;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armeb_linux_gnueabi::*;
@@ -142,7 +142,7 @@ pub use self::armeb_linux_gnueabi::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod loongarch64_linux_gnu;
@@ -152,7 +152,7 @@ mod loongarch64_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::loongarch64_linux_gnu::*;
@@ -162,7 +162,7 @@ pub use self::loongarch64_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mips_linux_gnu;
@@ -172,7 +172,7 @@ mod mips_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mips_linux_gnu::*;
@@ -182,7 +182,7 @@ pub use self::mips_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod mips64_linux_gnuabi64;
@@ -192,7 +192,7 @@ mod mips64_linux_gnuabi64;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::mips64_linux_gnuabi64::*;
@@ -202,7 +202,7 @@ pub use self::mips64_linux_gnuabi64::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod mips64el_linux_gnuabi64;
@@ -212,7 +212,7 @@ mod mips64el_linux_gnuabi64;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::mips64el_linux_gnuabi64::*;
@@ -222,7 +222,7 @@ pub use self::mips64el_linux_gnuabi64::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mipsel_linux_gnu;
@@ -232,7 +232,7 @@ mod mipsel_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mipsel_linux_gnu::*;
@@ -242,7 +242,7 @@ pub use self::mipsel_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mipsisa32r6_linux_gnu;
@@ -252,7 +252,7 @@ mod mipsisa32r6_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mipsisa32r6_linux_gnu::*;
@@ -262,7 +262,7 @@ pub use self::mipsisa32r6_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mipsisa32r6el_linux_gnu;
@@ -272,7 +272,7 @@ mod mipsisa32r6el_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mipsisa32r6el_linux_gnu::*;
@@ -282,7 +282,7 @@ pub use self::mipsisa32r6el_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod mipsisa64r6_linux_gnuabi64;
@@ -292,7 +292,7 @@ mod mipsisa64r6_linux_gnuabi64;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::mipsisa64r6_linux_gnuabi64::*;
@@ -302,7 +302,7 @@ pub use self::mipsisa64r6_linux_gnuabi64::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod mipsisa64r6el_linux_gnuabi64;
@@ -312,7 +312,7 @@ mod mipsisa64r6el_linux_gnuabi64;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::mipsisa64r6el_linux_gnuabi64::*;
@@ -322,7 +322,7 @@ pub use self::mipsisa64r6el_linux_gnuabi64::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod powerpc_linux_gnu;
@@ -332,7 +332,7 @@ mod powerpc_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::powerpc_linux_gnu::*;
@@ -342,7 +342,7 @@ pub use self::powerpc_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64_linux_gnu;
@@ -352,7 +352,7 @@ mod powerpc64_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64_linux_gnu::*;
@@ -362,7 +362,7 @@ pub use self::powerpc64_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64le_linux_gnu;
@@ -372,7 +372,7 @@ mod powerpc64le_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64le_linux_gnu::*;
@@ -382,7 +382,7 @@ pub use self::powerpc64le_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod riscv32_linux_gnu;
@@ -392,7 +392,7 @@ mod riscv32_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::riscv32_linux_gnu::*;
@@ -402,7 +402,7 @@ pub use self::riscv32_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod riscv64_linux_gnu;
@@ -412,7 +412,7 @@ mod riscv64_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::riscv64_linux_gnu::*;
@@ -422,7 +422,7 @@ pub use self::riscv64_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod s390x_linux_gnu;
@@ -432,7 +432,7 @@ mod s390x_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::s390x_linux_gnu::*;
@@ -442,7 +442,7 @@ pub use self::s390x_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod sparc_linux_gnu;
@@ -452,7 +452,7 @@ mod sparc_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::sparc_linux_gnu::*;
@@ -462,7 +462,7 @@ pub use self::sparc_linux_gnu::*;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod sparc64_linux_gnu;
@@ -472,7 +472,7 @@ mod sparc64_linux_gnu;
         target_os = "linux",
         target_env = "gnu",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::sparc64_linux_gnu::*;
@@ -482,7 +482,7 @@ pub use self::sparc64_linux_gnu::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_linux_musl;
@@ -492,7 +492,7 @@ mod aarch64_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_linux_musl::*;
@@ -502,7 +502,7 @@ pub use self::aarch64_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv5te_linux_musleabi;
@@ -512,7 +512,7 @@ mod armv5te_linux_musleabi;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv5te_linux_musleabi::*;
@@ -522,7 +522,7 @@ pub use self::armv5te_linux_musleabi::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod loongarch64_linux_musl;
@@ -532,7 +532,7 @@ mod loongarch64_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::loongarch64_linux_musl::*;
@@ -542,7 +542,7 @@ pub use self::loongarch64_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mips_linux_musl;
@@ -552,7 +552,7 @@ mod mips_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mips_linux_musl::*;
@@ -562,7 +562,7 @@ pub use self::mips_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod mips64_linux_muslabi64;
@@ -572,7 +572,7 @@ mod mips64_linux_muslabi64;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::mips64_linux_muslabi64::*;
@@ -582,7 +582,7 @@ pub use self::mips64_linux_muslabi64::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod mips64el_linux_muslabi64;
@@ -592,7 +592,7 @@ mod mips64el_linux_muslabi64;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::mips64el_linux_muslabi64::*;
@@ -602,7 +602,7 @@ pub use self::mips64el_linux_muslabi64::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mipsel_linux_musl;
@@ -612,7 +612,7 @@ mod mipsel_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mipsel_linux_musl::*;
@@ -622,7 +622,7 @@ pub use self::mipsel_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod powerpc_linux_musl;
@@ -632,7 +632,7 @@ mod powerpc_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::powerpc_linux_musl::*;
@@ -642,7 +642,7 @@ pub use self::powerpc_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64_linux_musl;
@@ -652,7 +652,7 @@ mod powerpc64_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64_linux_musl::*;
@@ -662,7 +662,7 @@ pub use self::powerpc64_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64le_linux_musl;
@@ -672,7 +672,7 @@ mod powerpc64le_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64le_linux_musl::*;
@@ -682,7 +682,7 @@ pub use self::powerpc64le_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod riscv32_linux_musl;
@@ -692,7 +692,7 @@ mod riscv32_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::riscv32_linux_musl::*;
@@ -702,7 +702,7 @@ pub use self::riscv32_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod riscv64_linux_musl;
@@ -712,7 +712,7 @@ mod riscv64_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::riscv64_linux_musl::*;
@@ -722,7 +722,7 @@ pub use self::riscv64_linux_musl::*;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod s390x_linux_musl;
@@ -732,7 +732,7 @@ mod s390x_linux_musl;
         target_os = "linux",
         target_env = "musl",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::s390x_linux_musl::*;
@@ -742,7 +742,7 @@ pub use self::s390x_linux_musl::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_linux_uclibc;
@@ -752,7 +752,7 @@ mod aarch64_linux_uclibc;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_linux_uclibc::*;
@@ -762,7 +762,7 @@ pub use self::aarch64_linux_uclibc::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv5te_linux_uclibceabi;
@@ -772,7 +772,7 @@ mod armv5te_linux_uclibceabi;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv5te_linux_uclibceabi::*;
@@ -782,7 +782,7 @@ pub use self::armv5te_linux_uclibceabi::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mips_linux_uclibc;
@@ -792,7 +792,7 @@ mod mips_linux_uclibc;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mips_linux_uclibc::*;
@@ -802,7 +802,7 @@ pub use self::mips_linux_uclibc::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mipsel_linux_uclibc;
@@ -812,7 +812,7 @@ mod mipsel_linux_uclibc;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mipsel_linux_uclibc::*;
@@ -822,7 +822,7 @@ pub use self::mipsel_linux_uclibc::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod powerpc_linux_uclibc;
@@ -832,7 +832,7 @@ mod powerpc_linux_uclibc;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::powerpc_linux_uclibc::*;
@@ -842,7 +842,7 @@ pub use self::powerpc_linux_uclibc::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod sparc_linux_uclibc;
@@ -852,7 +852,7 @@ mod sparc_linux_uclibc;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::sparc_linux_uclibc::*;
@@ -862,7 +862,7 @@ pub use self::sparc_linux_uclibc::*;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod sparc64_linux_uclibc;
@@ -872,7 +872,7 @@ mod sparc64_linux_uclibc;
         target_os = "linux",
         target_env = "uclibc",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::sparc64_linux_uclibc::*;
@@ -881,7 +881,7 @@ pub use self::sparc64_linux_uclibc::*;
         target_arch = "aarch64",
         target_os = "android",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_linux_android;
@@ -890,7 +890,7 @@ mod aarch64_linux_android;
         target_arch = "aarch64",
         target_os = "android",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_linux_android::*;
@@ -899,7 +899,7 @@ pub use self::aarch64_linux_android::*;
         target_arch = "arm",
         target_os = "android",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod arm_linux_androideabi;
@@ -908,7 +908,7 @@ mod arm_linux_androideabi;
         target_arch = "arm",
         target_os = "android",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::arm_linux_androideabi::*;
@@ -917,7 +917,7 @@ pub use self::arm_linux_androideabi::*;
         target_arch = "riscv64",
         target_os = "android",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod riscv64_linux_android;
@@ -926,7 +926,7 @@ mod riscv64_linux_android;
         target_arch = "riscv64",
         target_os = "android",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::riscv64_linux_android::*;
@@ -936,7 +936,7 @@ pub use self::riscv64_linux_android::*;
         target_os = "l4re",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_l4re_uclibc;
@@ -946,7 +946,7 @@ mod aarch64_l4re_uclibc;
         target_os = "l4re",
         target_env = "uclibc",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_l4re_uclibc::*;
@@ -955,7 +955,7 @@ pub use self::aarch64_l4re_uclibc::*;
         target_arch = "aarch64",
         target_os = "trusty",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_trusty;
@@ -964,7 +964,7 @@ mod aarch64_trusty;
         target_arch = "aarch64",
         target_os = "trusty",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_trusty::*;
@@ -973,7 +973,7 @@ pub use self::aarch64_trusty::*;
         target_arch = "arm",
         target_os = "trusty",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv7_trusty;
@@ -982,7 +982,7 @@ mod armv7_trusty;
         target_arch = "arm",
         target_os = "trusty",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv7_trusty::*;
@@ -991,7 +991,7 @@ pub use self::armv7_trusty::*;
         target_arch = "aarch64",
         target_os = "macos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_darwin;
@@ -1000,7 +1000,7 @@ mod aarch64_darwin;
         target_arch = "aarch64",
         target_os = "macos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_darwin::*;
@@ -1009,7 +1009,7 @@ pub use self::aarch64_darwin::*;
         target_arch = "aarch64",
         target_os = "ios",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_ios;
@@ -1018,7 +1018,7 @@ mod aarch64_ios;
         target_arch = "aarch64",
         target_os = "ios",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_ios::*;
@@ -1027,7 +1027,7 @@ pub use self::aarch64_ios::*;
         target_arch = "aarch64",
         target_os = "tvos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_tvos;
@@ -1036,7 +1036,7 @@ mod aarch64_tvos;
         target_arch = "aarch64",
         target_os = "tvos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_tvos::*;
@@ -1045,7 +1045,7 @@ pub use self::aarch64_tvos::*;
         target_arch = "aarch64",
         target_os = "visionos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_visionos;
@@ -1054,7 +1054,7 @@ mod aarch64_visionos;
         target_arch = "aarch64",
         target_os = "visionos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_visionos::*;
@@ -1063,7 +1063,7 @@ pub use self::aarch64_visionos::*;
         target_arch = "aarch64",
         target_os = "watchos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_watchos;
@@ -1072,7 +1072,7 @@ mod aarch64_watchos;
         target_arch = "aarch64",
         target_os = "watchos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_watchos::*;
@@ -1081,7 +1081,7 @@ pub use self::aarch64_watchos::*;
         target_arch = "aarch64",
         target_os = "watchos",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod arm64_32_watchos;
@@ -1090,7 +1090,7 @@ mod arm64_32_watchos;
         target_arch = "aarch64",
         target_os = "watchos",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::arm64_32_watchos::*;
@@ -1099,7 +1099,7 @@ pub use self::arm64_32_watchos::*;
         target_arch = "aarch64",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_freebsd;
@@ -1108,7 +1108,7 @@ mod aarch64_freebsd;
         target_arch = "aarch64",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_freebsd::*;
@@ -1117,7 +1117,7 @@ pub use self::aarch64_freebsd::*;
         target_arch = "arm",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv6_freebsd;
@@ -1126,7 +1126,7 @@ mod armv6_freebsd;
         target_arch = "arm",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv6_freebsd::*;
@@ -1135,7 +1135,7 @@ pub use self::armv6_freebsd::*;
         target_arch = "powerpc",
         target_os = "freebsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod powerpc_freebsd;
@@ -1144,7 +1144,7 @@ mod powerpc_freebsd;
         target_arch = "powerpc",
         target_os = "freebsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::powerpc_freebsd::*;
@@ -1153,7 +1153,7 @@ pub use self::powerpc_freebsd::*;
         target_arch = "powerpc64",
         target_os = "freebsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64_freebsd;
@@ -1162,7 +1162,7 @@ mod powerpc64_freebsd;
         target_arch = "powerpc64",
         target_os = "freebsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64_freebsd::*;
@@ -1171,7 +1171,7 @@ pub use self::powerpc64_freebsd::*;
         target_arch = "powerpc64",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64le_freebsd;
@@ -1180,7 +1180,7 @@ mod powerpc64le_freebsd;
         target_arch = "powerpc64",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64le_freebsd::*;
@@ -1189,7 +1189,7 @@ pub use self::powerpc64le_freebsd::*;
         target_arch = "riscv64",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod riscv64_freebsd;
@@ -1198,7 +1198,7 @@ mod riscv64_freebsd;
         target_arch = "riscv64",
         target_os = "freebsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::riscv64_freebsd::*;
@@ -1207,7 +1207,7 @@ pub use self::riscv64_freebsd::*;
         target_arch = "aarch64",
         target_os = "netbsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_netbsd;
@@ -1216,7 +1216,7 @@ mod aarch64_netbsd;
         target_arch = "aarch64",
         target_os = "netbsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_netbsd::*;
@@ -1225,7 +1225,7 @@ pub use self::aarch64_netbsd::*;
         target_arch = "aarch64",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_be_netbsd;
@@ -1234,7 +1234,7 @@ mod aarch64_be_netbsd;
         target_arch = "aarch64",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_be_netbsd::*;
@@ -1243,7 +1243,7 @@ pub use self::aarch64_be_netbsd::*;
         target_arch = "arm",
         target_os = "netbsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv6_netbsd_eabihf;
@@ -1252,7 +1252,7 @@ mod armv6_netbsd_eabihf;
         target_arch = "arm",
         target_os = "netbsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv6_netbsd_eabihf::*;
@@ -1261,7 +1261,7 @@ pub use self::armv6_netbsd_eabihf::*;
         target_arch = "arm",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armebv6_netbsd_eabihf;
@@ -1270,7 +1270,7 @@ mod armebv6_netbsd_eabihf;
         target_arch = "arm",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armebv6_netbsd_eabihf::*;
@@ -1279,7 +1279,7 @@ pub use self::armebv6_netbsd_eabihf::*;
         target_arch = "mips",
         target_os = "netbsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod mipsel_netbsd;
@@ -1288,7 +1288,7 @@ mod mipsel_netbsd;
         target_arch = "mips",
         target_os = "netbsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::mipsel_netbsd::*;
@@ -1297,7 +1297,7 @@ pub use self::mipsel_netbsd::*;
         target_arch = "powerpc",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod powerpc_netbsd;
@@ -1306,7 +1306,7 @@ mod powerpc_netbsd;
         target_arch = "powerpc",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::powerpc_netbsd::*;
@@ -1315,7 +1315,7 @@ pub use self::powerpc_netbsd::*;
         target_arch = "powerpc64",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64_netbsd;
@@ -1324,7 +1324,7 @@ mod powerpc64_netbsd;
         target_arch = "powerpc64",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64_netbsd::*;
@@ -1333,7 +1333,7 @@ pub use self::powerpc64_netbsd::*;
         target_arch = "sparc",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod sparc_netbsd;
@@ -1342,7 +1342,7 @@ mod sparc_netbsd;
         target_arch = "sparc",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::sparc_netbsd::*;
@@ -1351,7 +1351,7 @@ pub use self::sparc_netbsd::*;
         target_arch = "sparc64",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod sparc64_netbsd;
@@ -1360,7 +1360,7 @@ mod sparc64_netbsd;
         target_arch = "sparc64",
         target_os = "netbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::sparc64_netbsd::*;
@@ -1369,7 +1369,7 @@ pub use self::sparc64_netbsd::*;
         target_arch = "aarch64",
         target_os = "openbsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_openbsd;
@@ -1378,7 +1378,7 @@ mod aarch64_openbsd;
         target_arch = "aarch64",
         target_os = "openbsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_openbsd::*;
@@ -1387,7 +1387,7 @@ pub use self::aarch64_openbsd::*;
         target_arch = "arm",
         target_os = "openbsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod armv7_openbsd;
@@ -1396,7 +1396,7 @@ mod armv7_openbsd;
         target_arch = "arm",
         target_os = "openbsd",
         target_endian = "little",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::armv7_openbsd::*;
@@ -1405,7 +1405,7 @@ pub use self::armv7_openbsd::*;
         target_arch = "powerpc",
         target_os = "openbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 mod powerpc_openbsd;
@@ -1414,7 +1414,7 @@ mod powerpc_openbsd;
         target_arch = "powerpc",
         target_os = "openbsd",
         target_endian = "big",
-        target_pointer_width = "32"
+        target_pointer_width = 32u32
     )
 )]
 pub use self::powerpc_openbsd::*;
@@ -1423,7 +1423,7 @@ pub use self::powerpc_openbsd::*;
         target_arch = "powerpc64",
         target_os = "openbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64_openbsd;
@@ -1432,7 +1432,7 @@ mod powerpc64_openbsd;
         target_arch = "powerpc64",
         target_os = "openbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64_openbsd::*;
@@ -1441,7 +1441,7 @@ pub use self::powerpc64_openbsd::*;
         target_arch = "riscv64",
         target_os = "openbsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod riscv64_openbsd;
@@ -1450,7 +1450,7 @@ mod riscv64_openbsd;
         target_arch = "riscv64",
         target_os = "openbsd",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::riscv64_openbsd::*;
@@ -1459,7 +1459,7 @@ pub use self::riscv64_openbsd::*;
         target_arch = "sparc64",
         target_os = "openbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod sparc64_openbsd;
@@ -1468,7 +1468,7 @@ mod sparc64_openbsd;
         target_arch = "sparc64",
         target_os = "openbsd",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::sparc64_openbsd::*;
@@ -1477,7 +1477,7 @@ pub use self::sparc64_openbsd::*;
         target_arch = "sparc64",
         target_os = "solaris",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod sparcv9_solaris;
@@ -1486,7 +1486,7 @@ mod sparcv9_solaris;
         target_arch = "sparc64",
         target_os = "solaris",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::sparcv9_solaris::*;
@@ -1495,7 +1495,7 @@ pub use self::sparcv9_solaris::*;
         target_arch = "aarch64",
         target_os = "illumos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_illumos;
@@ -1504,7 +1504,7 @@ mod aarch64_illumos;
         target_arch = "aarch64",
         target_os = "illumos",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_illumos::*;
@@ -1513,7 +1513,7 @@ pub use self::aarch64_illumos::*;
         target_arch = "powerpc64",
         target_os = "aix",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod powerpc64_aix;
@@ -1522,7 +1522,7 @@ mod powerpc64_aix;
         target_arch = "powerpc64",
         target_os = "aix",
         target_endian = "big",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::powerpc64_aix::*;
@@ -1531,7 +1531,7 @@ pub use self::powerpc64_aix::*;
         target_arch = "aarch64",
         target_os = "fuchsia",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod aarch64_fuchsia;
@@ -1540,7 +1540,7 @@ mod aarch64_fuchsia;
         target_arch = "aarch64",
         target_os = "fuchsia",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::aarch64_fuchsia::*;
@@ -1549,7 +1549,7 @@ pub use self::aarch64_fuchsia::*;
         target_arch = "riscv64",
         target_os = "fuchsia",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 mod riscv64_fuchsia;
@@ -1558,7 +1558,7 @@ mod riscv64_fuchsia;
         target_arch = "riscv64",
         target_os = "fuchsia",
         target_endian = "little",
-        target_pointer_width = "64"
+        target_pointer_width = 64u32
     )
 )]
 pub use self::riscv64_fuchsia::*;
