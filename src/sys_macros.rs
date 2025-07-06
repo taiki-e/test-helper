@@ -192,7 +192,7 @@ macro_rules! __static_assert_sys_fn_cmp {
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __static_assert {
-    ($($tt:tt)*) => {
-        const _: () = assert!($($tt)*);
-    };
+    ($cond:expr $(,)?) => {{
+        let [()] = [(); (true /* type check */ & $cond) as usize];
+    }};
 }
