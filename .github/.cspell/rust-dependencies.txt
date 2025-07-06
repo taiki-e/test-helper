@@ -4,3 +4,4 @@
 camino
 globset
 prettyplease
+rustversion
