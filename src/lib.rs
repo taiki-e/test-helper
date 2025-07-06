@@ -11,9 +11,6 @@
 #[cfg(feature = "std")]
 extern crate std;
 
-#[cfg(feature = "sys")]
-pub use memoffset;
-
 #[cfg(feature = "std")]
 #[macro_use]
 mod macros;

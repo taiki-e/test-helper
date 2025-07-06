@@ -74,15 +74,30 @@ macro_rules! static_assert_sys_struct {
                     // field offsets
                     $(
                         $(#[$field_attr])*
-                        $crate::__static_assert!(
-                            $crate::memoffset::offset_of!($name, $field_name) ==
-                                $crate::memoffset::offset_of!(sys::$name, $field_name),
-                        );
+                        $crate::__static_assert_sys_struct_offset_cmp!($name, $field_name);
                     )*
                 }
             )*
         };
     };
+}
+// mem::offset_of requires Rust 1.77
+#[rustversion::since(1.77)]
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __static_assert_sys_struct_offset_cmp {
+    ($name:ident, $field_name:ident) => {
+        $crate::__static_assert!(
+            ::core::mem::offset_of!($name, $field_name)
+                == ::core::mem::offset_of!(sys::$name, $field_name),
+        );
+    };
+}
+#[rustversion::before(1.77)]
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __static_assert_sys_struct_offset_cmp {
+    ($name:ident, $field_name:ident) => {};
 }
 
 /// Static assertions for FFI bindings.

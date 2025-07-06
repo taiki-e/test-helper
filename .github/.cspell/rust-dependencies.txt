@@ -3,5 +3,4 @@
 
 camino
 globset
-memoffset
 prettyplease
