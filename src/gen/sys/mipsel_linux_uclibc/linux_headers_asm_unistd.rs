@@ -447,3 +447,5 @@ pub const __NR_getxattrat: u32 = 4464;
 pub const __NR_listxattrat: u32 = 4465;
 pub const __NR_removexattrat: u32 = 4466;
 pub const __NR_open_tree_attr: u32 = 4467;
+pub const __NR_file_getattr: u32 = 4468;
+pub const __NR_file_setattr: u32 = 4469;
