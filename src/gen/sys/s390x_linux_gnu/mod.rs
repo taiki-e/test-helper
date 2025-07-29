@@ -391,6 +391,8 @@ pub use self::linux_headers_asm_unistd::__NR_getxattrat;
 pub use self::linux_headers_asm_unistd::__NR_listxattrat;
 pub use self::linux_headers_asm_unistd::__NR_removexattrat;
 pub use self::linux_headers_asm_unistd::__NR_open_tree_attr;
+pub use self::linux_headers_asm_unistd::__NR_file_getattr;
+pub use self::linux_headers_asm_unistd::__NR_file_setattr;
 mod linux_headers_linux_auxvec;
 pub use self::linux_headers_linux_auxvec::AT_SYSINFO_EHDR;
 pub use self::linux_headers_linux_auxvec::AT_VECTOR_SIZE_ARCH;
