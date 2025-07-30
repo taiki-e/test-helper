@@ -131,6 +131,7 @@ pub const PR_MTE_TCF_MASK: u32 = 6;
 pub const PR_MTE_TAG_SHIFT: u32 = 3;
 pub const PR_MTE_TAG_MASK: u32 = 524280;
 pub const PR_MTE_TCF_SHIFT: u32 = 1;
+pub const PR_MTE_STORE_ONLY: u32 = 524288;
 pub const PR_PMLEN_SHIFT: u32 = 24;
 pub const PR_PMLEN_MASK: u32 = 2130706432;
 pub const PR_SET_IO_FLUSHER: u32 = 57;
