@@ -5,8 +5,9 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub const SYS_syscall: u32 = 0;
 pub const SYS_exit: u32 = 1;
+pub const SYS_syscall: u32 = 0;
+pub const SYS__exit: u32 = 1;
 pub const SYS_fork: u32 = 2;
 pub const SYS_read: u32 = 3;
 pub const SYS_write: u32 = 4;
