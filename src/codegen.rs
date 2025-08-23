@@ -401,13 +401,18 @@ pub fn gen_track_size(crate_root: &Path, config: TrackSizeConfig) -> (PathBuf, T
         }
     };
     out.extend(quote! {
-        /// Test the size of public types. This is not intended to keep a specific size and
-        /// is intended to be used only as a help in optimization.
+        /// Test the size of public types. This is not intended to keep a specific size and is intended to
+        /// be used only as a help in optimization.
         ///
-        /// Ignore non-64-bit targets due to usize/ptr size, and ignore Miri/cargo-careful
-        /// as we set -Z randomize-layout for them.
+        /// Ignore non-64-bit targets due to usize/ptr size, ignore Miri/cargo-careful as we set
+        /// -Z randomize-layout for them, and ignore old rustc as any::type_name output and size
+        /// optimization may differ between compiler versions.
+        #[rustversion::attr(
+            nightly,
+            cfg_attr(any(not(target_pointer_width = "64"), miri, careful), ignore)
+        )]
+        #[rustversion::attr(not(nightly), ignore)]
         #[test]
-        #[cfg_attr(any(not(target_pointer_width = "64"), miri, careful), ignore)] // We set -Z randomize-layout for Miri/cargo-careful.
         fn track_size() {
             let mut out = String::new();
             #tokens
