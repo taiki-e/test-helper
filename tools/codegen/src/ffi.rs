@@ -58,7 +58,9 @@ static TARGETS: &[Target] = &[
             "sparc64-unknown-linux-gnu",
             // Linux (musl)
             "aarch64-unknown-linux-musl",
+            "aarch64_be-unknown-linux-musl",
             "armv5te-unknown-linux-musleabi",
+            // "armeb-unknown-linux-musleabi", // TODO: not in rustc
             "loongarch64-unknown-linux-musl",
             "mips-unknown-linux-musl",
             "mips64-unknown-linux-muslabi64",

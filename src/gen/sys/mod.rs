@@ -498,6 +498,26 @@ mod aarch64_linux_musl;
 pub use self::aarch64_linux_musl::*;
 #[cfg(
     all(
+        target_arch = "aarch64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+mod aarch64_be_linux_musl;
+#[cfg(
+    all(
+        target_arch = "aarch64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "big",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::aarch64_be_linux_musl::*;
+#[cfg(
+    all(
         target_arch = "arm",
         target_os = "linux",
         target_env = "musl",
