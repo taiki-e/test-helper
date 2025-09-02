@@ -17,5 +17,5 @@
   "supported-split-debuginfo": ["packed", "unpacked", "off"],
   "target-endian": "big",
   "target-family": ["unix"],
-  "target-pointer-width": "64"
+  "target-pointer-width": 64
 }

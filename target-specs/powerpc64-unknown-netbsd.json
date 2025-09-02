@@ -24,6 +24,6 @@
   "target-endian": "big",
   "target-family": ["unix"],
   "target-mcount": "__mcount",
-  "target-pointer-width": "64",
+  "target-pointer-width": 64,
   "use-ctors-section": true
 }
