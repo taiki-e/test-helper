@@ -441,4 +441,6 @@ pub const SYS_inotify_add_watch_at: u32 = 593;
 pub const SYS_inotify_rm_watch: u32 = 594;
 pub const SYS_getgroups: u32 = 595;
 pub const SYS_setgroups: u32 = 596;
-pub const SYS_MAXSYSCALL: u32 = 597;
+pub const SYS_jail_attach_jd: u32 = 597;
+pub const SYS_jail_remove_jd: u32 = 598;
+pub const SYS_MAXSYSCALL: u32 = 599;
