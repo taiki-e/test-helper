@@ -2,12 +2,13 @@
 name = "test-helper"
 version = "0.0.0"
 edition = "2018"
-rust-version = "1.56" # For syn
+rust-version = "1.56"
 publish = false
 
 [package.metadata.docs.rs]
 all-features = true
 
+# NB: Sync with features table in msrv job in ci.yml
 [features]
 std = []
 
