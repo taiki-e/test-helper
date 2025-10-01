@@ -119,6 +119,7 @@ pub use self::linux_headers_asm_hwcap::HWCAP2_SME_SF8DP2;
 pub use self::linux_headers_asm_hwcap::HWCAP2_POE;
 pub use self::linux_headers_asm_hwcap::HWCAP3_MTE_FAR;
 pub use self::linux_headers_asm_hwcap::HWCAP3_MTE_STORE_ONLY;
+pub use self::linux_headers_asm_hwcap::HWCAP3_LSFE;
 mod linux_headers_asm_unistd;
 pub use self::linux_headers_asm_unistd::__NR_io_setup;
 pub use self::linux_headers_asm_unistd::__NR_io_destroy;

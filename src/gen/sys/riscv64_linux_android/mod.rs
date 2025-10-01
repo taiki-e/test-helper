@@ -96,6 +96,7 @@ pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_VECTOR_UNSUPPO
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_KEY_VENDOR_EXT_SIFIVE_0;
+pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_KEY_VENDOR_EXT_MIPS_0;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_WHICH_CPUS;
 mod linux_headers_asm_unistd;
 pub use self::linux_headers_asm_unistd::__NR_io_setup;
