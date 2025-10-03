@@ -581,6 +581,7 @@ pub use self::linux_headers_linux_prctl::PR_SET_NO_NEW_PRIVS;
 pub use self::linux_headers_linux_prctl::PR_GET_NO_NEW_PRIVS;
 pub use self::linux_headers_linux_prctl::PR_GET_TID_ADDRESS;
 pub use self::linux_headers_linux_prctl::PR_SET_THP_DISABLE;
+pub use self::linux_headers_linux_prctl::PR_THP_DISABLE_EXCEPT_ADVISED;
 pub use self::linux_headers_linux_prctl::PR_GET_THP_DISABLE;
 pub use self::linux_headers_linux_prctl::PR_MPX_ENABLE_MANAGEMENT;
 pub use self::linux_headers_linux_prctl::PR_MPX_DISABLE_MANAGEMENT;
