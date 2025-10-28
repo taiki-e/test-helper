@@ -443,4 +443,5 @@ pub const SYS_getgroups: u32 = 595;
 pub const SYS_setgroups: u32 = 596;
 pub const SYS_jail_attach_jd: u32 = 597;
 pub const SYS_jail_remove_jd: u32 = 598;
-pub const SYS_MAXSYSCALL: u32 = 599;
+pub const SYS_kexec_load: u32 = 599;
+pub const SYS_MAXSYSCALL: u32 = 600;

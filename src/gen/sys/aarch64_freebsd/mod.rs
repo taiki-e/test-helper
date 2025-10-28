@@ -448,6 +448,7 @@ pub use self::sys_syscall::SYS_getgroups;
 pub use self::sys_syscall::SYS_setgroups;
 pub use self::sys_syscall::SYS_jail_attach_jd;
 pub use self::sys_syscall::SYS_jail_remove_jd;
+pub use self::sys_syscall::SYS_kexec_load;
 pub use self::sys_syscall::SYS_MAXSYSCALL;
 mod sys_sysctl;
 pub use self::sys_sysctl::CTL_KERN;
