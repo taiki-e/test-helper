@@ -16,7 +16,6 @@ HWCAP
 hwprobe
 libpthread
 linaro
-loongson
 mabi
 macppc
 MAXNAME
