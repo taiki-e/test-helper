@@ -425,6 +425,7 @@ pub use self::linux_headers_asm_unistd::__NR_removexattrat;
 pub use self::linux_headers_asm_unistd::__NR_open_tree_attr;
 pub use self::linux_headers_asm_unistd::__NR_file_getattr;
 pub use self::linux_headers_asm_unistd::__NR_file_setattr;
+pub use self::linux_headers_asm_unistd::__NR_listns;
 mod linux_headers_linux_auxvec;
 pub use self::linux_headers_linux_auxvec::AT_SYSINFO_EHDR;
 pub use self::linux_headers_linux_auxvec::AT_L1I_CACHESIZE;
