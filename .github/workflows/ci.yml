@@ -51,6 +51,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: taiki-e/checkout-action@v1
+      - uses: taiki-e/github-actions/free-device-space@main
       - uses: taiki-e/install-action@cargo-hack
       - run: cargo hack build -p test-helper --no-dev-deps --features "${FEATURES}" --version-range .. --version-step 2
         if: github.event_name == 'pull_request'
