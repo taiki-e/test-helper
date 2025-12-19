@@ -204,6 +204,16 @@ macro_rules! __static_assert_sys_fn_cmp {
     };
 }
 
+// inline_const requires Rust 1.79
+#[rustversion::since(1.79)]
+#[macro_export]
+#[doc(hidden)]
+macro_rules! __static_assert {
+    ($cond:expr $(,)?) => {
+        const { assert!($cond) }
+    };
+}
+#[rustversion::before(1.79)]
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __static_assert {
