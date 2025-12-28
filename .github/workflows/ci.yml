@@ -66,6 +66,7 @@ jobs:
       pull-requests: write # for gh pr review --approve
     steps:
       - uses: taiki-e/checkout-action@v1
+      - uses: taiki-e/github-actions/free-device-space@main
       - uses: taiki-e/github-actions/install-rust@nightly
       - run: |
           retry() {
@@ -81,7 +82,9 @@ jobs:
           apt_packages=(
             gcc-aarch64-linux-gnu
             gcc-arm-linux-gnueabi
+            # gcc-i686-linux-gnu # x86-64-linux-gnu-gcc -m32
             gcc-13-loongarch64-linux-gnu
+            gcc-m68k-linux-gnu
             # gcc-mips-linux-gnu # mips64el-linux-gnuabi64-gcc -mabi=32 -mips32r2 -meb
             # gcc-mips64-linux-gnuabi64 # mips64el-linux-gnuabi64-gcc -mips64r2 -meb
             gcc-mips64el-linux-gnuabi64
@@ -96,10 +99,16 @@ jobs:
             gcc-riscv64-linux-gnu
             gcc-s390x-linux-gnu
             gcc-sparc64-linux-gnu
+            # gcc-x86-64-linux-gnux32 # x86-64-linux-gnu-gcc -mx32
             gettext
           )
           retry sudo apt-get -o Acquire::Retries=10 -qq update
           retry sudo apt-get -o Acquire::Retries=10 -o Dpkg::Use-Pty=0 install -y --no-install-recommends "${apt_packages[@]}"
+          # https://github.com/taiki-e/rust-cross-toolchain/pkgs/container/rust-cross-toolchain
+          retry docker create --name gcc-csky-linux-gnuabiv2 "ghcr.io/taiki-e/rust-cross-toolchain:csky-unknown-linux-gnuabiv2-dev-amd64"
+          docker cp -- "gcc-csky-linux-gnuabiv2:/csky-unknown-linux-gnuabiv2" "${HOME}"/gcc-csky-linux-gnuabiv2
+          docker rm -f -- gcc-csky-linux-gnuabiv2 >/dev/null
+          printf '%s\n' "${HOME}"/gcc-csky-linux-gnuabiv2/bin >>"${GITHUB_PATH}"
       - run: tools/gen.sh
       - name: Handle diff
         id: diff

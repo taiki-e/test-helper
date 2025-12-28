@@ -10,6 +10,7 @@ DESTDIR
 dlfcn
 dlsym
 evbmips
+futex
 getauxval
 getisax
 HWCAP
@@ -21,6 +22,7 @@ macppc
 MAXNAME
 mbig
 mipsn
+muslx
 nostdinc
 octeon
 osfmk
@@ -30,11 +32,15 @@ reentrancy
 richlowe
 rseq
 RTLD
+solarish
 stdatomic
 stdbool
 stddef
 syscall
 sysctlbyname
 sysctlnode
+timeval
 uapi
+uclibcabiv
+umtx
 unistd

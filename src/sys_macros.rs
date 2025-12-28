@@ -20,10 +20,7 @@ macro_rules! static_assert_sys_type {
             clippy::cast_possible_truncation
         )]
         const _: fn() = || {
-            #[cfg(not(any(target_os = "aix", windows)))]
-            use $crate::sys;
-            #[cfg(target_os = "aix")]
-            use ::libc as sys;
+            $crate::__static_assert_sys_import!();
             $(
                 $(#[$attr])*
                 {
@@ -53,10 +50,7 @@ macro_rules! static_assert_sys_struct {
     )*) => {
         #[allow(unused_imports, clippy::undocumented_unsafe_blocks)]
         const _: fn() = || {
-            #[cfg(not(any(target_os = "aix", windows)))]
-            use $crate::sys;
-            #[cfg(target_os = "aix")]
-            use ::libc as sys;
+            $crate::__static_assert_sys_import!();
             $(
                 $(#[$attr])*
                 {
@@ -121,10 +115,7 @@ macro_rules! static_assert_sys_const {
             clippy::cast_possible_truncation,
         )]
         const _: fn() = || {
-            #[cfg(not(any(target_os = "aix", windows)))]
-            use $crate::sys;
-            #[cfg(target_os = "aix")]
-            use ::libc as sys;
+            $crate::__static_assert_sys_import!();
             $(
                 $(#[$attr])*
                 {
@@ -173,10 +164,7 @@ macro_rules! static_assert_sys_fn {
     ) => {
         #[allow(unused_imports)]
         const _: fn() = || {
-            #[cfg(not(any(target_os = "aix", windows)))]
-            use $crate::sys;
-            #[cfg(target_os = "aix")]
-            use ::libc as sys;
+            $crate::__static_assert_sys_import!();
             $(
                 $(#[$fn_attr])*
                 {
@@ -201,6 +189,19 @@ macro_rules! __static_assert_sys_fn_cmp {
     ) => {
         let mut _f: unsafe extern $abi fn($($arg_ty),*) $(-> $ret_ty)? = $name;
         _f = sys::$name;
+    };
+}
+#[macro_export]
+macro_rules! __static_assert_sys_import {
+    () => {
+        #[cfg(target_os = "hermit")]
+        use ::hermit_abi as sys;
+        #[cfg(target_os = "aix")]
+        use ::libc as sys;
+        #[cfg(target_os = "redox")]
+        use ::redox_syscall as sys;
+        #[cfg(not(any(target_os = "aix", target_os = "hermit", windows)))]
+        use $crate::sys;
     };
 }
 

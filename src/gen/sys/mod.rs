@@ -138,6 +138,46 @@ mod armeb_linux_gnueabi;
 pub use self::armeb_linux_gnueabi::*;
 #[cfg(
     all(
+        target_arch = "csky",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod csky_linux_gnuabiv2;
+#[cfg(
+    all(
+        target_arch = "csky",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::csky_linux_gnuabiv2::*;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i586_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i586_linux_gnu::*;
+#[cfg(
+    all(
         target_arch = "loongarch64",
         target_os = "linux",
         target_env = "gnu",
@@ -156,6 +196,26 @@ mod loongarch64_linux_gnu;
     )
 )]
 pub use self::loongarch64_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "m68k",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+mod m68k_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "m68k",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "big",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::m68k_linux_gnu::*;
 #[cfg(
     all(
         target_arch = "mips",
@@ -478,6 +538,46 @@ mod sparc64_linux_gnu;
 pub use self::sparc64_linux_gnu::*;
 #[cfg(
     all(
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_linux_gnu;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_linux_gnu::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod x86_64_linux_gnux32;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::x86_64_linux_gnux32::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "linux",
         target_env = "musl",
@@ -536,6 +636,46 @@ mod armv5te_linux_musleabi;
     )
 )]
 pub use self::armv5te_linux_musleabi::*;
+#[cfg(
+    all(
+        target_arch = "hexagon",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod hexagon_linux_musl;
+#[cfg(
+    all(
+        target_arch = "hexagon",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::hexagon_linux_musl::*;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i586_linux_musl;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i586_linux_musl::*;
 #[cfg(
     all(
         target_arch = "loongarch64",
@@ -758,6 +898,26 @@ mod s390x_linux_musl;
 pub use self::s390x_linux_musl::*;
 #[cfg(
     all(
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_linux_musl;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "linux",
+        target_env = "musl",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_linux_musl::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "linux",
         target_env = "uclibc",
@@ -934,6 +1094,24 @@ mod arm_linux_androideabi;
 pub use self::arm_linux_androideabi::*;
 #[cfg(
     all(
+        target_arch = "x86",
+        target_os = "android",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i686_linux_android;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "android",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i686_linux_android::*;
+#[cfg(
+    all(
         target_arch = "riscv64",
         target_os = "android",
         target_endian = "little",
@@ -950,6 +1128,24 @@ mod riscv64_linux_android;
     )
 )]
 pub use self::riscv64_linux_android::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "android",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_linux_android;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "android",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_linux_android::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -1152,6 +1348,24 @@ mod armv6_freebsd;
 pub use self::armv6_freebsd::*;
 #[cfg(
     all(
+        target_arch = "x86",
+        target_os = "freebsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i686_freebsd;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "freebsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i686_freebsd::*;
+#[cfg(
+    all(
         target_arch = "powerpc",
         target_os = "freebsd",
         target_endian = "big",
@@ -1222,6 +1436,24 @@ mod riscv64_freebsd;
     )
 )]
 pub use self::riscv64_freebsd::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "freebsd",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_freebsd;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "freebsd",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_freebsd::*;
 #[cfg(
     all(
         target_arch = "aarch64",
@@ -1422,6 +1654,24 @@ mod armv7_openbsd;
 pub use self::armv7_openbsd::*;
 #[cfg(
     all(
+        target_arch = "x86",
+        target_os = "openbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i686_openbsd;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "openbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i686_openbsd::*;
+#[cfg(
+    all(
         target_arch = "powerpc",
         target_os = "openbsd",
         target_endian = "big",
@@ -1492,6 +1742,42 @@ mod sparc64_openbsd;
     )
 )]
 pub use self::sparc64_openbsd::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "openbsd",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_openbsd;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "openbsd",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_openbsd::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "dragonfly",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_dragonfly;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "dragonfly",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_dragonfly::*;
 #[cfg(
     all(
         target_arch = "sparc64",
@@ -1582,3 +1868,21 @@ mod riscv64_fuchsia;
     )
 )]
 pub use self::riscv64_fuchsia::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "fuchsia",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_fuchsia;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "fuchsia",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_fuchsia::*;

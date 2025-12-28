@@ -12,8 +12,8 @@ all-features = true
 [features]
 std = []
 
-codegen = ["std", "git", "fs-err", "proc-macro2", "quote", "syn"]
 cli = ["std"]
+codegen = ["std", "git", "fs-err", "proc-macro2", "quote", "syn"]
 critical-section-std = ["std", "critical-section"]
 doc = ["std", "git", "fs-err"]
 git = ["std", "fs-err"]
