@@ -74,6 +74,8 @@ pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZALRSC;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZABHA;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZALASR;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZICBOP;
+pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZILSD;
+pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZCLSD;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_KEY_CPUPERF_0;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_UNKNOWN;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_MISALIGNED_EMULATED;
