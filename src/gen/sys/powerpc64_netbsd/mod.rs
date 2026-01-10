@@ -486,4 +486,5 @@ pub use self::machine_cpu::CPU_BOOTED_KERNEL;
 pub use self::machine_cpu::CPU_EXECPROT;
 pub use self::machine_cpu::CPU_FPU;
 pub use self::machine_cpu::CPU_NO_UNALIGNED;
+pub use self::machine_cpu::CPU_PVR;
 pub type c_char = u8;
