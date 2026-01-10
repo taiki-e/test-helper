@@ -18,3 +18,4 @@ pub const CPU_BOOTED_KERNEL: u32 = 10;
 pub const CPU_EXECPROT: u32 = 11;
 pub const CPU_FPU: u32 = 12;
 pub const CPU_NO_UNALIGNED: u32 = 13;
+pub const CPU_PVR: u32 = 14;
