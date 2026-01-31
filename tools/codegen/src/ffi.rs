@@ -658,7 +658,7 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/types.h
                 path: "zircon/system/public/zircon/types.h",
-                types: &["zx_futex_t", "zx_handle_t", "zx_status_t", "zx_time_t"],
+                types: &["zx_futex_t", "zx_handle_t", "zx_handle_op_t", "zx_status_t", "zx_time_t"],
                 vars: &["ZX_HANDLE_.*"],
                 functions: &[],
                 arch: &[],
