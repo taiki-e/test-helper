@@ -188,10 +188,10 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://github.com/bminor/glibc/blob/HEAD/dlfcn/dlfcn.h
-                // https://github.com/bminor/musl/blob/HEAD/include/dlfcn.h
+                // https://sourceware.org/git/?p=glibc.git;a=blob;f=dlfcn/dlfcn.h
+                // https://git.musl-libc.org/cgit/musl/tree/include/dlfcn.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/dlfcn.h
-                // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/dlfcn.h
+                // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/dlfcn.h
                 path: "dlfcn.h",
                 types: &[],
                 vars: &["RTLD_DEFAULT"],
@@ -201,10 +201,10 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://github.com/bminor/glibc/blob/HEAD/elf/elf.h
-                // https://github.com/bminor/musl/blob/HEAD/include/elf.h
+                // https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h
+                // https://git.musl-libc.org/cgit/musl/tree/include/elf.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/elf.h
-                // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/elf.h
+                // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/elf.h
                 path: "elf.h",
                 types: &["Elf.*_auxv_t"],
                 vars: &[],
@@ -214,19 +214,19 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://github.com/bminor/glibc/blob/HEAD/misc/sys/auxv.h
-                // https://github.com/bminor/musl/blob/HEAD/include/sys/auxv.h
+                // https://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/auxv.h
+                // https://git.musl-libc.org/cgit/musl/tree/include/sys/auxv.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/sys/auxv.h
-                // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/auxv.h
+                // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
                 // HWCAP_S390_.*/HWCAP_SPARC_.* are not exposed from uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/s390/include/asm/elf.h
-                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/unix/sysv/linux/s390/bits/hwcap.h
-                // https://github.com/bminor/musl/blob/HEAD/arch/s390x/bits/hwcap.h
+                // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/s390/bits/hwcap.h
+                // https://git.musl-libc.org/cgit/musl/tree/arch/s390x/bits/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_32.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_64.h
-                // https://github.com/bminor/glibc/blob/HEAD/sysdeps/sparc/bits/hwcap.h
+                // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/sparc/bits/hwcap.h
                 vars: &["HWCAP[^_]*_S390_.*", "HWCAP[^_]*_SPARC_.*"],
                 functions: &["getauxval"],
                 arch: &[],
@@ -234,7 +234,7 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://github.com/aosp-mirror/platform_bionic/blob/HEAD/libc/include/sys/system_properties.h
+                // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/sys/system_properties.h
                 path: "sys/system_properties.h",
                 types: &[],
                 vars: &["PROP_VALUE_MAX"],
@@ -1066,14 +1066,6 @@ pub(crate) fn generate() {
     .unwrap();
 }
 
-// https://github.com/bminor/glibc
-const GLIBC_REPO: &str = "bminor/glibc";
-// https://github.com/bminor/musl
-const MUSL_REPO: &str = "bminor/musl";
-// https://github.com/wbx-github/uclibc-ng
-const UCLIBC_REPO: &str = "wbx-github/uclibc-ng";
-// https://github.com/aosp-mirror/platform_bionic
-const BIONIC_REPO: &str = "aosp-mirror/platform_bionic";
 fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf {
     #[track_caller]
     fn clone(
@@ -1086,8 +1078,8 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let name = name.replace("https://fuchsia.googlesource.com/", "fuchsia/");
         let name = name.replace("https://android.googlesource.com/", "android/");
         let name = name.replace("https://git.codelinaro.org/clo/le/", "linaro/");
-        let name =
-            name.replace("https://git.kernel.org/pub/scm/linux/kernel/git/arm64/", "linux-arm64/");
+        let name = name.replace("https://git.musl-libc.org/git/", "musl-libc/");
+        let name = name.replace("https://sourceware.org/git/", "glibc/");
         assert!(!name.contains("://"), "{}", name);
         let repository = if repository.contains("://") {
             repository.to_owned()
@@ -1097,6 +1089,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let src_dir = download_dir.join(name);
         if !src_dir.exists() {
             fs::create_dir_all(src_dir.parent().unwrap()).unwrap();
+            // TODO: retry on failure
             if sparse_checkout.is_empty() {
                 if let Some(branch) = branch {
                     cmd!("git", "clone", "--depth", "1", "-b", branch, repository, &src_dir)
@@ -1176,7 +1169,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 "-fsSL",
                 "--retry",
                 "10",
-                "--retry-connrefused",
+                "--retry-all-errors",
                 url,
                 "-o",
                 file
@@ -1233,12 +1226,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
     match target.os {
         linux | android => {
             src_dir = if target.arch == aarch64 && target.target_pointer_width == 32 {
-                clone(
-                    download_dir,
-                    "https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git",
-                    Some("staging/ilp32-5.1"),
-                    &[],
-                )
+                clone(download_dir, "taiki-e/linux", Some("arm64/staging/ilp32-5.1"), &[])
             } else {
                 clone(download_dir, "torvalds/linux", None, &[
                     "/arch/",
@@ -1263,7 +1251,12 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 .unwrap();
             }
             if target.os == android {
-                clone(download_dir, BIONIC_REPO, None, &["/libc/"]);
+                clone(
+                    download_dir,
+                    "https://android.googlesource.com/platform/bionic",
+                    None,
+                    &[/* "/libc/" */],
+                );
                 let bionic_dir = bionic_dir(&src_dir);
                 let asm_arch = match target.arch {
                     arm => "asm-arm",
@@ -1290,6 +1283,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 fs::write(bionic_dir.join("libc/include/float.h"), "").unwrap();
             } else if target.env == gnu && target.arch != csky {
                 if target.arch == aarch64 && target.target_pointer_width == 32 {
+                    // TODO: move to our own fork repo?
                     clone(
                         download_dir,
                         "https://git.codelinaro.org/clo/le/glibc.git",
@@ -1297,18 +1291,18 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                         &[],
                     );
                 } else {
-                    clone(download_dir, GLIBC_REPO, None, &[]);
+                    clone(download_dir, "https://sourceware.org/git/glibc.git", None, &[]);
                 }
                 let glibc_src_dir = &glibc_dir(target, &src_dir);
                 let headers_dir = &libc_headers_dir(target, &src_dir);
                 if !headers_dir.exists() {
                     let (cc, cflags) = linux_gcc(target);
-                    // https://github.com/bminor/glibc/blob/HEAD/INSTALL
+                    // https://sourceware.org/git/?p=glibc.git;a=blob;f=INSTALL
                     let build_dir = &glibc_src_dir.parent().unwrap().join("glibc-build");
                     if build_dir.exists() {
                         fs::remove_dir_all(build_dir).unwrap();
                     }
-                    // /bin/sh: 1: cannot create /home/runner/work/test-helper/test-helper/tools/codegen/tmp/cache/bminor/glibc-build/elf/dso-sort-tests-all4.def: Directory nonexistent
+                    // /bin/sh: 1: cannot create glibc-build/elf/dso-sort-tests-all4.def: Directory nonexistent
                     fs::create_dir_all(build_dir.join("elf")).unwrap();
                     cmd!(
                         "bash",
@@ -1341,13 +1335,19 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                     clone(download_dir, "quic/musl", Some("hexagon"), &[]);
                     src_dir.join("../..").join("quic/musl")
                 } else {
-                    clone(download_dir, MUSL_REPO, None, &["/arch/", "/include/", "/tools/"]);
-                    src_dir.join("../..").join(MUSL_REPO)
+                    clone(
+                        download_dir,
+                        "https://git.musl-libc.org/git/musl",
+                        None,
+                        &[/* "/arch/", "/include/", "/tools/" */],
+                    );
+                    src_dir.join("../..").join("musl-libc/musl")
                 };
                 let headers_dir = &libc_headers_dir(target, musl_src_dir);
                 musl_install_headers(target, musl_src_dir, headers_dir);
                 patched = true;
             } else if target.env == uclibc {
+                const UCLIBC_REPO: &str = "wbx-github/uclibc-ng";
                 clone(download_dir, UCLIBC_REPO, None, &[]);
                 let uclibc_arch = uclibc_arch(target);
                 let uclibc_src_dir = &src_dir.join("../..").join(UCLIBC_REPO);
@@ -1629,7 +1629,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
 fn musl_install_headers(target: &TargetSpec, musl_src_dir: &Utf8Path, headers_dir: &Utf8Path) {
     if !headers_dir.exists() {
         let musl_arch = musl_arch(target);
-        // https://github.com/bminor/musl/blob/HEAD/Makefile
+        // https://git.musl-libc.org/cgit/musl/tree/Makefile
         cmd!(
             "make",
             "install-headers",
@@ -1752,7 +1752,7 @@ fn glibc_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
     if target.arch == aarch64 && target.target_pointer_width == 32 {
         src_dir.join("../..").join("linaro/glibc")
     } else {
-        src_dir.join("../..").join(GLIBC_REPO)
+        src_dir.join("../..").join("glibc/glibc")
     }
 }
 fn libc_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
@@ -1766,7 +1766,7 @@ fn libc_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
     }
 }
 fn bionic_dir(src_dir: &Utf8Path) -> Utf8PathBuf {
-    src_dir.join("../..").join(BIONIC_REPO)
+    src_dir.join("../..").join("android/platform/bionic")
 }
 
 fn linux_arch(target: &TargetSpec) -> &'static str {
@@ -1789,7 +1789,7 @@ fn linux_arch(target: &TargetSpec) -> &'static str {
     }
 }
 fn musl_arch(target: &TargetSpec) -> &'static str {
-    // https://github.com/bminor/musl/tree/HEAD/arch
+    // https://git.musl-libc.org/cgit/musl/tree/arch
     // https://github.com/quic/musl/tree/bcain/to-upstream
     match target.arch {
         aarch64 => "aarch64",

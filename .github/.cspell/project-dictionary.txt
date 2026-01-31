@@ -1,10 +1,8 @@
 allnoconfig
-aosp
 armreg
 Auxinfo
 auxv
 auxvec
-bminor
 cputable
 DESTDIR
 dlfcn
