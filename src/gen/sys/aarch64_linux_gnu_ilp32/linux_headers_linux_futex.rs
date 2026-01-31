@@ -32,18 +32,6 @@ pub const FUTEX_WAIT_BITSET_PRIVATE: u32 = 137;
 pub const FUTEX_WAKE_BITSET_PRIVATE: u32 = 138;
 pub const FUTEX_WAIT_REQUEUE_PI_PRIVATE: u32 = 139;
 pub const FUTEX_CMP_REQUEUE_PI_PRIVATE: u32 = 140;
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct robust_list {
-    pub next: *mut robust_list,
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct robust_list_head {
-    pub list: robust_list,
-    pub futex_offset: ::std::os::raw::c_long,
-    pub list_op_pending: *mut robust_list,
-}
 pub const FUTEX_WAITERS: u32 = 2147483648;
 pub const FUTEX_OWNER_DIED: u32 = 1073741824;
 pub const FUTEX_TID_MASK: u32 = 1073741823;
@@ -61,3 +49,15 @@ pub const FUTEX_OP_CMP_LT: u32 = 2;
 pub const FUTEX_OP_CMP_LE: u32 = 3;
 pub const FUTEX_OP_CMP_GT: u32 = 4;
 pub const FUTEX_OP_CMP_GE: u32 = 5;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct robust_list {
+    pub next: *mut robust_list,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct robust_list_head {
+    pub list: robust_list,
+    pub futex_offset: ::std::os::raw::c_long,
+    pub list_op_pending: *mut robust_list,
+}

@@ -5,13 +5,9 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type uint_t = ::std::os::raw::c_uint;
 pub const AV_HW1_IDX: u32 = 0;
 pub const AV_HW2_IDX: u32 = 1;
 pub const AV_HW3_IDX: u32 = 2;
-extern "C" {
-    pub fn getisax(arg1: *mut u32, arg2: uint_t) -> uint_t;
-}
 pub const AV_SPARC_B_MUL32: u32 = 0;
 pub const AV_SPARC_MUL32: u32 = 1;
 pub const AV_SPARC_B_DIV32: u32 = 1;
@@ -119,3 +115,7 @@ pub const AV2_SPARC_MME: u32 = 1048576;
 pub const AV_SPARC_HWMUL_32x32: u32 = 1;
 pub const AV_SPARC_HWDIV_32x32: u32 = 2;
 pub const AV_SPARC_HWFSMULD: u32 = 4;
+pub type uint_t = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn getisax(arg1: *mut u32, arg2: uint_t) -> uint_t;
+}

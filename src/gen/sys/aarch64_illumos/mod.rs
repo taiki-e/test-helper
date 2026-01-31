@@ -5,7 +5,6 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 mod sys_auxv;
-pub use self::sys_auxv::getisax;
 pub use self::sys_auxv::AV_AARCH64_FP;
 pub use self::sys_auxv::AV_AARCH64_ADVSIMD;
 pub use self::sys_auxv::AV_AARCH64_SVE;
@@ -69,4 +68,5 @@ pub use self::sys_auxv::AV_AARCH64_2_SME_FA64;
 pub use self::sys_auxv::AV_AARCH64_2_EBF16;
 pub use self::sys_auxv::AV_AARCH64_2_SME_F64F64;
 pub use self::sys_auxv::AV_AARCH64_2_SME_I16I64;
+pub use self::sys_auxv::getisax;
 pub type c_char = u8;
