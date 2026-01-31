@@ -12,4 +12,5 @@ pub const ZX_HANDLE_OP_DUPLICATE: zx_handle_op_t = 1u8 as zx_handle_op_t;
 pub type zx_time_t = i64;
 pub type zx_handle_t = u32;
 pub type zx_status_t = i32;
+pub type zx_handle_op_t = u32;
 pub type zx_futex_t = ::std::os::raw::c_int;

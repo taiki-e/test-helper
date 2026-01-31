@@ -12,6 +12,7 @@ pub use self::zircon_system_public_zircon_types::ZX_HANDLE_OP_DUPLICATE;
 pub use self::zircon_system_public_zircon_types::zx_time_t;
 pub use self::zircon_system_public_zircon_types::zx_handle_t;
 pub use self::zircon_system_public_zircon_types::zx_status_t;
+pub use self::zircon_system_public_zircon_types::zx_handle_op_t;
 pub use self::zircon_system_public_zircon_types::zx_futex_t;
 mod zircon_system_public_zircon_errors;
 pub use self::zircon_system_public_zircon_errors::ZX_OK;
