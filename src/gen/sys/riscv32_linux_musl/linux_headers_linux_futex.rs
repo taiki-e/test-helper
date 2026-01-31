@@ -5,8 +5,6 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type __u32 = ::std::os::raw::c_uint;
-pub type __u64 = ::std::os::raw::c_ulonglong;
 pub const FUTEX_WAIT: u32 = 0;
 pub const FUTEX_WAKE: u32 = 1;
 pub const FUTEX_FD: u32 = 2;
@@ -39,6 +37,25 @@ pub const FUTEX_CMP_REQUEUE_PI_PRIVATE: u32 = 140;
 pub const FUTEX_32: u32 = 2;
 pub const FUTEX_NO_NODE: i32 = -1;
 pub const FUTEX_WAITV_MAX: u32 = 128;
+pub const FUTEX_WAITERS: u32 = 2147483648;
+pub const FUTEX_OWNER_DIED: u32 = 1073741824;
+pub const FUTEX_TID_MASK: u32 = 1073741823;
+pub const ROBUST_LIST_LIMIT: u32 = 2048;
+pub const FUTEX_BITSET_MATCH_ANY: u32 = 4294967295;
+pub const FUTEX_OP_SET: u32 = 0;
+pub const FUTEX_OP_ADD: u32 = 1;
+pub const FUTEX_OP_OR: u32 = 2;
+pub const FUTEX_OP_ANDN: u32 = 3;
+pub const FUTEX_OP_XOR: u32 = 4;
+pub const FUTEX_OP_OPARG_SHIFT: u32 = 8;
+pub const FUTEX_OP_CMP_EQ: u32 = 0;
+pub const FUTEX_OP_CMP_NE: u32 = 1;
+pub const FUTEX_OP_CMP_LT: u32 = 2;
+pub const FUTEX_OP_CMP_LE: u32 = 3;
+pub const FUTEX_OP_CMP_GT: u32 = 4;
+pub const FUTEX_OP_CMP_GE: u32 = 5;
+pub type __u32 = ::std::os::raw::c_uint;
+pub type __u64 = ::std::os::raw::c_ulonglong;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct futex_waitv {
@@ -59,20 +76,3 @@ pub struct robust_list_head {
     pub futex_offset: ::std::os::raw::c_long,
     pub list_op_pending: *mut robust_list,
 }
-pub const FUTEX_WAITERS: u32 = 2147483648;
-pub const FUTEX_OWNER_DIED: u32 = 1073741824;
-pub const FUTEX_TID_MASK: u32 = 1073741823;
-pub const ROBUST_LIST_LIMIT: u32 = 2048;
-pub const FUTEX_BITSET_MATCH_ANY: u32 = 4294967295;
-pub const FUTEX_OP_SET: u32 = 0;
-pub const FUTEX_OP_ADD: u32 = 1;
-pub const FUTEX_OP_OR: u32 = 2;
-pub const FUTEX_OP_ANDN: u32 = 3;
-pub const FUTEX_OP_XOR: u32 = 4;
-pub const FUTEX_OP_OPARG_SHIFT: u32 = 8;
-pub const FUTEX_OP_CMP_EQ: u32 = 0;
-pub const FUTEX_OP_CMP_NE: u32 = 1;
-pub const FUTEX_OP_CMP_LT: u32 = 2;
-pub const FUTEX_OP_CMP_LE: u32 = 3;
-pub const FUTEX_OP_CMP_GT: u32 = 4;
-pub const FUTEX_OP_CMP_GE: u32 = 5;

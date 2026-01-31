@@ -5,14 +5,6 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type __s64 = ::std::os::raw::c_longlong;
-pub type __u64 = ::std::os::raw::c_ulonglong;
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub struct riscv_hwprobe {
-    pub key: __s64,
-    pub value: __u64,
-}
 pub const RISCV_HWPROBE_KEY_MVENDORID: u32 = 0;
 pub const RISCV_HWPROBE_KEY_MARCHID: u32 = 1;
 pub const RISCV_HWPROBE_KEY_MIMPID: u32 = 2;
@@ -109,3 +101,11 @@ pub const RISCV_HWPROBE_KEY_VENDOR_EXT_SIFIVE_0: u32 = 13;
 pub const RISCV_HWPROBE_KEY_VENDOR_EXT_MIPS_0: u32 = 14;
 pub const RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE: u32 = 15;
 pub const RISCV_HWPROBE_WHICH_CPUS: u32 = 1;
+pub type __s64 = ::std::os::raw::c_longlong;
+pub type __u64 = ::std::os::raw::c_ulonglong;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct riscv_hwprobe {
+    pub key: __s64,
+    pub value: __u64,
+}

@@ -5,8 +5,8 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type u_int = ::core::ffi::c_uint;
 pub const CTL_MACHDEP: u32 = 7;
+pub type u_int = ::core::ffi::c_uint;
 extern "C" {
     pub fn sysctl(
         arg1: *const ::core::ffi::c_int,

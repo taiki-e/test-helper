@@ -5,10 +5,6 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type uint_t = ::std::os::raw::c_uint;
-extern "C" {
-    pub fn getisax(arg1: *mut u32, arg2: uint_t) -> uint_t;
-}
 pub const AV_AARCH64_FP: u32 = 1;
 pub const AV_AARCH64_ADVSIMD: u32 = 2;
 pub const AV_AARCH64_SVE: u32 = 4;
@@ -72,3 +68,7 @@ pub const AV_AARCH64_2_SME_FA64: u32 = 134217728;
 pub const AV_AARCH64_2_EBF16: u32 = 268435456;
 pub const AV_AARCH64_2_SME_F64F64: u32 = 536870912;
 pub const AV_AARCH64_2_SME_I16I64: u32 = 1073741824;
+pub type uint_t = ::std::os::raw::c_uint;
+extern "C" {
+    pub fn getisax(arg1: *mut u32, arg2: uint_t) -> uint_t;
+}

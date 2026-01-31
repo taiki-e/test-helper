@@ -5,15 +5,6 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-extern "C" {
-    pub fn futex(
-        arg1: *mut u32,
-        arg2: ::std::os::raw::c_int,
-        arg3: ::std::os::raw::c_int,
-        arg4: *const [u8; 0usize],
-        arg5: *mut u32,
-    ) -> ::std::os::raw::c_int;
-}
 pub const FUTEX_OP_MASK: u32 = 127;
 pub const FUTEX_WAIT: u32 = 1;
 pub const FUTEX_WAKE: u32 = 2;
@@ -23,3 +14,12 @@ pub const FUTEX_PRIVATE_FLAG: u32 = 128;
 pub const FUTEX_WAIT_PRIVATE: u32 = 129;
 pub const FUTEX_WAKE_PRIVATE: u32 = 130;
 pub const FUTEX_REQUEUE_PRIVATE: u32 = 131;
+extern "C" {
+    pub fn futex(
+        arg1: *mut u32,
+        arg2: ::std::os::raw::c_int,
+        arg3: ::std::os::raw::c_int,
+        arg4: *const [u8; 0usize],
+        arg5: *mut u32,
+    ) -> ::std::os::raw::c_int;
+}

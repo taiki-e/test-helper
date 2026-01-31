@@ -5,7 +5,6 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type u_long = ::std::os::raw::c_ulong;
 pub const UMTX_UNOWNED: u32 = 0;
 pub const UMTX_OP_LOCK: u32 = 0;
 pub const UMTX_OP_UNLOCK: u32 = 1;
@@ -44,6 +43,7 @@ pub const UMTX_SHM_CREAT: u32 = 1;
 pub const UMTX_SHM_LOOKUP: u32 = 2;
 pub const UMTX_SHM_DESTROY: u32 = 4;
 pub const UMTX_SHM_ALIVE: u32 = 8;
+pub type u_long = ::std::os::raw::c_ulong;
 extern "C" {
     pub fn _umtx_op(
         obj: *mut ::core::ffi::c_void,

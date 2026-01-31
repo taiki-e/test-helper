@@ -5,12 +5,12 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
-pub type u_int = ::std::os::raw::c_uint;
-pub type u_quad_t = u64;
 pub const SYSCTL_VERS_1: u32 = 16777216;
 pub const SYSCTL_VERSION: u32 = 16777216;
 pub const CTL_QUERY: i32 = -2;
 pub const CTL_MACHDEP: u32 = 7;
+pub type u_int = ::std::os::raw::c_uint;
+pub type u_quad_t = u64;
 pub type sysctlfn = *mut ::core::ffi::c_void;
 extern "C" {
     pub fn sysctl(
