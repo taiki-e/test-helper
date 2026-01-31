@@ -205,8 +205,8 @@ macro_rules! __static_assert_sys_import {
     };
 }
 
-// inline_const requires Rust 1.79
-#[rustversion::since(1.79)]
+// inline_const requires Rust 1.79 (use since(1.80) because it is unstable in early 1.79)
+#[rustversion::since(1.80)]
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __static_assert {
@@ -214,7 +214,7 @@ macro_rules! __static_assert {
         const { assert!($cond) }
     };
 }
-#[rustversion::before(1.79)]
+#[rustversion::before(1.80)]
 #[macro_export]
 #[doc(hidden)]
 macro_rules! __static_assert {
