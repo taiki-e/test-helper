@@ -450,3 +450,4 @@ pub const __NR_open_tree_attr: u32 = 4467;
 pub const __NR_file_getattr: u32 = 4468;
 pub const __NR_file_setattr: u32 = 4469;
 pub const __NR_listns: u32 = 4470;
+pub const __NR_rseq_slice_yield: u32 = 4471;
