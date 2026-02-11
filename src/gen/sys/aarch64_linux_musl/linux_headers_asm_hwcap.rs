@@ -120,3 +120,4 @@ pub const HWCAP2_POE: u64 = 9223372036854775808;
 pub const HWCAP3_MTE_FAR: u32 = 1;
 pub const HWCAP3_MTE_STORE_ONLY: u32 = 2;
 pub const HWCAP3_LSFE: u32 = 4;
+pub const HWCAP3_LS64: u32 = 8;

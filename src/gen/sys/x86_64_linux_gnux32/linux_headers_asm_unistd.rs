@@ -343,6 +343,7 @@ pub const __NR_open_tree_attr: u32 = 1073742291;
 pub const __NR_file_getattr: u32 = 1073742292;
 pub const __NR_file_setattr: u32 = 1073742293;
 pub const __NR_listns: u32 = 1073742294;
+pub const __NR_rseq_slice_yield: u32 = 1073742295;
 pub const __NR_rt_sigaction: u32 = 1073742336;
 pub const __NR_rt_sigreturn: u32 = 1073742337;
 pub const __NR_ioctl: u32 = 1073742338;

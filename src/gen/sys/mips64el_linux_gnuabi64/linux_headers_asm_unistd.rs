@@ -380,3 +380,4 @@ pub const __NR_open_tree_attr: u32 = 5467;
 pub const __NR_file_getattr: u32 = 5468;
 pub const __NR_file_setattr: u32 = 5469;
 pub const __NR_listns: u32 = 5470;
+pub const __NR_rseq_slice_yield: u32 = 5471;
