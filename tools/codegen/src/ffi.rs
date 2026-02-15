@@ -267,7 +267,7 @@ static TARGETS: &[Target] = &[
         ],
         headers: &[
             Header {
-                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/dlfcn.h
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/libc/uclibc-ng/contrib/uclibc/include/dlfcn.h
                 // https://android.googlesource.com/trusty/external/musl/+/refs/heads/main/include/dlfcn.h
                 path: "dlfcn.h",
                 types: &[],
@@ -278,7 +278,7 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://github.com/kernkonzept/l4re-core/blob/HEAD/uclibc/lib/contrib/uclibc/include/sys/auxv.h
+                // https://github.com/kernkonzept/l4re-core/blob/HEAD/libc/uclibc-ng/contrib/uclibc/include/sys/auxv.h
                 // https://android.googlesource.com/trusty/external/musl/+/refs/heads/main/include/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
