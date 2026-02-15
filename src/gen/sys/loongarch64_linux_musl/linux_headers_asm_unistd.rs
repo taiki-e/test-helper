@@ -304,6 +304,7 @@ pub const __NR_quotactl_fd: u32 = 443;
 pub const __NR_landlock_create_ruleset: u32 = 444;
 pub const __NR_landlock_add_rule: u32 = 445;
 pub const __NR_landlock_restrict_self: u32 = 446;
+pub const __NR_memfd_secret: u32 = 447;
 pub const __NR_process_mrelease: u32 = 448;
 pub const __NR_futex_waitv: u32 = 449;
 pub const __NR_set_mempolicy_home_node: u32 = 450;
