@@ -305,6 +305,7 @@ static TARGETS: &[Target] = &[
             "arm64_32-apple-watchos",
             // "armv7k-apple-watchos",
             // "armv7s-apple-ios",
+            "x86_64-apple-darwin",
         ],
         headers: &[
             Header {
