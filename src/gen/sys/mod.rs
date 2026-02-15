@@ -1312,6 +1312,24 @@ mod arm64_32_watchos;
 pub use self::arm64_32_watchos::*;
 #[cfg(
     all(
+        target_arch = "x86_64",
+        target_os = "macos",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_darwin;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "macos",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_darwin::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "freebsd",
         target_endian = "little",
