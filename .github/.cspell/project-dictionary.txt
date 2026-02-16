@@ -31,7 +31,6 @@ richlowe
 rseq
 RTLD
 solarish
-stdatomic
 stdbool
 stddef
 syscall

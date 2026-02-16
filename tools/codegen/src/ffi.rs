@@ -658,19 +658,13 @@ static TARGETS: &[Target] = &[
             // TODO: zx_system_get_features/zx_futex_wait/zx_futex_wake
             Header {
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/types.h
-                path: "zircon/system/public/zircon/types.h",
-                types: &["zx_futex_t", "zx_handle_t", "zx_handle_op_t", "zx_status_t", "zx_time_t"],
-                vars: &["ZX_HANDLE_.*"],
-                functions: &[],
-                arch: &[],
-                os: &[],
-                env: &[],
-            },
-            Header {
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/errors.h
-                path: "zircon/system/public/zircon/errors.h",
-                types: &[],
-                vars: &["ZX_.*"],
+                // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/time.h
+                path: "zircon/system/public/zircon/types.h",
+                // TODO: zx_futex_t: https://github.com/rust-lang/rust-bindgen/issues/2151
+                types: &["zx_handle_t", "zx_handle_op_t", "zx_status_t", "zx_time_t"],
+                // TODO: ZX_TIME_INFINITE.* is not included
+                vars: &["ZX_HANDLE_.*", "ZX_OK", "ZX_ERR_.*", "ZX_TIME_INFINITE.*"],
                 functions: &[],
                 arch: &[],
                 os: &[],
@@ -679,16 +673,6 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/features.h
                 path: "zircon/system/public/zircon/features.h",
-                types: &[],
-                vars: &["ZX_.*"],
-                functions: &[],
-                arch: &[],
-                os: &[],
-                env: &[],
-            },
-            Header {
-                // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/time.h
-                path: "zircon/system/public/zircon/time.h",
                 types: &[],
                 vars: &["ZX_.*"],
                 functions: &[],
@@ -937,7 +921,6 @@ pub(crate) fn generate() {
                             src_dir.join("zircon/system/public"),
                             src_dir.join("zircon/kernel/lib/libc/include"),
                         ];
-                        define!(_KERNEL); // TODO: Needed to avoid `'stdatomic.h' file not found` error from zircon/system/public/zircon/types.h
                     }
                     _ => todo!("{target:?}"),
                 }
