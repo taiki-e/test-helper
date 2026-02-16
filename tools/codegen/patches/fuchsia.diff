@@ -1,0 +1,12 @@
+diff --git a/zircon/system/public/zircon/types.h b/zircon/system/public/zircon/types.h
+index 2ccf9128a..67478dbe0 100644
+--- a/zircon/system/public/zircon/types.h
++++ b/zircon/system/public/zircon/types.h
+@@ -23,7 +23,7 @@
+ // A better solution would be to use <stdatomic.h> and C11 atomic operation
+ // even in the kernel, but that would require modifying all the code that uses
+ // the existing homegrown atomics.
+-#include <stdatomic.h>
++typedef _Atomic int atomic_int;
+ #endif
+ #endif

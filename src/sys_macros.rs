@@ -25,7 +25,9 @@ macro_rules! static_assert_sys_type {
                 $(#[$attr])*
                 {
                     $(use ::windows_sys::$($windows_path)::+ as sys;)?
-                    let _: $name = 0 as sys::$name;
+                    fn _check(a: $name) -> sys::$name {
+                        a
+                    }
                 }
             )*
         };
@@ -191,6 +193,7 @@ macro_rules! __static_assert_sys_fn_cmp {
         _f = sys::$name;
     };
 }
+
 #[macro_export]
 macro_rules! __static_assert_sys_import {
     () => {
