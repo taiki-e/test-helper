@@ -10,11 +10,12 @@
 )]
 
 #[cfg(unix)]
-#[macro_use]
-mod file;
+mod ffi;
 
 #[cfg(unix)]
-mod ffi;
+fn workspace_root() -> &'static camino::Utf8Path {
+    env!("CARGO_MANIFEST_DIR").strip_suffix("tools/codegen").unwrap().into()
+}
 
 fn main() {
     #[cfg(unix)]

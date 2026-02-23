@@ -25,8 +25,9 @@ use target_spec_json::{
     TargetEndian::*,
     TargetSpec,
 };
+use test_helper::{bin_name, codegen::file, function_name};
 
-use crate::file::{self, workspace_root};
+use crate::workspace_root;
 
 #[rustfmt::skip]
 static TARGETS: &[Target] = &[
@@ -717,7 +718,7 @@ pub(crate) fn generate() {
         // TODO
         fs::remove_dir_all(out_dir).unwrap();
     }
-    let raw_line = file::header(function_name!());
+    let raw_line = file::header(function_name!(), bin_name!());
     let raw_line = raw_line.trim_end();
 
     let mut target_modules = vec![];
@@ -1025,28 +1026,40 @@ pub(crate) fn generate() {
             } else {
                 quote! { i8 }
             };
-            file::write(function_name!(), out_dir.join("mod.rs"), quote! {
-                #(#modules)*
-                pub type c_char = #c_char_type;
-            })
+            file::write(
+                function_name!(),
+                bin_name!(),
+                workspace_root.as_std_path(),
+                out_dir.join("mod.rs"),
+                quote! {
+                    #(#modules)*
+                    pub type c_char = #c_char_type;
+                },
+            )
             .unwrap();
         }
     }
-    file::write(function_name!(), out_dir.join("mod.rs"), quote! {
-        #![allow(
-            dead_code,
-            non_camel_case_types,
-            non_upper_case_globals,
-            unreachable_pub,
-            unknown_lints,
-            unnameable_types, // unnameable_types is available on Rust 1.79+
-            clippy::cast_sign_loss,
-            clippy::ptr_as_ptr,
-            clippy::pub_underscore_fields,
-            clippy::unnecessary_cast,
-        )]
-        #(#target_modules)*
-    })
+    file::write(
+        function_name!(),
+        bin_name!(),
+        workspace_root.as_std_path(),
+        out_dir.join("mod.rs"),
+        quote! {
+            #![allow(
+                dead_code,
+                non_camel_case_types,
+                non_upper_case_globals,
+                unreachable_pub,
+                unknown_lints,
+                unnameable_types, // unnameable_types is available on Rust 1.79+
+                clippy::cast_sign_loss,
+                clippy::ptr_as_ptr,
+                clippy::pub_underscore_fields,
+                clippy::unnecessary_cast,
+            )]
+            #(#target_modules)*
+        },
+    )
     .unwrap();
 }
 

@@ -5,13 +5,12 @@ edition = "2018"
 publish = false
 
 [dependencies]
+test-helper = { path = "../..", features = ["codegen"] }
+
 bindgen = { default-features = false, features = ["prettyplease", "runtime"], git = "https://github.com/taiki-e/rust-bindgen.git", branch = "dev" } # https://github.com/rust-lang/rust-bindgen/pull/2369 + avoid https://github.com/rust-lang/cargo/issues/10623 + avoid bug on generate c str option
 camino = "1"
 duct = { version = "1", default-features = false }
 fs-err = "3"
-globset = { version = "0.4", default-features = false }
-prettyplease = "0.2"
-proc-macro2 = { version = "1", default-features = false }
 quote = { version = "1", default-features = false }
 regex = { version = "1", default-features = false, features = ["std"] }
 syn = { version = "2", default-features = false, features = ["parsing", "printing", "full"] }

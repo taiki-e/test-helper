@@ -13,7 +13,7 @@ all-features = true
 std = []
 
 cli = ["std"]
-codegen = ["std", "git", "fs-err", "proc-macro2", "quote", "syn"]
+codegen = ["std", "git", "fs-err", "globset", "prettyplease", "proc-macro2", "quote", "syn"]
 critical-section-std = ["std", "critical-section"]
 doc = ["std", "git", "fs-err"]
 git = ["std", "fs-err"]
@@ -22,6 +22,8 @@ sys = ["rustversion"]
 [dependencies]
 critical-section = { version = "1", optional = true, features = ["restore-state-bool"] }
 fs-err = { version = "3", optional = true }
+globset = { version = "0.4", optional = true, default-features = false }
+prettyplease = { version = "0.2", optional = true }
 proc-macro2 = { version = "1", optional = true, default-features = false }
 quote = { version = "1", optional = true, default-features = false }
 rustversion = { version = "1", optional = true }
