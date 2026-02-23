@@ -1,4 +1,5 @@
 {
+  "abi": "elfv1",
   "arch": "powerpc64",
   "cpu": "ppc64",
   "crt-objects-fallback": "false",
@@ -8,6 +9,7 @@
   "has-rpath": true,
   "has-thread-local": true,
   "linker-flavor": "gnu-cc",
+  "llvm-abiname": "elfv1",
   "llvm-target": "powerpc64-unknown-netbsd",
   "max-atomic-width": 64,
   "no-default-libraries": false,
