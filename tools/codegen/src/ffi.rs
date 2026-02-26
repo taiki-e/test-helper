@@ -1035,8 +1035,7 @@ pub(crate) fn generate() {
                     #(#modules)*
                     pub type c_char = #c_char_type;
                 },
-            )
-            .unwrap();
+            );
         }
     }
     file::write(
@@ -1059,8 +1058,7 @@ pub(crate) fn generate() {
             )]
             #(#target_modules)*
         },
-    )
-    .unwrap();
+    );
 }
 
 fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf {

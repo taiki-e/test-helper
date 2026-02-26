@@ -465,7 +465,7 @@ pub fn visit_items(
 }
 
 pub mod file {
-    use std::{eprintln, format, io, path::Path, string::String, sync::OnceLock, vec, vec::Vec};
+    use std::{eprintln, format, path::Path, string::String, sync::OnceLock, vec, vec::Vec};
 
     use fs_err as fs;
     use proc_macro2::TokenStream;
@@ -496,8 +496,8 @@ pub mod file {
         workspace_root: &Path,
         path: impl AsRef<Path>,
         contents: TokenStream,
-    ) -> io::Result<()> {
-        write_raw(function_name, bin_name, workspace_root, path.as_ref(), format_tokens(&contents))
+    ) {
+        write_raw(function_name, bin_name, workspace_root, path.as_ref(), format_tokens(&contents));
     }
 
     #[track_caller]
@@ -507,7 +507,7 @@ pub mod file {
         workspace_root: &Path,
         path: &Path,
         contents: impl AsRef<[u8]>,
-    ) -> io::Result<()> {
+    ) {
         static LINGUIST_GENERATED: OnceLock<Vec<globset::GlobMatcher>> = OnceLock::new();
         let linguist_generated = LINGUIST_GENERATED.get_or_init(|| {
             let gitattributes = fs::read_to_string(workspace_root.join(".gitattributes")).unwrap();
@@ -533,12 +533,11 @@ pub mod file {
         while out.ends_with(b"\n\n") {
             out.pop();
         }
-        if path.is_file() && fs::read(path)? == out {
-            return Ok(());
+        if path.is_file() && fs::read(path).unwrap() == out {
+            return;
         }
-        fs::write(path, out)?;
+        fs::write(path, out).unwrap();
         eprintln!("updated {}", p.display());
-        Ok(())
     }
 
     #[track_caller]
