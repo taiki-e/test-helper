@@ -1055,6 +1055,7 @@ pub(crate) fn generate() {
                 clippy::ptr_as_ptr,
                 clippy::pub_underscore_fields,
                 clippy::unnecessary_cast,
+                clippy::unreadable_literal,
             )]
             #(#target_modules)*
         },
