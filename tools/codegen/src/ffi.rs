@@ -710,7 +710,7 @@ pub(crate) fn generate() {
         // TODO
         return;
     }
-    let workspace_root = &workspace_root();
+    let workspace_root = workspace_root();
     let download_dir = &workspace_root.join("tools/codegen/tmp/cache");
     fs::create_dir_all(download_dir).unwrap();
     let out_dir = &workspace_root.join("src/gen/sys");
