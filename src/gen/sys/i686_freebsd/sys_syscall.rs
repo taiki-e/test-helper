@@ -446,4 +446,5 @@ pub const SYS_jail_remove_jd: u32 = 598;
 pub const SYS_kexec_load: u32 = 599;
 pub const SYS_pdrfork: u32 = 600;
 pub const SYS_pdwait: u32 = 601;
-pub const SYS_MAXSYSCALL: u32 = 602;
+pub const SYS_renameat2: u32 = 602;
+pub const SYS_MAXSYSCALL: u32 = 603;
