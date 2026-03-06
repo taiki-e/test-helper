@@ -493,6 +493,7 @@ pub use self::sys_syscall::SYS_jail_remove_jd;
 pub use self::sys_syscall::SYS_kexec_load;
 pub use self::sys_syscall::SYS_pdrfork;
 pub use self::sys_syscall::SYS_pdwait;
+pub use self::sys_syscall::SYS_renameat2;
 pub use self::sys_syscall::SYS_MAXSYSCALL;
 mod sys_sysctl;
 pub use self::sys_sysctl::CTL_KERN;
