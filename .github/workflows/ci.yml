@@ -35,9 +35,8 @@ jobs:
   tidy:
     uses: taiki-e/github-actions/.github/workflows/tidy.yml@main
     permissions:
-      contents: read
-      pull-requests: write # for gh pr edit --add-assignee
-      repository-projects: read # for gh pr edit --add-assignee
+      contents: write # for creating branch for pr
+      pull-requests: write # for gh pr review --approve
       security-events: write # for github/codeql-action/*
     secrets: inherit
     with:
@@ -55,7 +54,10 @@ jobs:
     steps:
       - uses: taiki-e/checkout-action@v1
       - uses: taiki-e/github-actions/free-device-space@main
-      - uses: taiki-e/install-action@cargo-hack
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-hack
+          fallback: none
       - run: cargo hack build -p test-helper --no-dev-deps --features "${FEATURES}" --version-range .. --version-step 2
         if: github.event_name == 'pull_request'
       - run: cargo hack build -p test-helper --no-dev-deps --features "${FEATURES}" --version-range ..
