@@ -40,6 +40,7 @@ pub use self::machine_cpu::CPU_CPUID;
 pub use self::machine_cpu::CPU_CPUFEATURE;
 pub use self::machine_cpu::CPU_KBDRESET;
 pub use self::machine_cpu::CPU_XCRYPT;
+pub use self::machine_cpu::CPU_HIBERNATEDELAY;
 pub use self::machine_cpu::CPU_LIDACTION;
 pub use self::machine_cpu::CPU_FORCEUKBD;
 pub use self::machine_cpu::CPU_TSCFREQ;
