@@ -15,6 +15,7 @@ pub const CPU_CPUID: u32 = 7;
 pub const CPU_CPUFEATURE: u32 = 8;
 pub const CPU_KBDRESET: u32 = 10;
 pub const CPU_XCRYPT: u32 = 12;
+pub const CPU_HIBERNATEDELAY: u32 = 13;
 pub const CPU_LIDACTION: u32 = 14;
 pub const CPU_FORCEUKBD: u32 = 15;
 pub const CPU_TSCFREQ: u32 = 16;
