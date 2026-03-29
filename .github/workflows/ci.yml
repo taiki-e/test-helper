@@ -38,7 +38,8 @@ jobs:
       contents: write # for creating branch for pr
       pull-requests: write # for gh pr review --approve
       security-events: write # for github/codeql-action/*
-    secrets: inherit
+    secrets:
+      PR_TOKEN_APP_PRIVATE_KEY: ${{ secrets.PR_TOKEN_APP_PRIVATE_KEY }}
     with:
       clippy-target: x86_64-unknown-linux-gnu,aarch64-unknown-linux-gnu,armv7-unknown-linux-gnueabihf,riscv64gc-unknown-linux-gnu,powerpc64le-unknown-linux-gnu
       codegen-automerge: true
