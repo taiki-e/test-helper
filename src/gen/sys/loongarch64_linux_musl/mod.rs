@@ -21,6 +21,7 @@ pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_LBT_MIPS;
 pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_PTW;
 pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_LSPW;
 pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_SCQ;
+pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_LAM_BH;
 mod linux_headers_asm_unistd;
 pub use self::linux_headers_asm_unistd::__NR_io_setup;
 pub use self::linux_headers_asm_unistd::__NR_io_destroy;
