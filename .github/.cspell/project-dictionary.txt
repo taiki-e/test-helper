@@ -8,6 +8,7 @@ DESTDIR
 dlfcn
 dlsym
 evbmips
+fsmonitor
 futex
 getauxval
 getisax

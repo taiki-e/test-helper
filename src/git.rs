@@ -30,7 +30,7 @@ pub fn assert_diff(expected_path: impl AsRef<Path>, actual: impl AsRef<[u8]>) {
                 &[]
             };
             let mut child = Command::new("git")
-                .arg("--no-pager")
+                .args(["-c", "core.fsmonitor=false", "--no-pager"])
                 .args(color)
                 .args(["diff", "--no-index", "--"])
                 .arg(expected_path)
@@ -53,7 +53,9 @@ pub fn assert_diff(expected_path: impl AsRef<Path>, actual: impl AsRef<[u8]>) {
 pub fn ls_files(dir: impl AsRef<Path>, filters: &[&str]) -> Vec<(String, PathBuf)> {
     let dir = dir.as_ref();
     let mut cmd = Command::new("git");
-    cmd.arg("ls-files").args(filters).current_dir(dir);
+    cmd.args(["-c", "core.fsmonitor=false", "--no-pager", "ls-files"])
+        .args(filters)
+        .current_dir(dir);
     let output =
         cmd.output().unwrap_or_else(|e| panic!("could not execute process `{:?}`: {}", cmd, e));
     assert!(
