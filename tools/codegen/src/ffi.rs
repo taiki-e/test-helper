@@ -1459,7 +1459,8 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         _ if target.vendor.as_deref() == Some("apple") => {
             clone(download_dir, "apple-oss-distributions/Libc", None, &["/include/"]);
             clone(download_dir, "apple-oss-distributions/libpthread", None, &["/include/"]);
-            src_dir = clone(download_dir, "apple-oss-distributions/xnu", None, &[
+            // TODO: detect latest branch
+            src_dir = clone(download_dir, "apple-oss-distributions/xnu", Some("rel/xnu-12377"), &[
                 "/bsd/",
                 "/EXTERNAL_HEADERS/",
                 "/osfmk/",
