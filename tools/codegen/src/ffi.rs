@@ -329,6 +329,16 @@ static TARGETS: &[Target] = &[
                 os: &[],
                 env: &[],
             },
+            Header {
+                // https://github.com/apple-oss-distributions/xnu/blob/HEAD/osfmk/arm/cpu_capabilities_public.h
+                path: "arm/cpu_capabilities_public.h",
+                types: &[],
+                vars: &["CAP_BIT_.*"],
+                functions: &[],
+                arch: &[aarch64, arm],
+                os: &[],
+                env: &[],
+            },
         ],
     },
     // FreeBSD
@@ -583,15 +593,24 @@ static TARGETS: &[Target] = &[
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/mips64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/powerpc64/include/elf.h
-                // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/sparc64/include/elf.h
                 // https://github.com/openbsd/src/blob/HEAD/sys/arch/amd64/include/elf.h
                 path: "machine/elf.h",
                 types: &[],
                 vars: &["HWCAP.*", "PPC_FEATURE.*"],
                 functions: &[],
-                // TODO: riscv
                 arch: &[aarch64, arm, mips64, mips64r6, powerpc, powerpc64, sparc64, x86, x86_64],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/openbsd/src/blob/HEAD/sys/arch/riscv64/include/elf.h
+                path: "machine/elf.h",
+                types: &[],
+                vars: &["HWCAP2_.*"],
+                functions: &[],
+                // TODO: HWCAP_
+                arch: &[riscv64],
                 os: &[],
                 env: &[],
             },
@@ -814,7 +833,7 @@ pub(crate) fn generate() {
                         clang_args.push(concat!("-include", $value));
                     }};
                 }
-                let header_path;
+                let mut header_path;
                 let include;
                 match target.os {
                     linux | android => {
@@ -864,6 +883,9 @@ pub(crate) fn generate() {
                     }
                     _ if target.vendor.as_deref() == Some("apple") => {
                         header_path = src_dir.join("bsd").join(header.path);
+                        if !header_path.is_file() {
+                            header_path = src_dir.join("osfmk").join(header.path);
+                        }
                         include = vec![
                             src_dir.join("bsd"),
                             src_dir.join("EXTERNAL_HEADERS"),
