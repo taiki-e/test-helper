@@ -17,4 +17,5 @@ pub const CPU_ID_AA64PFR1: u32 = 9;
 pub const CPU_ID_AA64SMFR0: u32 = 10;
 pub const CPU_ID_AA64ZFR0: u32 = 11;
 pub const CPU_LIDACTION: u32 = 12;
-pub const CPU_MAXID: u32 = 13;
+pub const CPU_LED_BLINK: u32 = 13;
+pub const CPU_MAXID: u32 = 14;

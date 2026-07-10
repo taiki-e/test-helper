@@ -31,6 +31,7 @@ pub use self::sys_sysctl::CTL_MACHDEP;
 pub use self::sys_sysctl::sysctl;
 mod machine_cpu;
 pub use self::machine_cpu::CPU_COMPATIBLE;
+pub use self::machine_cpu::CPU_LED_BLINK;
 pub use self::machine_cpu::CPU_MAXID;
 mod machine_elf;
 pub use self::machine_elf::HWCAP2_ISA_ZBA;

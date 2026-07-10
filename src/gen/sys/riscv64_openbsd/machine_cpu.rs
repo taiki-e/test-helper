@@ -6,4 +6,5 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
 pub const CPU_COMPATIBLE: u32 = 1;
-pub const CPU_MAXID: u32 = 2;
+pub const CPU_LED_BLINK: u32 = 2;
+pub const CPU_MAXID: u32 = 3;
