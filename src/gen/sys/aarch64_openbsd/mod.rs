@@ -42,6 +42,7 @@ pub use self::machine_cpu::CPU_ID_AA64PFR1;
 pub use self::machine_cpu::CPU_ID_AA64SMFR0;
 pub use self::machine_cpu::CPU_ID_AA64ZFR0;
 pub use self::machine_cpu::CPU_LIDACTION;
+pub use self::machine_cpu::CPU_LED_BLINK;
 pub use self::machine_cpu::CPU_MAXID;
 mod machine_elf;
 pub use self::machine_elf::HWCAP_FP;
