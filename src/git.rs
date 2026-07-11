@@ -43,9 +43,8 @@ pub fn assert_diff(expected_path: impl AsRef<Path>, actual: impl AsRef<[u8]>) {
             panic!(
                 "assertion failed; please run test locally and commit resulting changes, or apply the above diff as patch (e.g., `patch -p1 <<'EOF' ... EOF`)"
             );
-        } else {
-            fs::write(expected_path, actual).unwrap();
         }
+        fs::write(expected_path, actual).unwrap();
     }
 }
 
