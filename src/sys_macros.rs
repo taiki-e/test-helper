@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 /// Static assertions for FFI bindings.
+///
 /// This checks that FFI bindings defined in this crate and FFI bindings generated for
 /// the platform's latest header file using bindgen have the same types.
 /// Since this is static assertion, we can detect problems with
@@ -35,6 +36,7 @@ macro_rules! static_assert_sys_type {
 }
 
 /// Static assertions for FFI bindings.
+///
 /// This checks that FFI bindings defined in this crate and FFI bindings generated for
 /// the platform's latest header file using bindgen have the same fields.
 /// Since this is static assertion, we can detect problems with
@@ -97,6 +99,7 @@ macro_rules! __static_assert_sys_struct_offset_cmp {
 }
 
 /// Static assertions for FFI bindings.
+///
 /// This checks that FFI bindings defined in this crate and FFI bindings generated for
 /// the platform's latest header file using bindgen have the same values.
 /// Since this is static assertion, we can detect problems with
@@ -149,6 +152,7 @@ macro_rules! __static_assert_sys_const_cmp {
 }
 
 /// Static assertions for FFI bindings.
+///
 /// This checks that FFI bindings defined in this crate and FFI bindings generated for
 /// the platform's latest header file using bindgen have the same signatures.
 /// Since this is static assertion, we can detect problems with
