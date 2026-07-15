@@ -206,8 +206,13 @@ macro_rules! __static_assert_sys_import {
         #[cfg(target_os = "aix")]
         use ::libc as sys;
         #[cfg(target_os = "redox")]
-        use ::redox_syscall as sys;
-        #[cfg(not(any(target_os = "aix", target_os = "hermit", windows)))]
+        use ::syscall as sys;
+        #[cfg(not(any(
+            target_os = "aix",
+            target_os = "hermit",
+            target_os = "redox",
+            windows,
+        )))]
         use $crate::sys;
     };
 }
