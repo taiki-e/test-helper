@@ -201,9 +201,7 @@ macro_rules! __static_assert_sys_fn_cmp {
 #[macro_export]
 macro_rules! __static_assert_sys_import {
     () => {
-        #[cfg(target_os = "hermit")]
-        use ::hermit_abi as sys;
-        #[cfg(target_os = "aix")]
+        #[cfg(any(target_os = "aix", target_os = "hermit"))]
         use ::libc as sys;
         #[cfg(target_os = "redox")]
         use ::syscall as sys;
