@@ -68,6 +68,7 @@ pub use self::machine_elf::PPC_FEATURE2_EBB;
 pub use self::machine_elf::PPC_FEATURE2_ISEL;
 pub use self::machine_elf::PPC_FEATURE2_TAR;
 pub use self::machine_elf::PPC_FEATURE2_HAS_VEC_CRYPTO;
+pub use self::machine_elf::PPC_FEATURE2_VEC_CRYPTO;
 pub use self::machine_elf::PPC_FEATURE2_HTM_NOSC;
 pub use self::machine_elf::PPC_FEATURE2_ARCH_3_00;
 pub use self::machine_elf::PPC_FEATURE2_HAS_IEEE128;
