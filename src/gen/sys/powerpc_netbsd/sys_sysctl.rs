@@ -5,10 +5,36 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
+pub const CTL_MAXNAME: u32 = 12;
 pub const SYSCTL_VERS_1: u32 = 16777216;
 pub const SYSCTL_VERSION: u32 = 16777216;
+pub const CTL_EOL: i32 = -1;
 pub const CTL_QUERY: i32 = -2;
+pub const CTL_CREATE: i32 = -3;
+pub const CTL_CREATESYM: i32 = -4;
+pub const CTL_DESTROY: i32 = -5;
+pub const CTL_MMAP: i32 = -6;
+pub const CTL_DESCRIBE: i32 = -7;
+pub const CTL_UNSPEC: u32 = 0;
+pub const CTL_KERN: u32 = 1;
+pub const CTL_VM: u32 = 2;
+pub const CTL_VFS: u32 = 3;
+pub const CTL_NET: u32 = 4;
+pub const CTL_DEBUG: u32 = 5;
+pub const CTL_HW: u32 = 6;
 pub const CTL_MACHDEP: u32 = 7;
+pub const CTL_USER: u32 = 8;
+pub const CTL_DDB: u32 = 9;
+pub const CTL_PROC: u32 = 10;
+pub const CTL_VENDOR: u32 = 11;
+pub const CTL_EMUL: u32 = 12;
+pub const CTL_SECURITY: u32 = 13;
+pub const KERN_OSREV: u32 = 3;
+pub const CTL_DEBUG_NAME: u32 = 0;
+pub const CTL_DEBUG_VALUE: u32 = 1;
+pub const CTL_PROC_PAXFLAGS_ASLR: u32 = 1;
+pub const CTL_PROC_PAXFLAGS_MPROTECT: u32 = 2;
+pub const CTL_PROC_PAXFLAGS_GUARD: u32 = 4;
 pub type u_int = ::std::os::raw::c_uint;
 pub type u_quad_t = u64;
 pub type sysctlfn = *mut ::core::ffi::c_void;

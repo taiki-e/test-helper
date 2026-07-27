@@ -1547,6 +1547,24 @@ mod armebv6_netbsd_eabihf;
 pub use self::armebv6_netbsd_eabihf::*;
 #[cfg(
     all(
+        target_arch = "x86",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i586_netbsd;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i586_netbsd::*;
+#[cfg(
+    all(
         target_arch = "mips",
         target_os = "netbsd",
         target_endian = "little",
@@ -1635,6 +1653,24 @@ mod sparc64_netbsd;
     )
 )]
 pub use self::sparc64_netbsd::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_netbsd;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "netbsd",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_netbsd::*;
 #[cfg(
     all(
         target_arch = "aarch64",

@@ -448,7 +448,7 @@ static TARGETS: &[Target] = &[
             "aarch64_be-unknown-netbsd",
             "armv6-unknown-netbsd-eabihf",
             "armebv6-unknown-netbsd-eabihf",
-            // "i586-unknown-netbsd",
+            "i586-unknown-netbsd",
             // "m68k-unknown-netbsd", // TODO: not in rustc
             // "mips-unknown-netbsd", // TODO: not in rustc
             "mipsel-unknown-netbsd",
@@ -459,7 +459,7 @@ static TARGETS: &[Target] = &[
             // "riscv64gc-unknown-netbsd", // TODO: error: __WCHAR_MIN__ or __WCHAR_MAX__ not defined
             "sparc-unknown-netbsd",
             "sparc64-unknown-netbsd",
-            // "x86_64-unknown-netbsd",
+            "x86_64-unknown-netbsd",
         ],
         headers: &[
             Header {
@@ -476,8 +476,19 @@ static TARGETS: &[Target] = &[
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &["sysctlnode"],
-                vars: &["CTL_MACHDEP", "CTL_QUERY", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
+                vars: &["CTL_.*", "KERN_OSREV", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
                 functions: &["sysctl", "sysctlbyname"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/NetBSD/src/blob/HEAD/sys/sys/futex.h
+                path: "sys/futex.h",
+                types: &[],
+                // TODO: FUTEX_PRIVATE_FLAG
+                vars: &["FUTEX_.*"],
+                functions: &[],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -507,6 +518,16 @@ static TARGETS: &[Target] = &[
                 types: &[],
                 vars: &["CPU_.*"],
                 functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/NetBSD/src/blob/HEAD/include/unistd.h
+                path: "unistd.h",
+                types: &[],
+                vars: &[],
+                functions: &["syscall"],
                 arch: &[],
                 os: &[],
                 env: &[],

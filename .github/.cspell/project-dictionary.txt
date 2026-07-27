@@ -25,6 +25,7 @@ muslx
 nostdinc
 octeon
 osfmk
+OSREV
 prctl
 quic
 reentrancy
