@@ -6,6 +6,23 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
 pub const UMTX_UNOWNED: u32 = 0;
+pub const USYNC_PROCESS_SHARED: u32 = 1;
+pub const UMUTEX_PRIO_INHERIT: u32 = 4;
+pub const UMUTEX_PRIO_PROTECT: u32 = 8;
+pub const UMUTEX_ROBUST: u32 = 16;
+pub const UMUTEX_NONCONSISTENT: u32 = 32;
+pub const UMUTEX_UNOWNED: u32 = 0;
+pub const UMUTEX_CONTESTED: u32 = 2147483648;
+pub const UMUTEX_RB_OWNERDEAD: u32 = 2147483664;
+pub const UMUTEX_RB_NOTRECOV: u32 = 2147483665;
+pub const URWLOCK_PREFER_READER: u32 = 2;
+pub const URWLOCK_WRITE_OWNER: u32 = 2147483648;
+pub const URWLOCK_WRITE_WAITERS: u32 = 1073741824;
+pub const URWLOCK_READ_WAITERS: u32 = 536870912;
+pub const URWLOCK_MAX_READERS: u32 = 536870911;
+pub const SEM_NAMED: u32 = 2;
+pub const USEM_HAS_WAITERS: u32 = 2147483648;
+pub const USEM_MAX_COUNT: u32 = 2147483647;
 pub const UMTX_OP_LOCK: u32 = 0;
 pub const UMTX_OP_UNLOCK: u32 = 1;
 pub const UMTX_OP_WAIT: u32 = 2;
@@ -37,13 +54,112 @@ pub const UMTX_OP_GET_MIN_TIMEOUT: u32 = 27;
 pub const UMTX_OP_SET_MIN_TIMEOUT: u32 = 28;
 pub const UMTX_OP__I386: u32 = 1073741824;
 pub const UMTX_OP__32BIT: u32 = 2147483648;
+pub const CVWAIT_CHECK_UNPARKING: u32 = 1;
+pub const CVWAIT_ABSTIME: u32 = 2;
+pub const CVWAIT_CLOCKID: u32 = 4;
+pub const CVWAIT_UMTX_TIME: u32 = 8;
 pub const UMTX_ABSTIME: u32 = 1;
 pub const UMTX_CHECK_UNPARKING: u32 = 1;
 pub const UMTX_SHM_CREAT: u32 = 1;
 pub const UMTX_SHM_LOOKUP: u32 = 2;
 pub const UMTX_SHM_DESTROY: u32 = 4;
 pub const UMTX_SHM_ALIVE: u32 = 8;
+pub type __uint8_t = ::std::os::raw::c_uchar;
+pub type __uint16_t = ::std::os::raw::c_ushort;
+pub type __int32_t = ::std::os::raw::c_int;
+pub type __uint32_t = ::std::os::raw::c_uint;
+pub type __int64_t = ::std::os::raw::c_longlong;
+pub type __uint64_t = ::std::os::raw::c_ulonglong;
+pub type __uintmax_t = __uint64_t;
+pub type __uintptr_t = __uint32_t;
+pub type __uint64ptr_t = __uint64_t;
+pub type __time_t = __int64_t;
+pub type __u_register_t = __uint32_t;
+pub type __lwpid_t = __int32_t;
+pub type __uid_t = __uint32_t;
+pub type __useconds_t = ::std::os::raw::c_uint;
+pub type u_char = ::std::os::raw::c_uchar;
+pub type u_short = ::std::os::raw::c_ushort;
+pub type u_int = ::std::os::raw::c_uint;
 pub type u_long = ::std::os::raw::c_ulong;
+pub type ushort = ::std::os::raw::c_ushort;
+pub type uint = ::std::os::raw::c_uint;
+pub type uint64ptr_t = __uint64ptr_t;
+pub type uintmax_t = __uintmax_t;
+pub type u_int8_t = __uint8_t;
+pub type u_int16_t = __uint16_t;
+pub type u_int32_t = __uint32_t;
+pub type u_int64_t = __uint64_t;
+pub type u_quad_t = __uint64_t;
+pub type time_t = __time_t;
+pub type u_register_t = __u_register_t;
+pub type uid_t = __uid_t;
+pub type useconds_t = __useconds_t;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct timespec {
+    pub tv_sec: time_t,
+    pub tv_nsec: ::std::os::raw::c_long,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct umtx {
+    pub u_owner: ::std::os::raw::c_ulong,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct umutex {
+    pub m_owner: __lwpid_t,
+    pub m_flags: __uint32_t,
+    pub m_ceilings: [__uint32_t; 2usize],
+    pub m_rb_lnk: __uintptr_t,
+    pub m_pad: __uint32_t,
+    pub m_spare: [__uint32_t; 2usize],
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct ucond {
+    pub c_has_waiters: __uint32_t,
+    pub c_flags: __uint32_t,
+    pub c_clockid: __uint32_t,
+    pub c_spare: [__uint32_t; 1usize],
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct urwlock {
+    pub rw_state: __int32_t,
+    pub rw_flags: __uint32_t,
+    pub rw_blocked_readers: __uint32_t,
+    pub rw_blocked_writers: __uint32_t,
+    pub rw_spare: [__uint32_t; 4usize],
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct _usem {
+    pub _has_waiters: __uint32_t,
+    pub _count: __uint32_t,
+    pub _flags: __uint32_t,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct _usem2 {
+    pub _count: __uint32_t,
+    pub _flags: __uint32_t,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct _umtx_time {
+    pub _timeout: timespec,
+    pub _flags: __uint32_t,
+    pub _clockid: __uint32_t,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct umtx_robust_lists_params {
+    pub robust_list_offset: usize,
+    pub robust_priv_list_offset: usize,
+    pub robust_inact_offset: usize,
+}
 extern "C" {
     pub fn _umtx_op(
         obj: *mut ::core::ffi::c_void,
