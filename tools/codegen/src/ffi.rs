@@ -171,8 +171,8 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/torvalds/linux/blob/HEAD/include/uapi/linux/futex.h
                 path: "linux-headers:linux/futex.h",
-                types: &["futex_.*", "robust_.*"],
-                vars: &["FUTEX_.*", "ROBUST_.*"],
+                types: &["futex.*", "robust.*"],
+                vars: &["FUTEX.*", "ROBUST.*"],
                 functions: &[],
                 arch: &[],
                 os: &[],
@@ -407,8 +407,8 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/sys/umtx.h
                 path: "sys/umtx.h",
-                types: &[],
-                vars: &["UMTX_.*"],
+                types: &["u.*", "_u.*"],
+                vars: &["U.*", "SEM.*", "CV.*"],
                 functions: &["_umtx.*"],
                 arch: &[],
                 os: &[],
@@ -485,9 +485,9 @@ static TARGETS: &[Target] = &[
             Header {
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/futex.h
                 path: "sys/futex.h",
-                types: &[],
+                types: &["futex.*"],
                 // TODO: FUTEX_PRIVATE_FLAG
-                vars: &["FUTEX_.*"],
+                vars: &["FUTEX.*"],
                 functions: &[],
                 arch: &[],
                 os: &[],
@@ -573,7 +573,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/openbsd/src/blob/HEAD/sys/sys/futex.h
                 path: "sys/futex.h",
                 types: &[],
-                vars: &["FUTEX_.*"],
+                vars: &["FUTEX.*"],
                 functions: &["futex"],
                 arch: &[],
                 os: &[],
