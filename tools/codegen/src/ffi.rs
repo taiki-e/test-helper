@@ -914,7 +914,7 @@ pub(crate) fn generate() {
                             src_dir.parent().unwrap().join("Libc/include"),
                             src_dir.parent().unwrap().join("libpthread/include"),
                         ];
-                        // https://github.com/apple-oss-distributions/xnu/blob/8d741a5de7ff4191bf97d57b9f54c2f6d4a15585/bsd/sys/cdefs.h#L628-L638
+                        // https://github.com/apple-oss-distributions/xnu/blob/xnu-12377.121.6/bsd/sys/cdefs.h#L654
                         define!(_POSIX_C_SOURCE, "200112L");
                         include_header!("sys/_types/_u_char.h");
                         include_header!("sys/_types/_u_short.h");
