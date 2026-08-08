@@ -7,6 +7,27 @@
     clippy::new_without_default,
     clippy::undocumented_unsafe_blocks
 )]
+#![cfg_attr(
+    all(
+        feature = "valgrind",
+        valgrind,
+        not(any(
+            target_arch = "arm",
+            target_arch = "aarch64",
+            target_arch = "x86",
+            target_arch = "x86_64",
+            target_arch = "riscv32",
+            target_arch = "riscv64",
+            target_arch = "loongarch64",
+            target_arch = "arm64ec",
+            target_arch = "s390x",
+            target_arch = "loongarch32",
+            target_arch = "powerpc",
+            target_arch = "powerpc64",
+        )),
+    ),
+    feature(asm_experimental_arch)
+)]
 
 #[cfg(feature = "std")]
 extern crate std;
@@ -31,3 +52,5 @@ pub mod once_lock;
 pub mod sys;
 #[cfg(feature = "sys")]
 mod sys_macros;
+#[cfg(all(feature = "valgrind", valgrind))]
+pub mod valgrind;
