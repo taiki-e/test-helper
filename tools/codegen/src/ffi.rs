@@ -1118,7 +1118,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let name = name.replace("https://android.googlesource.com/", "android/");
         let name = name.replace("https://git.codelinaro.org/clo/le/", "linaro/");
         let name = name.replace("https://git.musl-libc.org/git/", "musl-libc/");
-        let name = name.replace("https://sourceware.org/git/", "glibc/");
+        let name = name.replace("https://gitlab.com/gnutools/", "glibc/");
         assert!(!name.contains("://"), "{}", name);
         let repository = if repository.contains("://") {
             repository.to_owned()
@@ -1330,7 +1330,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                         &[],
                     );
                 } else {
-                    clone(download_dir, "https://sourceware.org/git/glibc.git", None, &[]);
+                    clone(download_dir, "https://gitlab.com/gnutools/glibc.git", None, &[]);
                 }
                 let glibc_src_dir = &glibc_dir(target, &src_dir);
                 let headers_dir = &libc_headers_dir(target, &src_dir);
