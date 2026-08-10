@@ -10,7 +10,7 @@
 //
 // See also https://github.com/rust-lang/libc/issues/570.
 
-use std::{convert::TryInto as _, process::Command};
+use std::{convert::TryInto as _, env, process::Command};
 
 use camino::{Utf8Path, Utf8PathBuf};
 use duct::cmd;
@@ -324,7 +324,7 @@ static TARGETS: &[Target] = &[
                 path: "sys/sysctl.h",
                 types: &[],
                 vars: &["CTL_MAXNAME"],
-                functions: &["sysctlbyname"],
+                functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -365,6 +365,16 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/freebsd/freebsd-src/blob/HEAD/include/unistd.h
+                path: "unistd.h",
+                types: &["pid_t"],
+                vars: &[],
+                functions: &["getpid"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/sys/auxv.h
                 path: "sys/auxv.h",
                 types: &[],
@@ -399,7 +409,7 @@ static TARGETS: &[Target] = &[
                 path: "sys/sysctl.h",
                 types: &[],
                 vars: &["CTL_KERN", "KERN_PROC", "KERN_PROC_AUXV"],
-                functions: &[],
+                functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],
                 env: &[],
@@ -476,7 +486,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &["sysctlnode"],
-                vars: &["CTL_.*", "KERN_OSREV", "SYSCTL_VERS_1", "SYSCTL_VERSION"],
+                vars: &["CTL_.*", "KERN_OSREV", "SYSCTL_.*"],
                 functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],
@@ -665,14 +675,34 @@ static TARGETS: &[Target] = &[
         ],
         headers: &[
             Header {
+                // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/head/fcntl.h
+                path: "fcntl.h",
+                types: &[],
+                vars: &["O_.*"],
+                functions: &["open"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/head/unistd.h
+                path: "unistd.h",
+                types: &[],
+                vars: &[],
+                functions: &["close", "read"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv.h
                 // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv.h
                 // https://github.com/richlowe/illumos-gate/blob/arm64-gate/usr/src/uts/common/sys/auxv_aarch64.h
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv_SPARC.h
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/auxv_386.h
                 path: "sys/auxv.h",
-                types: &[],
-                vars: &["AV.*"],
+                types: &["auxv.*_t"],
+                vars: &["AT.*", "AV.*"],
                 functions: &["getisax"],
                 arch: &[],
                 os: &[],
@@ -745,7 +775,9 @@ struct Header {
 }
 
 pub(crate) fn generate() {
-    if !cfg!(all(target_os = "linux", target_arch = "x86_64")) {
+    if !cfg!(all(target_os = "linux", target_arch = "x86_64"))
+        && env::var_os("TEST_HELPER_DEV").is_none()
+    {
         eprintln!("warning: codegen is only fully supported on x86_64 Linux");
         // TODO
         return;
@@ -754,8 +786,7 @@ pub(crate) fn generate() {
     let download_dir = &workspace_root.join("tools/codegen/tmp/cache");
     fs::create_dir_all(download_dir).unwrap();
     let out_dir = &workspace_root.join("src/gen/sys");
-    if out_dir.exists() {
-        // TODO
+    if out_dir.exists() && env::var_os("TEST_HELPER_DEV").is_none() {
         fs::remove_dir_all(out_dir).unwrap();
     }
     let raw_line = file::header(function_name!(), bin_name!());
@@ -952,7 +983,10 @@ pub(crate) fn generate() {
                         include = vec![src_dir.join("usr/include")];
                     }
                     illumos => {
-                        header_path = src_dir.join("usr/src/uts/common").join(header.path);
+                        header_path = src_dir.join("usr/src/head").join(header.path);
+                        if !header_path.is_file() {
+                            header_path = src_dir.join("usr/src/uts/common").join(header.path);
+                        }
                         include = vec![
                             src_dir.join("usr/src/uts/common"),
                             src_dir.join("usr/src/uts").join(illumos_arch(target)),

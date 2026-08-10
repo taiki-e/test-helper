@@ -7,6 +7,9 @@
 mod dlfcn;
 pub use self::dlfcn::RTLD_DEFAULT;
 pub use self::dlfcn::dlsym;
+mod unistd;
+pub use self::unistd::pid_t;
+pub use self::unistd::getpid;
 mod sys_auxv;
 pub use self::sys_auxv::elf_aux_info;
 mod sys_elf_common;
@@ -501,6 +504,8 @@ mod sys_sysctl;
 pub use self::sys_sysctl::CTL_KERN;
 pub use self::sys_sysctl::KERN_PROC;
 pub use self::sys_sysctl::KERN_PROC_AUXV;
+pub use self::sys_sysctl::sysctl;
+pub use self::sys_sysctl::sysctlbyname;
 mod sys_umtx;
 pub use self::sys_umtx::UMTX_UNOWNED;
 pub use self::sys_umtx::USYNC_PROCESS_SHARED;

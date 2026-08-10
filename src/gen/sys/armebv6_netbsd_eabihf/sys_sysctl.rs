@@ -6,8 +6,15 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
 pub const CTL_MAXNAME: u32 = 12;
+pub const SYSCTL_NAMELEN: u32 = 32;
+pub const SYSCTL_DEFSIZE: u32 = 8;
+pub const SYSCTL_VERS_MASK: u32 = 4278190080;
+pub const SYSCTL_VERS_0: u32 = 0;
 pub const SYSCTL_VERS_1: u32 = 16777216;
 pub const SYSCTL_VERSION: u32 = 16777216;
+pub const SYSCTL_USERFLAGS: u32 = 40432;
+pub const SYSCTL_TYPEMASK: u32 = 15;
+pub const SYSCTL_FLAGMASK: u32 = 16777200;
 pub const CTL_EOL: i32 = -1;
 pub const CTL_QUERY: i32 = -2;
 pub const CTL_CREATE: i32 = -3;

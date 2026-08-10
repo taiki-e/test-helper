@@ -88,5 +88,6 @@ pub use self::sys_errno::ENOPOLICY;
 pub use self::sys_errno::ENOTCAPABLE;
 mod sys_sysctl;
 pub use self::sys_sysctl::CTL_MAXNAME;
+pub use self::sys_sysctl::sysctl;
 pub use self::sys_sysctl::sysctlbyname;
 pub type c_char = i8;

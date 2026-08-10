@@ -5,9 +5,44 @@
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
+pub const AT_SUN_CAP_HW_MAX: u32 = 3;
 pub const AV_HW1_IDX: u32 = 0;
 pub const AV_HW2_IDX: u32 = 1;
 pub const AV_HW3_IDX: u32 = 2;
+pub const AT_NULL: u32 = 0;
+pub const AT_IGNORE: u32 = 1;
+pub const AT_EXECFD: u32 = 2;
+pub const AT_PHDR: u32 = 3;
+pub const AT_PHENT: u32 = 4;
+pub const AT_PHNUM: u32 = 5;
+pub const AT_PAGESZ: u32 = 6;
+pub const AT_BASE: u32 = 7;
+pub const AT_FLAGS: u32 = 8;
+pub const AT_ENTRY: u32 = 9;
+pub const AT_SUN_UID: u32 = 2000;
+pub const AT_SUN_RUID: u32 = 2001;
+pub const AT_SUN_GID: u32 = 2002;
+pub const AT_SUN_RGID: u32 = 2003;
+pub const AT_SUN_LDELF: u32 = 2004;
+pub const AT_SUN_LDSHDR: u32 = 2005;
+pub const AT_SUN_LDNAME: u32 = 2006;
+pub const AT_SUN_LPAGESZ: u32 = 2007;
+pub const AT_SUN_PLATFORM: u32 = 2008;
+pub const AT_SUN_CAP_HW1: u32 = 2009;
+pub const AT_SUN_HWCAP: u32 = 2009;
+pub const AT_SUN_IFLUSH: u32 = 2010;
+pub const AT_SUN_CPU: u32 = 2011;
+pub const AT_SUN_EXECNAME: u32 = 2014;
+pub const AT_SUN_MMU: u32 = 2015;
+pub const AT_SUN_LDDATA: u32 = 2016;
+pub const AT_SUN_AUXFLAGS: u32 = 2017;
+pub const AT_SUN_EMULATOR: u32 = 2018;
+pub const AT_SUN_BRANDNAME: u32 = 2019;
+pub const AT_SUN_BRAND_AUX1: u32 = 2020;
+pub const AT_SUN_BRAND_AUX2: u32 = 2021;
+pub const AT_SUN_BRAND_AUX3: u32 = 2022;
+pub const AT_SUN_CAP_HW2: u32 = 2023;
+pub const AT_SUN_CAP_HW3: u32 = 2024;
 pub const AV_SPARC_B_MUL32: u32 = 0;
 pub const AV_SPARC_MUL32: u32 = 1;
 pub const AV_SPARC_B_DIV32: u32 = 1;
@@ -116,6 +151,19 @@ pub const AV_SPARC_HWMUL_32x32: u32 = 1;
 pub const AV_SPARC_HWDIV_32x32: u32 = 2;
 pub const AV_SPARC_HWFSMULD: u32 = 4;
 pub type uint_t = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct auxv_t {
+    pub a_type: ::std::os::raw::c_int,
+    pub a_un: auxv_t__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union auxv_t__bindgen_ty_1 {
+    pub a_val: ::std::os::raw::c_long,
+    pub a_ptr: *mut ::core::ffi::c_void,
+    pub a_fcn: ::core::option::Option<unsafe extern "C" fn()>,
+}
 extern "C" {
     pub fn getisax(arg1: *mut u32, arg2: uint_t) -> uint_t;
 }

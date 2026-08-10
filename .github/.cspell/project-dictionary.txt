@@ -9,10 +9,12 @@ dlfcn
 dlsym
 dsll
 evbmips
+fcntl
 fsmonitor
 futex
 getauxval
 getisax
+getpid
 HWCAP
 hwprobe
 libpthread
