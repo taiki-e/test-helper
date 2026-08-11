@@ -797,6 +797,19 @@ pub(crate) fn generate() {
         for &triple in triples {
             eprintln!("\ninfo: generating bindings for {triple}");
             let (ref target, is_custom) = target_spec_json(triple);
+            // loongarch64 support was added in Rust 1.70: https://github.com/rust-lang/rust/pull/96971
+            // csky support was added in Rust 1.73: https://github.com/rust-lang/rust/pull/113658
+            // loongarch32 support was added in Rust 1.89: https://github.com/rust-lang/rust/pull/142053
+            // aix support was added in Rust 1.67: https://github.com/rust-lang/rust/pull/102293
+            // trusty support was added in Rust 1.82: https://github.com/rust-lang/rust/pull/129490
+            // non-x86_64 illumos support was added in Rust 1.77: https://github.com/rust-lang/rust/pull/112936
+            // non-x86_64 l4re support was added in Rust 1.99: https://github.com/rust-lang/rust/pull/150885
+            // riscv64 fuchsia support was added in Rust 1.70: https://github.com/rust-lang/rust/pull/108722
+            let use_core_ffi = is_custom
+                || matches!(target.arch, loongarch64 | csky | loongarch32)
+                || matches!(target.os, aix | trusty)
+                || matches!(target.os, illumos | l4re) && target.arch != x86_64
+                || target.os == fuchsia && target.arch == riscv64;
             let mut module_name = triple
                 .replace(&*format!("-{}-", target.vendor.as_deref().unwrap_or("unknown")), "-")
                 .replace(['-', '.'], "_");
@@ -1013,7 +1026,7 @@ pub(crate) fn generate() {
                     .disable_header_comment()
                     .generate_comments(false)
                     .layout_tests(false)
-                    .rust_target(if is_custom {
+                    .rust_target(if use_core_ffi {
                         // targets without std support
                         bindgen::RustTarget::Stable_1_64
                     } else {
@@ -1034,7 +1047,7 @@ pub(crate) fn generate() {
                 bindings.write_to_file(out_path).unwrap_or_else(|e| {
                     panic!("failed to write_to_file for {}: {}", header.path, e)
                 });
-                if is_custom {
+                if use_core_ffi {
                     // TODO: Workaround for bindgen bug
                     let f = fs::read_to_string(out_path).unwrap();
                     fs::write(out_path, f.replace("::std::os::raw::", "::core::ffi::")).unwrap();
