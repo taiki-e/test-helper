@@ -124,6 +124,17 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/torvalds/linux/blob/HEAD/include/uapi/asm-generic/errno-base.h
+                // https://github.com/torvalds/linux/blob/HEAD/include/uapi/asm-generic/errno.h
+                path: "linux-headers:asm/errno.h",
+                types: &[],
+                vars: &["E.*"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm64/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/arm/include/uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/loongarch/include/uapi/asm/hwcap.h
@@ -189,7 +200,7 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://sourceware.org/git/?p=glibc.git;a=blob;f=dlfcn/dlfcn.h
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/dlfcn/dlfcn.h
                 // https://git.musl-libc.org/cgit/musl/tree/include/dlfcn.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/dlfcn.h
                 // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/dlfcn.h
@@ -202,7 +213,21 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/include/errno.h
+                // https://git.musl-libc.org/cgit/musl/tree/include/errno.h
+                // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/errno.h
+                // https://github.com/wbx-github/uclibc-ng/blob/HEAD/libc/sysdeps/linux/common/bits/errno.h
+                // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/errno.h
+                path: "errno.h",
+                types: &[],
+                vars: &[],
+                functions: &["__errno_location", "__errno"],
+                arch: &[],
+                os: &[linux],
+                env: &[],
+            },
+            Header {
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/elf/elf.h
                 // https://git.musl-libc.org/cgit/musl/tree/include/elf.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/elf.h
                 // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/elf.h
@@ -215,7 +240,7 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
-                // https://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/auxv.h
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/misc/sys/auxv.h
                 // https://git.musl-libc.org/cgit/musl/tree/include/sys/auxv.h
                 // https://github.com/wbx-github/uclibc-ng/blob/HEAD/include/sys/auxv.h
                 // https://android.googlesource.com/platform/bionic.git/+/refs/heads/main/libc/include/sys/auxv.h
@@ -223,11 +248,11 @@ static TARGETS: &[Target] = &[
                 types: &[],
                 // HWCAP_S390_.*/HWCAP_SPARC_.* are not exposed from uapi/asm/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/s390/include/asm/elf.h
-                // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/s390/bits/hwcap.h
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/sysdeps/unix/sysv/linux/s390/bits/hwcap.h
                 // https://git.musl-libc.org/cgit/musl/tree/arch/s390x/bits/hwcap.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_32.h
                 // https://github.com/torvalds/linux/blob/HEAD/arch/sparc/include/asm/elf_64.h
-                // https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/sparc/bits/hwcap.h
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/sysdeps/sparc/bits/hwcap.h
                 vars: &["HWCAP[^_]*_S390_.*", "HWCAP[^_]*_SPARC_.*"],
                 functions: &["getauxval"],
                 arch: &[],
@@ -385,6 +410,16 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/sys/errno.h
+                path: "sys/errno.h",
+                types: &[],
+                vars: &["E.*"],
+                functions: &["__error"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/freebsd/freebsd-src/blob/HEAD/sys/sys/elf_common.h
                 path: "sys/elf_common.h",
                 types: &[],
@@ -533,6 +568,17 @@ static TARGETS: &[Target] = &[
                 env: &[],
             },
             Header {
+                // https://github.com/NetBSD/src/blob/HEAD/include/errno.h
+                // https://github.com/NetBSD/src/blob/HEAD/sys/sys/errno.h
+                path: "errno.h",
+                types: &[],
+                vars: &["E.*"],
+                functions: &["__errno"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/NetBSD/src/blob/HEAD/include/unistd.h
                 path: "unistd.h",
                 types: &[],
@@ -674,6 +720,17 @@ static TARGETS: &[Target] = &[
             // "x86_64-unknown-illumos",
         ],
         headers: &[
+            Header {
+                // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/head/errno.h
+                // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/uts/common/sys/errno.h
+                path: "errno.h",
+                types: &[],
+                vars: &["E.*"],
+                functions: &["___errno"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
             Header {
                 // https://github.com/illumos/illumos-gate/blob/HEAD/usr/src/head/fcntl.h
                 path: "fcntl.h",
@@ -1383,7 +1440,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 let headers_dir = &libc_headers_dir(target, &src_dir);
                 if !headers_dir.exists() {
                     let (cc, cflags) = linux_gcc(target);
-                    // https://sourceware.org/git/?p=glibc.git;a=blob;f=INSTALL
+                    // https://gitlab.com/gnutools/glibc/-/blob/HEAD/INSTALL
                     let build_dir = &glibc_src_dir.parent().unwrap().join("glibc-build");
                     if build_dir.exists() {
                         fs::remove_dir_all(build_dir).unwrap();
