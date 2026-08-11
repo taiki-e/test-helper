@@ -81,5 +81,5 @@ pub const HWCAP_SB: u32 = 536870912;
 pub const HWCAP_PACA: u32 = 1073741824;
 pub const HWCAP_PACG: u32 = 2147483648;
 extern "C" {
-    pub fn getauxval(arg1: ::std::os::raw::c_ulong) -> ::std::os::raw::c_ulong;
+    pub fn getauxval(arg1: ::core::ffi::c_ulong) -> ::core::ffi::c_ulong;
 }
