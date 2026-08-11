@@ -104,17 +104,17 @@ pub const AV_AARCH64_2_SME_FA64: u32 = 134217728;
 pub const AV_AARCH64_2_EBF16: u32 = 268435456;
 pub const AV_AARCH64_2_SME_F64F64: u32 = 536870912;
 pub const AV_AARCH64_2_SME_I16I64: u32 = 1073741824;
-pub type uint_t = ::std::os::raw::c_uint;
+pub type uint_t = ::core::ffi::c_uint;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct auxv_t {
-    pub a_type: ::std::os::raw::c_int,
+    pub a_type: ::core::ffi::c_int,
     pub a_un: auxv_t__bindgen_ty_1,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union auxv_t__bindgen_ty_1 {
-    pub a_val: ::std::os::raw::c_long,
+    pub a_val: ::core::ffi::c_long,
     pub a_ptr: *mut ::core::ffi::c_void,
     pub a_fcn: ::core::option::Option<unsafe extern "C" fn()>,
 }

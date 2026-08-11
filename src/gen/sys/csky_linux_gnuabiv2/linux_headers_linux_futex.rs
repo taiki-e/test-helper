@@ -78,8 +78,8 @@ pub const FUTEX_OP_CMP_LT: u32 = 2;
 pub const FUTEX_OP_CMP_LE: u32 = 3;
 pub const FUTEX_OP_CMP_GT: u32 = 4;
 pub const FUTEX_OP_CMP_GE: u32 = 5;
-pub type __u32 = ::std::os::raw::c_uint;
-pub type __u64 = ::std::os::raw::c_ulonglong;
+pub type __u32 = ::core::ffi::c_uint;
+pub type __u64 = ::core::ffi::c_ulonglong;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct futex_waitv {
@@ -97,6 +97,6 @@ pub struct robust_list {
 #[derive(Copy, Clone)]
 pub struct robust_list_head {
     pub list: robust_list,
-    pub futex_offset: ::std::os::raw::c_long,
+    pub futex_offset: ::core::ffi::c_long,
     pub list_op_pending: *mut robust_list,
 }

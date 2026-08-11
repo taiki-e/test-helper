@@ -6,11 +6,11 @@
 #![cfg_attr(rustfmt, rustfmt::skip)]
 
 extern "C" {
-    pub fn close(arg1: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn close(arg1: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn read(
-        arg1: ::std::os::raw::c_int,
+        arg1: ::core::ffi::c_int,
         arg2: *mut ::core::ffi::c_void,
         arg3: usize,
     ) -> isize;
