@@ -223,7 +223,7 @@ static TARGETS: &[Target] = &[
                 vars: &[],
                 functions: &["__errno_location", "__errno"],
                 arch: &[],
-                os: &[linux],
+                os: &[],
                 env: &[],
             },
             Header {
@@ -606,6 +606,16 @@ static TARGETS: &[Target] = &[
         ],
         headers: &[
             Header {
+                // https://github.com/openbsd/src/blob/HEAD/include/errno.h
+                path: "errno.h",
+                types: &[],
+                vars: &["E.*"],
+                functions: &["__errno"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
                 // https://github.com/openbsd/src/blob/HEAD/include/dlfcn.h
                 path: "dlfcn.h",
                 types: &[],
@@ -699,6 +709,16 @@ static TARGETS: &[Target] = &[
             "x86_64-unknown-dragonfly",
         ],
         headers: &[
+            Header {
+                // https://github.com/DragonFlyBSD/DragonFlyBSD/blob/HEAD/sys/sys/errno.h
+                path: "sys/errno.h",
+                types: &[],
+                vars: &["E.*"],
+                functions: &["__errno_location"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
             Header {
                 // https://github.com/DragonFlyBSD/DragonFlyBSD/blob/HEAD/include/unistd.h
                 path: "unistd.h",
@@ -1051,6 +1071,8 @@ pub(crate) fn generate() {
                     solaris => {
                         header_path = src_dir.join("usr/include").join(header.path);
                         include = vec![src_dir.join("usr/include")];
+                        // https://docs.oracle.com/cd/E88353_01/html/E37853/posix-7.html
+                        define!(_POSIX_C_SOURCE, "200809L");
                     }
                     illumos => {
                         header_path = src_dir.join("usr/src/head").join(header.path);
@@ -1062,6 +1084,8 @@ pub(crate) fn generate() {
                             src_dir.join("usr/src/uts").join(illumos_arch(target)),
                             src_dir.join("usr/src/head"),
                         ];
+                        // https://illumos.org/man/7/standards
+                        define!(_POSIX_C_SOURCE, "200112L");
                     }
                     fuchsia => {
                         header_path = src_dir.join(header.path);
