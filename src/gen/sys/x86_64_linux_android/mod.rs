@@ -848,6 +848,8 @@ pub use self::linux_headers_linux_prctl::PR_CFI_BRANCH_LANDING_PADS;
 mod dlfcn;
 pub use self::dlfcn::RTLD_DEFAULT;
 pub use self::dlfcn::dlsym;
+mod errno;
+pub use self::errno::__errno;
 mod elf;
 pub use self::elf::Elf32_auxv_t;
 pub use self::elf::Elf64_auxv_t;

@@ -127,3 +127,6 @@ pub const EWOULDBLOCK: u32 = 11;
 pub const EALREADY: u32 = 149;
 pub const EINPROGRESS: u32 = 150;
 pub const ESTALE: u32 = 151;
+extern "C" {
+    pub fn ___errno() -> *mut ::core::ffi::c_int;
+}
