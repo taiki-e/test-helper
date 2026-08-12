@@ -803,15 +803,21 @@ static TARGETS: &[Target] = &[
             "x86_64-unknown-fuchsia",
         ],
         headers: &[
-            // TODO: zx_system_get_features/zx_futex_wait/zx_futex_wake
+            Header {
+                path: "zircon/system/public/zircon/syscalls.h",
+                types: &["zx_futex_t"],
+                vars: &[],
+                functions: &["zx_system_get_features", "zx_futex_.*"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
             Header {
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/types.h
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/errors.h
                 // https://fuchsia.googlesource.com/fuchsia/+/refs/heads/main/zircon/system/public/zircon/time.h
                 path: "zircon/system/public/zircon/types.h",
-                // TODO: zx_futex_t: https://github.com/rust-lang/rust-bindgen/issues/2151
-                types: &["zx_handle_t", "zx_handle_op_t", "zx_status_t", "zx_time_t"],
-                // TODO: ZX_TIME_INFINITE.* is not included
+                types: &["zx_handle_t", "zx_handle_op_t", "zx_status_t", "zx_time_t", "zx_instant_mono_t"],
                 vars: &["ZX_HANDLE_.*", "ZX_OK", "ZX_ERR_.*", "ZX_TIME_INFINITE.*"],
                 functions: &[],
                 arch: &[],
@@ -1101,7 +1107,7 @@ pub(crate) fn generate() {
                     clang_args.push(include.as_str());
                 }
 
-                let bindings = bindgen::builder()
+                let mut builder = bindgen::builder()
                     .array_pointers_in_arguments(true)
                     .derive_debug(false)
                     .disable_header_comment()
@@ -1122,7 +1128,14 @@ pub(crate) fn generate() {
                     .allowlist_function(&functions)
                     .allowlist_type(&types)
                     .allowlist_var(&vars)
-                    .raw_line(raw_line)
+                    .raw_line(raw_line);
+                if target.os == fuchsia && header.path == "zircon/system/public/zircon/syscalls.h" {
+                    // Workaround for https://github.com/rust-lang/rust-bindgen/issues/2151.
+                    builder = builder
+                        .blocklist_type("^zx_futex_t$")
+                        .raw_line("pub type zx_futex_t = ::core::sync::atomic::AtomicI32;");
+                }
+                let bindings = builder
                     .generate()
                     .unwrap_or_else(|e| panic!("failed to generate for {}: {}", header.path, e));
                 bindings.write_to_file(out_path).unwrap_or_else(|e| {
@@ -1784,7 +1797,10 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             fs::write(src_dir.join("zircon/kernel/lib/libc/include/stdbool.h"), "").unwrap();
             fs::write(
                 src_dir.join("zircon/kernel/lib/libc/include/stddef.h"),
-                "#define size_t unsigned long",
+                "
+                #define size_t unsigned long
+                #define bool _Bool
+                ",
             )
             .unwrap();
         }

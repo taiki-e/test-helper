@@ -3,6 +3,7 @@ armreg
 Auxinfo
 auxv
 auxvec
+blocklist
 cputable
 DESTDIR
 dlfcn
@@ -46,6 +47,7 @@ srli
 stdbool
 stddef
 syscall
+syscalls
 sysctlbyname
 sysctlnode
 timeval

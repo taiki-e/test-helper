@@ -1,5 +1,20 @@
+diff --git a/zircon/system/public/zircon/time.h b/zircon/system/public/zircon/time.h
+index 9353b8825..e06eca6ab 100644
+--- a/zircon/system/public/zircon/time.h
++++ b/zircon/system/public/zircon/time.h
+@@ -54,8 +54,8 @@ typedef int64_t zx_time_t;
+ typedef int64_t zx_duration_t;
+ typedef int64_t zx_ticks_t;
+ 
+-#define ZX_TIME_INFINITE INT64_MAX
+-#define ZX_TIME_INFINITE_PAST INT64_MIN
++#define ZX_TIME_INFINITE ((zx_time_t)9223372036854775807LL)
++#define ZX_TIME_INFINITE_PAST ((zx_time_t)(-9223372036854775807LL - 1))
+ 
+ // These functions perform overflow-safe time arithmetic and unit conversion, clamping to
+ // ZX_TIME_INFINITE in case of overflow and ZX_TIME_INFINITE_PAST in case of underflow.
 diff --git a/zircon/system/public/zircon/types.h b/zircon/system/public/zircon/types.h
-index 2ccf9128a..67478dbe0 100644
+index 2e51cd285..967d5686c 100644
 --- a/zircon/system/public/zircon/types.h
 +++ b/zircon/system/public/zircon/types.h
 @@ -23,7 +23,7 @@

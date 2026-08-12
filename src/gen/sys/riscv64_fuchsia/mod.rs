@@ -4,6 +4,16 @@
 // It is not intended for manual editing.
 
 #![cfg_attr(rustfmt, rustfmt::skip)]
+mod zircon_system_public_zircon_syscalls;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_t;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_get_owner;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_requeue;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_requeue_single_owner;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_wait;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_wake;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_wake_handle_close_thread_exit;
+pub use self::zircon_system_public_zircon_syscalls::zx_futex_wake_single_owner;
+pub use self::zircon_system_public_zircon_syscalls::zx_system_get_features;
 mod zircon_system_public_zircon_types;
 pub use self::zircon_system_public_zircon_types::ZX_OK;
 pub use self::zircon_system_public_zircon_types::ZX_ERR_INTERNAL;
@@ -52,10 +62,13 @@ pub use self::zircon_system_public_zircon_types::ZX_ERR_CONNECTION_REFUSED;
 pub use self::zircon_system_public_zircon_types::ZX_ERR_CONNECTION_RESET;
 pub use self::zircon_system_public_zircon_types::ZX_ERR_CONNECTION_ABORTED;
 pub use self::zircon_system_public_zircon_types::ZX_ERR_INTERNAL_INTR_KILLED;
+pub use self::zircon_system_public_zircon_types::ZX_TIME_INFINITE;
+pub use self::zircon_system_public_zircon_types::ZX_TIME_INFINITE_PAST;
 pub use self::zircon_system_public_zircon_types::ZX_HANDLE_INVALID;
 pub use self::zircon_system_public_zircon_types::ZX_HANDLE_FIXED_BITS_MASK;
 pub use self::zircon_system_public_zircon_types::ZX_HANDLE_OP_MOVE;
 pub use self::zircon_system_public_zircon_types::ZX_HANDLE_OP_DUPLICATE;
+pub use self::zircon_system_public_zircon_types::zx_instant_mono_t;
 pub use self::zircon_system_public_zircon_types::zx_time_t;
 pub use self::zircon_system_public_zircon_types::zx_handle_t;
 pub use self::zircon_system_public_zircon_types::zx_status_t;
