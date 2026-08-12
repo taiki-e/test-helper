@@ -1434,6 +1434,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                         &[],
                     );
                 } else {
+                    // Mirror maintained by maintainer https://sourceware.org/glibc/wiki/GlibcGit
                     clone(download_dir, "https://gitlab.com/gnutools/glibc.git", None, &[]);
                 }
                 let glibc_src_dir = &glibc_dir(target, &src_dir);
@@ -1490,6 +1491,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 musl_install_headers(target, musl_src_dir, headers_dir);
                 patched = true;
             } else if target.env == uclibc {
+                // Mirror maintained by maintainer https://uclibc-ng.org/
                 const UCLIBC_REPO: &str = "wbx-github/uclibc-ng";
                 clone(download_dir, UCLIBC_REPO, None, &[]);
                 let uclibc_arch = uclibc_arch(target);
