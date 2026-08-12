@@ -10,13 +10,11 @@ pub const O_WRONLY: u32 = 1;
 pub const O_RDWR: u32 = 2;
 pub const O_SEARCH: u32 = 2097152;
 pub const O_EXEC: u32 = 4194304;
-pub const O_NDELAY: u32 = 4;
 pub const O_APPEND: u32 = 8;
 pub const O_SYNC: u32 = 16;
 pub const O_DSYNC: u32 = 64;
 pub const O_RSYNC: u32 = 32768;
 pub const O_NONBLOCK: u32 = 128;
-pub const O_LARGEFILE: u32 = 8192;
 pub const O_CREAT: u32 = 256;
 pub const O_TRUNC: u32 = 512;
 pub const O_EXCL: u32 = 1024;
@@ -25,9 +23,6 @@ pub const O_XATTR: u32 = 16384;
 pub const O_NOFOLLOW: u32 = 131072;
 pub const O_NOLINKS: u32 = 262144;
 pub const O_CLOEXEC: u32 = 8388608;
-pub const O_DIRECTORY: u32 = 16777216;
-pub const O_DIRECT: u32 = 33554432;
-pub const O_CLOFORK: u32 = 67108864;
 pub const O_ACCMODE: u32 = 6291459;
 extern "C" {
     pub fn open(
