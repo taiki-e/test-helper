@@ -1205,6 +1205,46 @@ mod armv7_trusty;
 pub use self::armv7_trusty::*;
 #[cfg(
     all(
+        target_arch = "x86",
+        target_os = "hurd",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+mod i686_hurd_gnu;
+#[cfg(
+    all(
+        target_arch = "x86",
+        target_os = "hurd",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "32"
+    )
+)]
+pub use self::i686_hurd_gnu::*;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "hurd",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+mod x86_64_hurd_gnu;
+#[cfg(
+    all(
+        target_arch = "x86_64",
+        target_os = "hurd",
+        target_env = "gnu",
+        target_endian = "little",
+        target_pointer_width = "64"
+    )
+)]
+pub use self::x86_64_hurd_gnu::*;
+#[cfg(
+    all(
         target_arch = "aarch64",
         target_os = "macos",
         target_endian = "little",

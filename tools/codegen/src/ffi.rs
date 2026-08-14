@@ -320,6 +320,37 @@ static TARGETS: &[Target] = &[
             },
         ],
     },
+    // GNU/Hurd
+    Target {
+        triples: &[
+            "i686-unknown-hurd-gnu",
+            "x86_64-unknown-hurd-gnu",
+        ],
+        headers: &[
+            Header {
+                // https://gitlab.com/gnu-hurd/gnumach/-/blob/HEAD/include/mach/gnumach.defs
+                // https://gitlab.com/gnu-hurd/gnumach/-/blob/HEAD/kern/gsync.h
+                path: "gnumach:kern/gsync.h",
+                types: &["task_t", "vm_offset_t", "natural_t", "kern_return_t", "boolean_t"],
+                vars: &["GSYNC_.*"],
+                // Do not generate the kernel-only gsync_setup function.
+                functions: &["gsync_(wait|wake|requeue)"],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+            Header {
+                // https://gitlab.com/gnutools/glibc/-/blob/HEAD/mach/mach_init.h
+                path: "mach/mach_init.h",
+                types: &["mach_port_t"],
+                vars: &["__mach_task_self_"],
+                functions: &[],
+                arch: &[],
+                os: &[],
+                env: &[],
+            },
+        ],
+    },
     // Darwin
     Target {
         triples: &[
@@ -884,13 +915,14 @@ pub(crate) fn generate() {
             // csky support was added in Rust 1.73: https://github.com/rust-lang/rust/pull/113658
             // loongarch32 support was added in Rust 1.89: https://github.com/rust-lang/rust/pull/142053
             // aix support was added in Rust 1.67: https://github.com/rust-lang/rust/pull/102293
+            // hurd support was added in Rust 1.74: https://github.com/rust-lang/rust/pull/115230
             // trusty support was added in Rust 1.82: https://github.com/rust-lang/rust/pull/129490
             // non-x86_64 illumos support was added in Rust 1.77: https://github.com/rust-lang/rust/pull/112936
             // non-x86_64 l4re support was added in Rust 1.99: https://github.com/rust-lang/rust/pull/150885
             // riscv64 fuchsia support was added in Rust 1.70: https://github.com/rust-lang/rust/pull/108722
             let use_core_ffi = is_custom
                 || matches!(target.arch, loongarch64 | csky | loongarch32)
-                || matches!(target.os, aix | trusty)
+                || matches!(target.os, aix | hurd | trusty)
                 || matches!(target.os, illumos | l4re) && target.arch != x86_64
                 || target.os == fuchsia && target.arch == riscv64;
             let mut module_name = triple
@@ -1028,6 +1060,14 @@ pub(crate) fn generate() {
                             .join("include");
                         header_path = headers_dir.join(header.path);
                         include = vec![headers_dir];
+                    }
+                    hurd => {
+                        if let Some(path) = header.path.strip_prefix("gnumach:") {
+                            header_path = src_dir.join(path);
+                        } else {
+                            header_path = glibc_dir(target, src_dir).join(header.path);
+                        }
+                        include = vec![src_dir.join("include")];
                     }
                     _ if target.vendor.as_deref() == Some("apple") => {
                         header_path = src_dir.join("bsd").join(header.path);
@@ -1247,6 +1287,8 @@ pub(crate) fn generate() {
 }
 
 fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf {
+    // Mirror maintained by maintainer https://sourceware.org/glibc/wiki/GlibcGit
+    const GLIBC_REPO: &str = "https://gitlab.com/gnutools/glibc.git";
     #[track_caller]
     fn clone(
         download_dir: &Utf8Path,
@@ -1260,6 +1302,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let name = name.replace("https://git.codelinaro.org/clo/le/", "linaro/");
         let name = name.replace("https://git.musl-libc.org/git/", "musl-libc/");
         let name = name.replace("https://gitlab.com/gnutools/", "glibc/");
+        let name = name.replace("https://gitlab.com/gnu-hurd/", "hurd/");
         assert!(!name.contains("://"), "{}", name);
         let repository = if repository.contains("://") {
             repository.to_owned()
@@ -1471,8 +1514,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                         &[],
                     );
                 } else {
-                    // Mirror maintained by maintainer https://sourceware.org/glibc/wiki/GlibcGit
-                    clone(download_dir, "https://gitlab.com/gnutools/glibc.git", None, &[]);
+                    clone(download_dir, GLIBC_REPO, None, &[]);
                 }
                 let glibc_src_dir = &glibc_dir(target, &src_dir);
                 let headers_dir = &libc_headers_dir(target, &src_dir);
@@ -1619,6 +1661,39 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 .join("../../../../headers/trusty/musl")
                 .join(target.llvm_target.replace("-unknown", ""));
             musl_install_headers(target, &src_dir, headers_dir);
+        }
+        hurd => {
+            src_dir = clone(download_dir, "https://gitlab.com/gnu-hurd/gnumach.git", None, &[]);
+            clone(download_dir, GLIBC_REPO, None, &[]);
+            let arch = match target.arch {
+                x86 => "i386",
+                x86_64 => "x86_64",
+                _ => todo!("{target:?}"),
+            };
+            symlink(
+                src_dir.join(arch).join("include/mach").join(arch),
+                src_dir.join("include/mach/machine"),
+            )
+            .unwrap();
+            fs::write(
+                src_dir.join("include/stdint.h"),
+                "\
+                #ifndef _STDINT_H\n\
+                #define _STDINT_H 1\n\
+                typedef __INT8_TYPE__ int8_t;\n\
+                typedef __UINT8_TYPE__ uint8_t;\n\
+                typedef __INT16_TYPE__ int16_t;\n\
+                typedef __UINT16_TYPE__ uint16_t;\n\
+                typedef __INT32_TYPE__ int32_t;\n\
+                typedef __UINT32_TYPE__ uint32_t;\n\
+                typedef __INT64_TYPE__ int64_t;\n\
+                typedef __UINT64_TYPE__ uint64_t;\n\
+                typedef __INTPTR_TYPE__ intptr_t;\n\
+                typedef __UINTPTR_TYPE__ uintptr_t;\n\
+                #endif\n\
+                ",
+            )
+            .unwrap();
         }
         _ if target.vendor.as_deref() == Some("apple") => {
             clone(download_dir, "apple-oss-distributions/Libc", None, &["/include/"]);
@@ -1797,9 +1872,9 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             fs::write(src_dir.join("zircon/kernel/lib/libc/include/stdbool.h"), "").unwrap();
             fs::write(
                 src_dir.join("zircon/kernel/lib/libc/include/stddef.h"),
-                "
-                #define size_t unsigned long
-                #define bool _Bool
+                "\
+                #define size_t unsigned long\n\
+                #define bool _Bool\n\
                 ",
             )
             .unwrap();

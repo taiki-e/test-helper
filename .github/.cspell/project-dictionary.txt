@@ -16,6 +16,8 @@ futex
 getauxval
 getisax
 getpid
+gnumach
+gsync
 HWCAP
 hwprobe
 libpthread
@@ -46,6 +48,7 @@ srax
 srli
 stdbool
 stddef
+stdint
 syscall
 syscalls
 sysctlbyname
