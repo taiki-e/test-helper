@@ -481,6 +481,7 @@ pub use self::linux_headers_asm_unistd::__NR_file_getattr;
 pub use self::linux_headers_asm_unistd::__NR_file_setattr;
 pub use self::linux_headers_asm_unistd::__NR_listns;
 pub use self::linux_headers_asm_unistd::__NR_rseq_slice_yield;
+pub use self::linux_headers_asm_unistd::__NR_fchroot;
 pub use self::linux_headers_asm_unistd::__NR_rt_sigaction;
 pub use self::linux_headers_asm_unistd::__NR_rt_sigreturn;
 pub use self::linux_headers_asm_unistd::__NR_ioctl;

@@ -488,6 +488,7 @@ pub use self::linux_headers_asm_unistd::__NR_file_getattr;
 pub use self::linux_headers_asm_unistd::__NR_file_setattr;
 pub use self::linux_headers_asm_unistd::__NR_listns;
 pub use self::linux_headers_asm_unistd::__NR_rseq_slice_yield;
+pub use self::linux_headers_asm_unistd::__NR_fchroot;
 pub use self::linux_headers_asm_unistd::__NR_sync_file_range2;
 mod linux_headers_linux_auxvec;
 pub use self::linux_headers_linux_auxvec::AT_NULL;
