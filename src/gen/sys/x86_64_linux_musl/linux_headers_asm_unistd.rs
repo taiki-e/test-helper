@@ -391,3 +391,4 @@ pub const __NR_file_getattr: u32 = 468;
 pub const __NR_file_setattr: u32 = 469;
 pub const __NR_listns: u32 = 470;
 pub const __NR_rseq_slice_yield: u32 = 471;
+pub const __NR_fchroot: u32 = 472;
