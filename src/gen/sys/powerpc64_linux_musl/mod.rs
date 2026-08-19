@@ -48,6 +48,8 @@ pub use self::linux_headers_asm_cputable::PPC_FEATURE2_SCV;
 pub use self::linux_headers_asm_cputable::PPC_FEATURE2_HTM_NO_SUSPEND;
 pub use self::linux_headers_asm_cputable::PPC_FEATURE2_ARCH_3_1;
 pub use self::linux_headers_asm_cputable::PPC_FEATURE2_MMA;
+pub use self::linux_headers_asm_cputable::PPC_FEATURE2_ARCH_3_2;
+pub use self::linux_headers_asm_cputable::PPC_FEATURE2_DMF;
 mod linux_headers_asm_errno;
 pub use self::linux_headers_asm_errno::EPERM;
 pub use self::linux_headers_asm_errno::ENOENT;
