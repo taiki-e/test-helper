@@ -552,7 +552,7 @@ static TARGETS: &[Target] = &[
                 // https://github.com/NetBSD/src/blob/HEAD/sys/sys/sysctl.h
                 path: "sys/sysctl.h",
                 types: &["sysctlnode"],
-                vars: &["CTL_.*", "KERN_OSREV", "SYSCTL_.*"],
+                vars: &["CTL_.*", "CTLFLAG_.*", "CTLTYPE_.*", "HW_.*", "KERN_OSREV", "SYSCTL_.*"],
                 functions: &["sysctl", "sysctlbyname"],
                 arch: &[],
                 os: &[],

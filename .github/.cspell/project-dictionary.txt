@@ -5,6 +5,8 @@ auxv
 auxvec
 blocklist
 cputable
+CTLFLAG
+CTLTYPE
 DESTDIR
 dlfcn
 dlsym
