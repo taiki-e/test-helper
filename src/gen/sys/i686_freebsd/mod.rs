@@ -601,6 +601,7 @@ pub use self::sys_syscall::SYS_pdwait;
 pub use self::sys_syscall::SYS_renameat2;
 pub use self::sys_syscall::SYS_pdopenpid;
 pub use self::sys_syscall::SYS_pddupfd;
+pub use self::sys_syscall::SYS_pdptrace;
 pub use self::sys_syscall::SYS_MAXSYSCALL;
 mod sys_sysctl;
 pub use self::sys_sysctl::CTL_KERN;
