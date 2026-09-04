@@ -1,4 +1,5 @@
 {
+  "abi": "v8plus",
   "arch": "sparc",
   "cpu": "v9",
   "crt-objects-fallback": "false",
@@ -19,6 +20,7 @@
   "os": "linux",
   "position-independent-executables": true,
   "relro-level": "full",
+  "rustc-abi": "sparc-v8plus",
   "supported-split-debuginfo": ["packed", "unpacked", "off"],
   "target-endian": "big",
   "target-family": ["unix"],
