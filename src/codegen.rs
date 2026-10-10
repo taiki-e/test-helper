@@ -8,6 +8,8 @@ use std::{
     vec::Vec,
 };
 
+#[cfg(feature = "codegen")]
+pub use ::{prettyplease, proc_macro2, quote, syn};
 use fs_err as fs;
 use proc_macro2::TokenStream;
 use quote::{ToTokens as _, format_ident, quote};
