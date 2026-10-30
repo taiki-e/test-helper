@@ -246,6 +246,8 @@ pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZICCAMOA;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZICCIF;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZICCRSE;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZA64RS;
+pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_B;
+pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_EXT_ZIC64B;
 pub use self::linux_headers_asm_hwprobe::RISCV_HWPROBE_WHICH_CPUS;
 pub use self::linux_headers_asm_hwprobe::riscv_hwprobe;
 mod linux_headers_asm_unistd;

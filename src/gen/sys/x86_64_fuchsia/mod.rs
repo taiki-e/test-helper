@@ -79,6 +79,7 @@ pub use self::zircon_system_public_zircon_features::ZX_FEATURE_KIND_HW_BREAKPOIN
 pub use self::zircon_system_public_zircon_features::ZX_FEATURE_KIND_HW_WATCHPOINT_COUNT;
 pub use self::zircon_system_public_zircon_features::ZX_FEATURE_KIND_ADDRESS_TAGGING;
 pub use self::zircon_system_public_zircon_features::ZX_FEATURE_KIND_VM;
+pub use self::zircon_system_public_zircon_features::ZX_FEATURE_KIND_CPU_SVE;
 pub use self::zircon_system_public_zircon_features::ZX_HAS_CPU_FEATURES;
 pub use self::zircon_system_public_zircon_features::ZX_VM_FEATURE_CAN_MAP_XOM;
 pub type c_char = i8;
