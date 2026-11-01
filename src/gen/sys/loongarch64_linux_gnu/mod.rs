@@ -159,6 +159,8 @@ pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_PTW;
 pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_LSPW;
 pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_SCQ;
 pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_LAM_BH;
+pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_LAMCAS;
+pub use self::linux_headers_asm_hwcap::HWCAP_LOONGARCH_DIV32;
 mod linux_headers_asm_unistd;
 pub use self::linux_headers_asm_unistd::__NR_io_setup;
 pub use self::linux_headers_asm_unistd::__NR_io_destroy;
