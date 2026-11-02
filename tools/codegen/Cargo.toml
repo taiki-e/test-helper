@@ -11,9 +11,7 @@ bindgen = { default-features = false, features = ["prettyplease", "runtime"], gi
 camino = "1"
 duct = { version = "1", default-features = false }
 fs-err = "3"
-quote = { version = "1", default-features = false }
 regex = { version = "1", default-features = false, features = ["std"] }
-syn = { version = "2", default-features = false, features = ["parsing", "printing", "full"] }
 target-spec-json = "0.2"
 
 [lints]

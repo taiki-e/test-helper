@@ -16,7 +16,6 @@ use camino::{Utf8Path, Utf8PathBuf};
 use duct::cmd;
 use fs::os::unix::fs::symlink;
 use fs_err as fs;
-use quote::{format_ident, quote};
 use regex::Regex;
 use target_spec_json::{
     Arch::{self, *},
@@ -25,7 +24,15 @@ use target_spec_json::{
     TargetEndian::*,
     TargetSpec,
 };
-use test_helper::{bin_name, codegen::file, function_name};
+use test_helper::{
+    bin_name,
+    codegen::{
+        file,
+        quote::{format_ident, quote},
+        syn,
+    },
+    function_name,
+};
 
 use crate::workspace_root;
 
