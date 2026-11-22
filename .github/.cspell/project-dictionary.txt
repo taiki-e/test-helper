@@ -23,7 +23,6 @@ gsync
 HWCAP
 hwprobe
 libpthread
-linaro
 mabi
 macppc
 MAXNAME

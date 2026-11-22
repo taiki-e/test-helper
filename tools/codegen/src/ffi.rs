@@ -1306,7 +1306,6 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let name = repository.strip_suffix(".git").unwrap_or(repository);
         let name = name.replace("https://fuchsia.googlesource.com/", "fuchsia/");
         let name = name.replace("https://android.googlesource.com/", "android/");
-        let name = name.replace("https://git.codelinaro.org/clo/le/", "linaro/");
         let name = name.replace("https://git.musl-libc.org/git/", "musl-libc/");
         let name = name.replace("https://gitlab.com/gnutools/", "glibc/");
         let name = name.replace("https://gitlab.com/hurd/", "hurd/");
@@ -1513,13 +1512,8 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
                 fs::write(bionic_dir.join("libc/include/float.h"), "").unwrap();
             } else if target.env == gnu && target.arch != csky {
                 if target.arch == aarch64 && target.target_pointer_width == 32 {
-                    // TODO: move to our own fork repo?
-                    clone(
-                        download_dir,
-                        "https://git.codelinaro.org/clo/le/glibc.git",
-                        Some("drains/arm/ilp32"),
-                        &[],
-                    );
+                    // Keep the ILP32 branch in a separate checkout from glibc's default branch.
+                    clone(&download_dir.join("ilp32"), GLIBC_REPO, Some("arm/ilp32"), &[]);
                 } else {
                     clone(download_dir, GLIBC_REPO, None, &[]);
                 }
@@ -2018,7 +2012,7 @@ fn linux_headers_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
 }
 fn glibc_dir(target: &TargetSpec, src_dir: &Utf8Path) -> Utf8PathBuf {
     if target.arch == aarch64 && target.target_pointer_width == 32 {
-        src_dir.join("../..").join("linaro/glibc")
+        src_dir.join("../..").join("ilp32/glibc/glibc")
     } else {
         src_dir.join("../..").join("glibc/glibc")
     }
