@@ -335,8 +335,8 @@ static TARGETS: &[Target] = &[
         ],
         headers: &[
             Header {
-                // https://gitlab.com/gnu-hurd/gnumach/-/blob/HEAD/include/mach/gnumach.defs
-                // https://gitlab.com/gnu-hurd/gnumach/-/blob/HEAD/kern/gsync.h
+                // https://gitlab.com/hurd/gnumach/-/blob/HEAD/include/mach/gnumach.defs
+                // https://gitlab.com/hurd/gnumach/-/blob/HEAD/kern/gsync.h
                 path: "gnumach:kern/gsync.h",
                 types: &["task_t", "vm_offset_t", "natural_t", "kern_return_t", "boolean_t"],
                 vars: &["GSYNC_.*"],
@@ -1309,7 +1309,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
         let name = name.replace("https://git.codelinaro.org/clo/le/", "linaro/");
         let name = name.replace("https://git.musl-libc.org/git/", "musl-libc/");
         let name = name.replace("https://gitlab.com/gnutools/", "glibc/");
-        let name = name.replace("https://gitlab.com/gnu-hurd/", "hurd/");
+        let name = name.replace("https://gitlab.com/hurd/", "hurd/");
         assert!(!name.contains("://"), "{}", name);
         let repository = if repository.contains("://") {
             repository.to_owned()
@@ -1670,7 +1670,7 @@ fn download_headers(target: &TargetSpec, download_dir: &Utf8Path) -> Utf8PathBuf
             musl_install_headers(target, &src_dir, headers_dir);
         }
         hurd => {
-            src_dir = clone(download_dir, "https://gitlab.com/gnu-hurd/gnumach.git", None, &[]);
+            src_dir = clone(download_dir, "https://gitlab.com/hurd/gnumach.git", None, &[]);
             clone(download_dir, GLIBC_REPO, None, &[]);
             let arch = match target.arch {
                 x86 => "i386",
