@@ -450,4 +450,6 @@ pub const SYS_renameat2: u32 = 602;
 pub const SYS_pdopenpid: u32 = 603;
 pub const SYS_pddupfd: u32 = 604;
 pub const SYS_pdptrace: u32 = 605;
-pub const SYS_MAXSYSCALL: u32 = 606;
+pub const SYS_chaltroot: u32 = 606;
+pub const SYS_fchaltroot: u32 = 607;
+pub const SYS_MAXSYSCALL: u32 = 608;
