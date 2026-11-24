@@ -19,6 +19,8 @@ pub fn sync_command_output_to_markdown(
     new: impl AsRef<str>,
 ) {
     let marker = marker.as_ref();
+    let new = new.as_ref();
+    let fence = if new.is_empty() || new.ends_with('\n') { "```\n" } else { "\n```\n" };
     /*
     Inserts:
 
@@ -31,7 +33,7 @@ pub fn sync_command_output_to_markdown(
         path.as_ref(),
         &format!("<!-- {}:start -->", marker),
         &format!("<!-- {}:end -->", marker),
-        &["```console\n$ ", command.as_ref(), "\n", new.as_ref(), "```\n"],
+        &["```console\n$ ", command.as_ref(), "\n", new, fence],
     );
 }
 
