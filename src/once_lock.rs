@@ -25,7 +25,7 @@ impl<T> OnceLock<T> {
         F: FnOnce() -> T,
     {
         if !self.once.is_completed() {
-            self.once.call_once(|| {
+            self.once.call_once_force(|_| {
                 let value = f();
                 unsafe {
                     self.value.get().cast::<T>().write(value);
