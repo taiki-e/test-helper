@@ -48,5 +48,5 @@
       "dictionaries": ["bash", "cpp-refined", "rust"]
     }
   ],
-  "ignorePaths": ["src/gen/**", "target-specs/**", "tools/codegen/patches/**"]
+  "ignorePaths": []
 }

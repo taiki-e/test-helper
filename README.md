@@ -1,10 +1,15 @@
 # Test helper
 
-This repository contains some helpers used by tests and internal tools in projects managed by @taiki-e.
-Originally extracted from test-helper from portable-atomic repository.
+<!-- tidy:sync-markdown-to-rustdoc:start:src/lib.rs -->
+
+This crate contains some helpers used by tests and internal tools in projects managed by @taiki-e.
+
+Originally extracted from test-helper from [portable-atomic](https://github.com/taiki-e/portable-atomic) repository.
 
 There are no stability guarantees for these helpers, since they're
 supposed to only be used in projects managed by us.
+
+<!-- tidy:sync-markdown-to-rustdoc:end -->
 
 ## License
 

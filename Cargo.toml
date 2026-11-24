@@ -1,14 +1,37 @@
 [package]
-name = "test-helper"
-version = "0.0.0"
+name = "taiki-e-test-helper"
+version = "0.1.0" #publish:version
 edition = "2018"
 rust-version = "1.56"
-publish = false
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/taiki-e/test-helper"
+keywords = []
+categories = ["development-tools::testing"]
+exclude = ["/.*", "/tools"]
+description = """
+Internal test helper.
+"""
 
 [package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
 all-features = true
 
-# NB: Sync with features table in msrv job in ci.yml
+[package.metadata.cargo_check_external_types]
+# The following are external types that are allowed to be exposed in our public API.
+allowed_external_types = [
+    "prettyplease",
+    "proc_macro2",
+    "proc_macro2::*",
+    "quote",
+    "syn",
+    "syn::*",
+]
+
+[lib]
+name = "test_helper"
+doc-scrape-examples = false
+
+# NB: Sync with features list in msrv job in ci.yml
 [features]
 std = []
 
@@ -17,26 +40,22 @@ codegen = ["std", "git", "fs-err", "globset", "prettyplease", "proc-macro2", "qu
 critical-section-std = ["std", "critical-section"]
 doc = ["std", "git", "fs-err"]
 git = ["std", "fs-err"]
-sys = ["rustversion"]
 valgrind = []
 
+# Note: critical-section, prettyplease, proc-macro2, quote, and syn are public dependencies.
 [dependencies]
 critical-section = { version = "1", optional = true, features = ["restore-state-bool"] }
 fs-err = { version = "3", optional = true }
 globset = { version = "0.4", optional = true, default-features = false }
 prettyplease = { version = "0.2", optional = true }
-proc-macro2 = { version = "1", optional = true, default-features = false }
-quote = { version = "1", optional = true, default-features = false }
-rustversion = { version = "1", optional = true }
-syn = { version = "2", optional = true, default-features = false, features = ["parsing", "printing", "full", "visit-mut"] }
+proc-macro2 = { version = "1.0.52", optional = true, default-features = false }
+quote = { version = "1.0.25", optional = true, default-features = false }
+syn = { version = "2.0.7", optional = true, default-features = false, features = ["parsing", "printing", "full", "visit-mut"] }
 
 [lints]
 workspace = true
 
 [workspace]
-members = [
-    "tools/codegen",
-]
 
 # This table is shared by projects under github.com/taiki-e.
 # Expect for unexpected_cfgs.check-cfg, it is not intended for manual editing.
@@ -49,7 +68,6 @@ rust_2018_idioms = "warn"
 single_use_lifetimes = "warn"
 unexpected_cfgs = { level = "warn", check-cfg = [
     'cfg(target_arch,values("loongarch32"))', # 1.89+ https://github.com/rust-lang/rust/pull/142053
-    'cfg(target_os,values("trusty"))', # 1.82+ https://github.com/rust-lang/rust/pull/129490
     'cfg(valgrind)',
 ] }
 unnameable_types = "warn"

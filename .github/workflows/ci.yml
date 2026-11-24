@@ -24,29 +24,15 @@ jobs:
     with:
       clippy-target: x86_64-unknown-linux-gnu,i686-unknown-linux-gnu,aarch64-unknown-linux-gnu,armv7-unknown-linux-gnueabihf,riscv64gc-unknown-linux-gnu,powerpc-unknown-linux-gnu,powerpc64le-unknown-linux-gnu,s390x-unknown-linux-gnu,loongarch64-unknown-linux-gnu,sparc64-unknown-linux-gnu
       clippy-rustflags: --cfg valgrind
-  codegen:
+  test:
     needs: tidy
-    uses: taiki-e/github-actions/.github/workflows/gen.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
-    permissions:
-      contents: write # for creating branch for pr
-      pull-requests: read # for gh pr list
-    secrets:
-      PR_TOKEN_APP_PRIVATE_KEY: ${{ secrets.PR_TOKEN_APP_PRIVATE_KEY }}
-    with:
-      free-device-space: true
-  codeql:
-    needs: tidy
-    uses: taiki-e/github-actions/.github/workflows/codeql.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
+    uses: taiki-e/github-actions/.github/workflows/rust-test.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
     permissions:
       security-events: write # for github/codeql-action/*
     with:
-      language: rust
-  msrv:
-    needs: tidy
-    uses: taiki-e/github-actions/.github/workflows/rust-msrv.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
-    with:
       # Exclude codegen feature because syn's MSRV.
+      # Exclude valgrind feature because asm! requires Rust 1.59.
       # NB: Sync with features table in Cargo.toml
-      args: -p test-helper --features std,cli,critical-section-std,doc,git,sys
-      workspace: false
-      no-private: false
+      msrv-args: --features std,cli,critical-section-std,doc,git
+      no-std-args: --exclude-features std,cli,codegen,critical-section-std,doc,git
+      optional-deps: ''
