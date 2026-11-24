@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   tidy:
-    uses: taiki-e/github-actions/.github/workflows/tidy.yml@a2bc8ad241bd3c7fa2ba3239d7dca7a032a17095 # 2026.11.22
+    uses: taiki-e/github-actions/.github/workflows/tidy.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
     permissions:
       security-events: write # for github/codeql-action/*
     with:
@@ -26,7 +26,7 @@ jobs:
       clippy-rustflags: --cfg valgrind
   codegen:
     needs: tidy
-    uses: taiki-e/github-actions/.github/workflows/gen.yml@a2bc8ad241bd3c7fa2ba3239d7dca7a032a17095 # 2026.11.22
+    uses: taiki-e/github-actions/.github/workflows/gen.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
     permissions:
       contents: write # for creating branch for pr
       pull-requests: read # for gh pr list
@@ -34,9 +34,16 @@ jobs:
       PR_TOKEN_APP_PRIVATE_KEY: ${{ secrets.PR_TOKEN_APP_PRIVATE_KEY }}
     with:
       free-device-space: true
+  codeql:
+    needs: tidy
+    uses: taiki-e/github-actions/.github/workflows/codeql.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
+    permissions:
+      security-events: write # for github/codeql-action/*
+    with:
+      language: rust
   msrv:
     needs: tidy
-    uses: taiki-e/github-actions/.github/workflows/rust-msrv.yml@a2bc8ad241bd3c7fa2ba3239d7dca7a032a17095 # 2026.11.22
+    uses: taiki-e/github-actions/.github/workflows/rust-msrv.yml@af422d7af8ef63e0ea0d84510aff17254fef31c2 # 2026.11.23
     with:
       # Exclude codegen feature because syn's MSRV.
       # NB: Sync with features table in Cargo.toml
