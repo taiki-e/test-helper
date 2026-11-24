@@ -512,15 +512,16 @@ pub mod file {
     ) {
         static LINGUIST_GENERATED: OnceLock<Vec<globset::GlobMatcher>> = OnceLock::new();
         let linguist_generated = LINGUIST_GENERATED.get_or_init(|| {
-            let gitattributes = fs::read_to_string(workspace_root.join(".gitattributes")).unwrap();
             let mut linguist_generated = vec![];
-            for line in gitattributes.lines() {
-                if line.contains("linguist-generated") {
-                    linguist_generated.push(
-                        globset::Glob::new(line.split_once(' ').unwrap().0)
-                            .unwrap()
-                            .compile_matcher(),
-                    );
+            if let Ok(gitattributes) = fs::read_to_string(workspace_root.join(".gitattributes")) {
+                for line in gitattributes.lines() {
+                    if line.contains("linguist-generated") {
+                        linguist_generated.push(
+                            globset::Glob::new(line.split_once([' ', '\t']).unwrap().0)
+                                .unwrap()
+                                .compile_matcher(),
+                        );
+                    }
                 }
             }
             linguist_generated
