@@ -1,10 +1,15 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use std::{format, mem, path::Path, string::String};
+use std::{
+    format, mem,
+    path::Path,
+    string::String,
+    sync::{Mutex, PoisonError},
+};
 
 use fs_err as fs;
 
-use crate::git::assert_diff;
+use crate::{git::assert_diff, once_lock::OnceLock};
 
 #[track_caller]
 pub fn sync_command_output_to_markdown(
@@ -32,6 +37,8 @@ pub fn sync_command_output_to_markdown(
 
 #[track_caller]
 fn insert(path: &Path, start_marker: &str, end_marker: &str, new: &[&str]) {
+    static LOCK: OnceLock<Mutex<()>> = OnceLock::new(); // prevent concurrent marker updates
+    let _guard = LOCK.get_or_init(|| Mutex::new(())).lock().unwrap_or_else(PoisonError::into_inner);
     let base = fs::read_to_string(path).unwrap();
     let mut out = String::with_capacity(base.capacity());
     let mut lines = base.lines();
