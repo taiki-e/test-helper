@@ -268,13 +268,12 @@ pub fn gen_track_size(crate_root: &Path, config: TrackSizeConfig) -> (PathBuf, T
         /// Ignore non-64-bit targets due to usize/ptr size, ignore Miri/cargo-careful as we set
         /// -Z randomize-layout for them, and ignore old rustc as any::type_name output and size
         /// optimization may differ between compiler versions.
-        #[rustversion::attr(
-            nightly,
-            cfg_attr(any(not(target_pointer_width = "64"), miri, careful), ignore)
-        )]
-        #[rustversion::attr(not(nightly), ignore)]
+        #[cfg_attr(any(not(target_pointer_width = "64"), miri, careful), ignore)]
         #[test]
         fn track_size() {
+            if !build_context::RUSTC_NIGHTLY {
+                return;
+            }
             let mut out = String::new();
             #tokens
             test_helper::git::assert_diff(
