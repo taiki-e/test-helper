@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use std::{
-    collections::HashSet,
-    path::{Path, PathBuf},
+    collections::{BTreeMap, HashSet},
+    path::{MAIN_SEPARATOR, Path, PathBuf},
     string::ToString as _,
     vec,
     vec::Vec,
@@ -14,6 +14,9 @@ use fs_err as fs;
 use proc_macro2::TokenStream;
 use quote::{ToTokens as _, format_ident, quote};
 use syn::visit_mut::{self, VisitMut};
+
+mod cfg;
+mod modules;
 
 pub const GEN_TESTS_DIR: &str = "src/gen/tests";
 
@@ -32,113 +35,93 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
     let out_dir = &crate_root.join(GEN_TESTS_DIR);
     fs::create_dir_all(out_dir).unwrap();
 
-    let files = crate::git::ls_files(crate_root.join("src"), &["*.rs"]);
-    let mut tokens = quote! {};
     let mut visited_types = HashSet::new();
-    for (file_name, path) in &files {
-        // Assertions are only needed for the library's public APIs.
-        if file_name == "main.rs" || file_name.starts_with("bin/") {
-            continue;
-        }
+    // TODO: assert impl trait returned from public functions
+    let tokens = collect_tests(crate_root, |tokens, item, module, cfg| match item {
+        syn::Item::Struct(syn::ItemStruct { vis, ident, generics, .. })
+        | syn::Item::Enum(syn::ItemEnum { vis, ident, generics, .. })
+        | syn::Item::Union(syn::ItemUnion { vis, ident, generics, .. })
+        | syn::Item::Type(syn::ItemType { vis, ident, generics, .. })
+            if matches!(vis, syn::Visibility::Public(..)) =>
+        {
+            let path_string = quote! { #(#module::)* #ident }.to_string().replace(' ', "");
+            visited_types.insert(path_string.clone());
+            if config.exclude.contains(&path_string.as_str()) {
+                return;
+            }
 
-        let s = fs::read_to_string(path).unwrap();
-        let ast = syn::parse_file(&s).unwrap();
+            let type_params = generics.type_params().count();
+            assert_eq!(
+                generics.const_params().count(),
+                0,
+                "gen_assert_impl doesn't support const generics yet; skipped `{}`",
+                path_string
+            );
 
-        let module = if file_name == "lib.rs" {
-            vec![]
-        } else {
-            let name =
-                format_ident!("{}", Path::new(file_name).file_stem().unwrap().to_str().unwrap());
-            vec![name.into()]
-        };
-
-        // TODO: assert impl trait returned from public functions
-        visit_items(module, ast, |item, module| match item {
-            syn::Item::Struct(syn::ItemStruct { vis, ident, generics, .. })
-            | syn::Item::Enum(syn::ItemEnum { vis, ident, generics, .. })
-            | syn::Item::Union(syn::ItemUnion { vis, ident, generics, .. })
-            | syn::Item::Type(syn::ItemType { vis, ident, generics, .. })
-                if matches!(vis, syn::Visibility::Public(..)) =>
-            {
-                let path_string = quote! { #(#module::)* #ident }.to_string().replace(' ', "");
-                visited_types.insert(path_string.clone());
-                if config.exclude.contains(&path_string.as_str()) {
-                    return;
-                }
-
-                let type_params = generics.type_params().count();
-                assert_eq!(
-                    generics.const_params().count(),
-                    0,
-                    "gen_assert_impl doesn't support const generics yet; skipped `{}`",
-                    path_string
-                );
-
-                let ty = quote! { crate:: #(#module::)* #ident };
-                let mut assert_value = |args: &[TokenStream], traits: &TokenStream| {
-                    let args = if generics.params.is_empty() {
-                        quote! {}
-                    } else {
-                        let lifetimes = generics.lifetimes().map(|_| quote! { '_ });
-                        let args = lifetimes.chain(args.iter().cloned());
-                        quote! { <#(#args),*> }
-                    };
-                    tokens.extend(quote! { test_helper::assert_value!(#ty #args: #traits); });
+            let ty = quote! { crate:: #(#module::)* #ident };
+            let mut assert_value = |args: &[TokenStream], traits: &TokenStream| {
+                let args = if generics.params.is_empty() {
+                    quote! {}
+                } else {
+                    let lifetimes = generics.lifetimes().map(|_| quote! { '_ });
+                    let args = lifetimes.chain(args.iter().cloned());
+                    quote! { <#(#args),*> }
                 };
-                let implements = |exceptions: &[&str]| !exceptions.contains(&path_string.as_str());
-                let send = implements(config.not_send);
-                let sync = implements(config.not_sync);
-                // Each marker tests its own trait. NotSend and NotSync also test that
-                // the other trait is still implemented independently.
-                let traits = [
-                    ("Send", send, sync.then(|| quote! { Sync })),
-                    ("Sync", sync, send.then(|| quote! { Send })),
-                    ("Unpin", implements(config.not_unpin), None),
-                    ("UnwindSafe", implements(config.not_unwind_safe), None),
-                    ("RefUnwindSafe", implements(config.not_ref_unwind_safe), None),
-                ];
-                let baseline = traits.iter().map(|(name, positive, _)| {
-                    let ident = format_ident!("{}", name);
-                    if *positive {
-                        quote! { #ident }
-                    } else {
-                        quote! { !#ident }
-                    }
-                });
-                let unit = quote! { () };
-                let mut args = vec![unit.clone(); type_params];
-                assert_value(&args, &quote! { #(#baseline)&* });
-
-                if type_params == 0 {
-                    return;
+                tokens.extend(quote! { #(#cfg)* test_helper::assert_value!(#ty #args: #traits); });
+            };
+            let implements = |exceptions: &[&str]| !exceptions.contains(&path_string.as_str());
+            let send = implements(config.not_send);
+            let sync = implements(config.not_sync);
+            // Each marker tests its own trait. NotSend and NotSync also test that
+            // the other trait is still implemented independently.
+            let traits = [
+                ("Send", send, sync.then(|| quote! { Sync })),
+                ("Sync", sync, send.then(|| quote! { Send })),
+                ("Unpin", implements(config.not_unpin), None),
+                ("UnwindSafe", implements(config.not_unwind_safe), None),
+                ("RefUnwindSafe", implements(config.not_ref_unwind_safe), None),
+            ];
+            let baseline = traits.iter().map(|(name, positive, _)| {
+                let ident = format_ident!("{}", name);
+                if *positive {
+                    quote! { #ident }
+                } else {
+                    quote! { !#ident }
                 }
-                for (name, positive, other_trait) in traits {
-                    let ident = format_ident!("{}", name);
-                    let mut checks = vec![];
-                    if positive {
-                        checks.push(quote! { !#ident });
-                    }
-                    checks.extend(other_trait);
-                    if checks.is_empty() {
-                        continue;
-                    }
-                    let checks = quote! { #(#checks)&* };
-                    let marker = format_ident!("Not{}", name);
-                    let marker = quote! { test_helper::marker::#marker };
-                    assert_value(&vec![marker.clone(); type_params], &checks);
-                    if type_params > 1 {
-                        // A missing bound on one parameter can be masked by another.
-                        for i in 0..type_params {
-                            args[i] = marker.clone();
-                            assert_value(&args, &checks);
-                            args[i] = unit.clone();
-                        }
+            });
+            let unit = quote! { () };
+            let mut args = vec![unit.clone(); type_params];
+            assert_value(&args, &quote! { #(#baseline)&* });
+
+            if type_params == 0 {
+                return;
+            }
+            for (name, positive, other_trait) in traits {
+                let ident = format_ident!("{}", name);
+                let mut checks = vec![];
+                if positive {
+                    checks.push(quote! { !#ident });
+                }
+                checks.extend(other_trait);
+                if checks.is_empty() {
+                    continue;
+                }
+                let checks = quote! { #(#checks)&* };
+                let marker = format_ident!("Not{}", name);
+                let marker = quote! { test_helper::marker::#marker };
+                assert_value(&vec![marker.clone(); type_params], &checks);
+                if type_params > 1 {
+                    // A missing bound on one parameter can be masked by another.
+                    for i in 0..type_params {
+                        args[i] = marker.clone();
+                        assert_value(&args, &checks);
+                        args[i] = unit.clone();
                     }
                 }
             }
-            _ => {}
-        });
-    }
+        }
+        _ => {}
+    });
 
     for (list, name) in &[
         (config.exclude, "AssertImplConfig::exclude"),
@@ -166,76 +149,59 @@ pub struct TrackSizeConfig {
     pub exclude: &'static [&'static str],
 }
 
+/// Generates a size check for each public struct, enum, and union in the same module
+/// tree as [`gen_assert_impl`]. The snapshot contains the types enabled in that build.
 #[must_use]
 pub fn gen_track_size(crate_root: &Path, config: TrackSizeConfig) -> (PathBuf, TokenStream) {
     let out_dir = &crate_root.join(GEN_TESTS_DIR);
     fs::create_dir_all(out_dir).unwrap();
 
-    let files = crate::git::ls_files(crate_root.join("src"), &["*.rs"]);
-    let mut tokens = quote! {};
     let mut visited_types = HashSet::new();
-    for (file_name, path) in &files {
-        // Assertions are only needed for the library's public APIs.
-        if file_name == "main.rs" || file_name.starts_with("bin/") {
-            continue;
-        }
-
-        let s = fs::read_to_string(path).unwrap();
-        let ast = syn::parse_file(&s).unwrap();
-
-        let module = if file_name == "lib.rs" {
-            vec![]
-        } else {
-            let name =
-                format_ident!("{}", Path::new(file_name).file_stem().unwrap().to_string_lossy());
-            vec![name.into()]
-        };
-
-        // Item:Type is ignored since the size of it cannot be controlled by us.
-        // TODO: assert impl trait returned from public functions
-        visit_items(module, ast, |item, module| match item {
-            syn::Item::Struct(syn::ItemStruct { vis, ident, generics, .. })
-            | syn::Item::Enum(syn::ItemEnum { vis, ident, generics, .. })
-            | syn::Item::Union(syn::ItemUnion { vis, ident, generics, .. })
-                if matches!(vis, syn::Visibility::Public(..)) =>
-            {
-                let path_string = quote! { #(#module::)* #ident }.to_string().replace(' ', "");
-                visited_types.insert(path_string.clone());
-                if config.exclude.contains(&path_string.as_str()) {
-                    return;
-                }
-
-                let has_generics = generics.type_params().count() != 0;
-                let has_lifetimes = generics.lifetimes().count() != 0;
-                assert_eq!(
-                    generics.const_params().count(),
-                    0,
-                    "gen_track_size doesn't support const generics yet; skipped `{}`",
-                    path_string
-                );
-
-                let lt = generics.lifetimes().map(|_| quote! { '_ });
-                if has_generics {
-                    let lt = quote! { #(#lt,)* };
-                    let unit = generics.type_params().map(|_| quote! { () });
-                    let unit_generics = quote! { <#lt #(#unit),*> };
-                    tokens.extend(quote! {
-                        write_size::<crate:: #(#module::)* #ident #unit_generics>(&mut out);
-                    });
-                } else {
-                    let lt = if has_lifetimes {
-                        quote! { <#(#lt),*> }
-                    } else {
-                        quote! {}
-                    };
-                    tokens.extend(quote! {
-                        write_size::<crate:: #(#module::)* #ident #lt>(&mut out);
-                    });
-                }
+    // Ignore type aliases because this crate may not control the underlying layout.
+    let tokens = collect_tests(crate_root, |tokens, item, module, cfg| match item {
+        syn::Item::Struct(syn::ItemStruct { vis, ident, generics, .. })
+        | syn::Item::Enum(syn::ItemEnum { vis, ident, generics, .. })
+        | syn::Item::Union(syn::ItemUnion { vis, ident, generics, .. })
+            if matches!(vis, syn::Visibility::Public(..)) =>
+        {
+            let path_string = quote! { #(#module::)* #ident }.to_string().replace(' ', "");
+            visited_types.insert(path_string.clone());
+            if config.exclude.contains(&path_string.as_str()) {
+                return;
             }
-            _ => {}
-        });
-    }
+
+            let has_generics = generics.type_params().count() != 0;
+            let has_lifetimes = generics.lifetimes().count() != 0;
+            assert_eq!(
+                generics.const_params().count(),
+                0,
+                "gen_track_size doesn't support const generics yet; skipped `{}`",
+                path_string
+            );
+
+            let lt = generics.lifetimes().map(|_| quote! { '_ });
+            if has_generics {
+                let lt = quote! { #(#lt,)* };
+                let unit = generics.type_params().map(|_| quote! { () });
+                let unit_generics = quote! { <#lt #(#unit),*> };
+                tokens.extend(quote! {
+                    #(#cfg)*
+                    write_size::<crate:: #(#module::)* #ident #unit_generics>(&mut out);
+                });
+            } else {
+                let lt = if has_lifetimes {
+                    quote! { <#(#lt),*> }
+                } else {
+                    quote! {}
+                };
+                tokens.extend(quote! {
+                    #(#cfg)*
+                    write_size::<crate:: #(#module::)* #ident #lt>(&mut out);
+                });
+            }
+        }
+        _ => {}
+    });
 
     for &ty in config.exclude {
         assert!(
@@ -274,6 +240,7 @@ pub fn gen_track_size(crate_root: &Path, config: TrackSizeConfig) -> (PathBuf, T
             if !build_context::RUSTC_NIGHTLY {
                 return;
             }
+            #[allow(unused_mut)] // All measured types can be disabled by cfg.
             let mut out = String::new();
             #tokens
             test_helper::git::assert_diff(
@@ -283,6 +250,20 @@ pub fn gen_track_size(crate_root: &Path, config: TrackSizeConfig) -> (PathBuf, T
         }
     });
     (out_dir.join("track_size.rs"), out)
+}
+
+fn collect_tests(
+    crate_root: &Path,
+    mut emit: impl FnMut(&mut TokenStream, &syn::Item, &[syn::Ident], &[syn::Attribute]),
+) -> TokenStream {
+    // Match git's slash-separated filename order on every platform, and keep source
+    // order within each file so existing track_size.txt snapshots stay stable.
+    let mut files = BTreeMap::new();
+    modules::visit(crate_root, |item, module, cfg, path| {
+        let key = path.to_string_lossy().replace(MAIN_SEPARATOR, "/");
+        emit(files.entry(key).or_default(), item, module, cfg);
+    });
+    files.into_values().collect()
 }
 
 pub fn visit_items(
