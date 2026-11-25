@@ -3,9 +3,11 @@
 #![allow(clippy::must_use_candidate)]
 
 use std::{
-    io::Write as _,
+    borrow::ToOwned as _,
+    io::{ErrorKind, Write as _},
     process::{Child, Command, ExitStatus, Output, Stdio},
     string::String,
+    thread,
 };
 
 pub trait CommandExt {
@@ -23,7 +25,19 @@ impl CommandExt for Command {
             .stderr(Stdio::piped())
             .spawn()
             .unwrap();
-        child.stdin.as_mut().unwrap().write_all(stdin.as_ref()).unwrap();
+        let mut pipe = child.stdin.take().unwrap();
+        let stdin = stdin.as_ref();
+        if !stdin.is_empty() {
+            let stdin = stdin.to_owned();
+            thread::spawn(move || {
+                if let Err(e) = pipe.write_all(&stdin) {
+                    // A child may exit or close stdin before consuming all of it.
+                    if e.kind() != ErrorKind::BrokenPipe {
+                        panic!("failed to write to child stdin: {}", e);
+                    }
+                }
+            });
+        }
         child
     }
     #[track_caller]
@@ -178,5 +192,30 @@ impl AssertOutput {
             }
         }
         self
+    }
+}
+
+#[cfg(test)]
+#[cfg(unix)]
+mod tests {
+    use std::{sync::mpsc, time::Duration, vec};
+
+    use super::*;
+
+    #[test]
+    #[cfg_attr(miri, ignore)] // Miri doesn't support std::process::Command: https://github.com/rust-lang/miri/issues/3374
+    fn large_stdin() {
+        let (tx, rx) = mpsc::channel();
+        let h = thread::spawn(move || {
+            let stdin = vec![b'x'; 4 * 1024 * 1024];
+            let child = Command::new("cat").spawn_with_stdin(&stdin);
+            let output = child.wait_with_output().unwrap();
+            assert!(output.status.success());
+            assert!(output.stdout == stdin);
+            Command::new("false").spawn_with_stdin(&stdin).assert_failure();
+            tx.send(()).unwrap();
+        });
+        rx.recv_timeout(Duration::from_secs(30)).unwrap();
+        h.join().unwrap();
     }
 }
