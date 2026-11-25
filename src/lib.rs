@@ -71,6 +71,17 @@ extern crate std;
 #[macro_use]
 mod macros;
 
+// Not public API.
+#[doc(hidden)]
+pub mod __private {
+    pub use core::{any::type_name, env, primitive::str};
+    #[cfg(feature = "std")]
+    pub use std::{
+        io::{Write, stderr},
+        writeln,
+    };
+}
+
 #[cfg(feature = "cli")]
 pub mod cli;
 #[cfg(feature = "codegen")]

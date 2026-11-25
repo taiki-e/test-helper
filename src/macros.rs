@@ -4,10 +4,10 @@
 #[macro_export]
 macro_rules! eprintln_nocapture {
     ($($arg:tt)*) => {{
-        use ::std::io::Write as _;
-        let __stderr = ::std::io::stderr(); // Not buffered because it is written at once.
+        use $crate::__private::Write as _;
+        let __stderr = $crate::__private::stderr(); // Not buffered because it is written at once.
         let mut __stderr = __stderr.lock();
-        let _ = ::std::writeln!(
+        let _ = $crate::__private::writeln!(
             __stderr,
             $($arg)*
         );
@@ -20,8 +20,8 @@ macro_rules! eprintln_nocapture {
 macro_rules! function_name {
     () => {{
         fn f() {}
-        fn type_name_of<T>(_: T) -> &'static str {
-            ::core::any::type_name::<T>()
+        fn type_name_of<T>(_: T) -> &'static $crate::__private::str {
+            $crate::__private::type_name::<T>()
         }
         let name = type_name_of(f);
         name[..name.len() - 3].rsplit_once(':').unwrap().1
@@ -31,6 +31,6 @@ macro_rules! function_name {
 #[macro_export]
 macro_rules! bin_name {
     () => {
-        env!("CARGO_BIN_NAME")
+        $crate::__private::env!("CARGO_BIN_NAME")
     };
 }
