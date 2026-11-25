@@ -74,7 +74,13 @@ mod macros;
 // Not public API.
 #[doc(hidden)]
 pub mod __private {
-    pub use core::{any::type_name, env, primitive::str};
+    pub use core::{
+        any::type_name,
+        env,
+        marker::{Send, Sized, Sync, Unpin},
+        panic::{RefUnwindSafe, UnwindSafe},
+        primitive::str,
+    };
     #[cfg(feature = "std")]
     pub use std::{
         io::{Write, stderr},
@@ -92,6 +98,7 @@ mod critical_section_std;
 pub mod doc;
 #[cfg(feature = "git")]
 pub mod git;
+pub mod marker;
 #[cfg(feature = "std")]
 pub mod once_lock;
 #[cfg(all(feature = "valgrind", valgrind))]
