@@ -67,7 +67,7 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
                     return;
                 }
 
-                let has_generics = generics.type_params().count() != 0;
+                let type_params = generics.type_params().count();
                 let has_lifetimes = generics.lifetimes().count() != 0;
                 assert_eq!(
                     generics.const_params().count(),
@@ -77,84 +77,82 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
                 );
 
                 let lt = generics.lifetimes().map(|_| quote! { '_ });
-                if has_generics {
+                if type_params != 0 {
                     let lt = quote! { #(#lt,)* };
                     use_generics_helpers = true;
-                    // Send & Sync & Unpin & UnwindSafe & RefUnwindSafe
-                    let unit = generics.type_params().map(|_| quote! { () });
-                    let unit_generics = quote! { <#lt #(#unit),*> };
-                    // !Send & Sync
-                    let not_send = generics.type_params().map(|_| quote! { NotSend });
-                    let not_send_generics = quote! { <#lt #(#not_send),*> };
-                    // Send & !Sync
-                    let not_sync = generics.type_params().map(|_| quote! { NotSync });
-                    let not_sync_generics = quote! { <#lt #(#not_sync),*> };
-                    // !Unpin
-                    let not_unpin = generics.type_params().map(|_| quote! { NotUnpin });
-                    let not_unpin_generics = quote! { <#lt #(#not_unpin),*> };
-                    // !UnwindSafe
-                    let not_unwind_safe = generics.type_params().map(|_| quote! { NotUnwindSafe });
-                    let not_unwind_safe_generics = quote! { <#lt #(#not_unwind_safe),*> };
-                    // !RefUnwindSafe
-                    let not_ref_unwind_safe =
-                        generics.type_params().map(|_| quote! { NotRefUnwindSafe });
-                    let not_ref_unwind_safe_generics = quote! { <#lt #(#not_ref_unwind_safe),*> };
+                    let ty = quote! { crate:: #(#module::)* #ident };
+                    let unit = quote! { () };
+                    let units = (0..type_params).map(|_| &unit);
+                    let baseline = quote! { #ty <#lt #(#units),*> };
+                    let with_marker = |marker: TokenStream| {
+                        let all = (0..type_params).map(|_| &marker);
+                        let mut types = vec![quote! { #ty <#lt #(#all),*> }];
+                        // With several parameters, the all-marker case alone can hide
+                        // a missing bound when another parameter still requires the trait.
+                        if type_params > 1 {
+                            for index in 0..type_params {
+                                let args = (0..type_params)
+                                    .map(|i| if i == index { &marker } else { &unit });
+                                types.push(quote! { #ty <#lt #(#args),*> });
+                            }
+                        }
+                        types
+                    };
+                    let not_send = with_marker(quote! { NotSend });
+                    let not_sync = with_marker(quote! { NotSync });
+                    let not_unpin = with_marker(quote! { NotUnpin });
+                    let not_unwind_safe = with_marker(quote! { NotUnwindSafe });
+                    let not_ref_unwind_safe = with_marker(quote! { NotRefUnwindSafe });
                     if config.not_send.contains(&path_string.as_str()) {
                         tokens.extend(quote! {
-                            assert_not_send!(crate:: #(#module::)* #ident #unit_generics);
+                            assert_not_send!(#baseline);
                         });
                     } else {
                         tokens.extend(quote! {
-                            assert_send::<crate:: #(#module::)* #ident #unit_generics>();
-                            assert_send::<crate:: #(#module::)* #ident #not_sync_generics>();
-                            assert_not_send!(crate:: #(#module::)* #ident #not_send_generics);
+                            assert_send::<#baseline>();
+                            #(assert_send::<#not_sync>();)*
+                            #(assert_not_send!(#not_send);)*
                         });
                     }
                     if config.not_sync.contains(&path_string.as_str()) {
                         tokens.extend(quote! {
-                            assert_not_sync!(crate:: #(#module::)* #ident #unit_generics);
+                            assert_not_sync!(#baseline);
                         });
                     } else {
                         tokens.extend(quote! {
-                            assert_sync::<crate:: #(#module::)* #ident #unit_generics>();
-                            assert_sync::<crate:: #(#module::)* #ident #not_send_generics>();
-                            assert_not_sync!(crate:: #(#module::)* #ident #not_sync_generics);
+                            assert_sync::<#baseline>();
+                            #(assert_sync::<#not_send>();)*
+                            #(assert_not_sync!(#not_sync);)*
                         });
                     }
                     if config.not_unpin.contains(&path_string.as_str()) {
                         tokens.extend(quote! {
-                            assert_not_unpin!(crate:: #(#module::)* #ident #unit_generics);
+                            assert_not_unpin!(#baseline);
                         });
                     } else {
                         tokens.extend(quote! {
-                            assert_unpin::<crate:: #(#module::)* #ident #unit_generics>();
-                            assert_not_unpin!(crate:: #(#module::)* #ident #not_unpin_generics);
+                            assert_unpin::<#baseline>();
+                            #(assert_not_unpin!(#not_unpin);)*
                         });
                     }
                     if config.not_unwind_safe.contains(&path_string.as_str()) {
                         tokens.extend(quote! {
-                            assert_not_unwind_safe!(crate:: #(#module::)* #ident #unit_generics);
+                            assert_not_unwind_safe!(#baseline);
                         });
                     } else {
                         tokens.extend(quote! {
-                            assert_unwind_safe::<crate:: #(#module::)* #ident #unit_generics>();
-                            assert_not_unwind_safe!(
-                                crate:: #(#module::)* #ident #not_unwind_safe_generics
-                            );
+                            assert_unwind_safe::<#baseline>();
+                            #(assert_not_unwind_safe!(#not_unwind_safe);)*
                         });
                     }
                     if config.not_ref_unwind_safe.contains(&path_string.as_str()) {
                         tokens.extend(quote! {
-                            assert_not_ref_unwind_safe!(
-                                crate:: #(#module::)* #ident #unit_generics
-                            );
+                            assert_not_ref_unwind_safe!(#baseline);
                         });
                     } else {
                         tokens.extend(quote! {
-                            assert_ref_unwind_safe::<crate:: #(#module::)* #ident #unit_generics>();
-                            assert_not_ref_unwind_safe!(
-                                crate:: #(#module::)* #ident #not_ref_unwind_safe_generics
-                            );
+                            assert_ref_unwind_safe::<#baseline>();
+                            #(assert_not_ref_unwind_safe!(#not_ref_unwind_safe);)*
                         });
                     }
                 } else {
