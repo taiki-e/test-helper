@@ -238,7 +238,7 @@ pub fn gen_track_size(crate_root: &Path, config: TrackSizeConfig) -> (PathBuf, T
     for &ty in config.exclude {
         assert!(
             visited_types.contains(ty),
-            "unknown type `{}` specified in AssertImplConfig::exclude field",
+            "unknown type `{}` specified in TrackSizeConfig::exclude field",
             ty
         );
     }
