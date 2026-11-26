@@ -35,7 +35,6 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
     let files = crate::git::ls_files(crate_root.join("src"), &["*.rs"]);
     let mut tokens = quote! {};
     let mut visited_types = HashSet::new();
-    let mut use_generics_helpers = false;
     for (file_name, path) in &files {
         // Assertions are only needed for the library's public APIs.
         if file_name == "main.rs" || file_name.starts_with("bin/") {
@@ -68,7 +67,6 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
                 }
 
                 let type_params = generics.type_params().count();
-                let has_lifetimes = generics.lifetimes().count() != 0;
                 assert_eq!(
                     generics.const_params().count(),
                     0,
@@ -76,135 +74,63 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
                     path_string
                 );
 
-                let lt = generics.lifetimes().map(|_| quote! { '_ });
-                if type_params != 0 {
-                    let lt = quote! { #(#lt,)* };
-                    use_generics_helpers = true;
-                    let ty = quote! { crate:: #(#module::)* #ident };
-                    let unit = quote! { () };
-                    let units = (0..type_params).map(|_| &unit);
-                    let baseline = quote! { #ty <#lt #(#units),*> };
-                    let with_marker = |marker: TokenStream| {
-                        let all = (0..type_params).map(|_| &marker);
-                        let mut types = vec![quote! { #ty <#lt #(#all),*> }];
-                        // With several parameters, the all-marker case alone can hide
-                        // a missing bound when another parameter still requires the trait.
-                        if type_params > 1 {
-                            for index in 0..type_params {
-                                let args = (0..type_params)
-                                    .map(|i| if i == index { &marker } else { &unit });
-                                types.push(quote! { #ty <#lt #(#args),*> });
-                            }
-                        }
-                        types
-                    };
-                    let not_send = with_marker(quote! { NotSend });
-                    let not_sync = with_marker(quote! { NotSync });
-                    let not_unpin = with_marker(quote! { NotUnpin });
-                    let not_unwind_safe = with_marker(quote! { NotUnwindSafe });
-                    let not_ref_unwind_safe = with_marker(quote! { NotRefUnwindSafe });
-                    if config.not_send.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_send!(#baseline);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_send::<#baseline>();
-                            #(assert_send::<#not_sync>();)*
-                            #(assert_not_send!(#not_send);)*
-                        });
-                    }
-                    if config.not_sync.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_sync!(#baseline);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_sync::<#baseline>();
-                            #(assert_sync::<#not_send>();)*
-                            #(assert_not_sync!(#not_sync);)*
-                        });
-                    }
-                    if config.not_unpin.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_unpin!(#baseline);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_unpin::<#baseline>();
-                            #(assert_not_unpin!(#not_unpin);)*
-                        });
-                    }
-                    if config.not_unwind_safe.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_unwind_safe!(#baseline);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_unwind_safe::<#baseline>();
-                            #(assert_not_unwind_safe!(#not_unwind_safe);)*
-                        });
-                    }
-                    if config.not_ref_unwind_safe.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_ref_unwind_safe!(#baseline);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_ref_unwind_safe::<#baseline>();
-                            #(assert_not_ref_unwind_safe!(#not_ref_unwind_safe);)*
-                        });
-                    }
-                } else {
-                    let lt = if has_lifetimes {
-                        quote! { <#(#lt),*> }
-                    } else {
+                let ty = quote! { crate:: #(#module::)* #ident };
+                let mut assert_value = |args: &[TokenStream], traits: &TokenStream| {
+                    let args = if generics.params.is_empty() {
                         quote! {}
+                    } else {
+                        let lifetimes = generics.lifetimes().map(|_| quote! { '_ });
+                        let args = lifetimes.chain(args.iter().cloned());
+                        quote! { <#(#args),*> }
                     };
-                    if config.not_send.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_send!(crate:: #(#module::)* #ident #lt);
-                        });
+                    tokens.extend(quote! { test_helper::assert_value!(#ty #args: #traits); });
+                };
+                let implements = |exceptions: &[&str]| !exceptions.contains(&path_string.as_str());
+                let send = implements(config.not_send);
+                let sync = implements(config.not_sync);
+                let traits = [
+                    ("Send", send, sync.then(|| quote! { Sync })),
+                    ("Sync", sync, send.then(|| quote! { Send })),
+                    ("Unpin", implements(config.not_unpin), None),
+                    ("UnwindSafe", implements(config.not_unwind_safe), None),
+                    ("RefUnwindSafe", implements(config.not_ref_unwind_safe), None),
+                ];
+                let baseline = traits.iter().map(|(name, positive, _)| {
+                    let ident = format_ident!("{}", name);
+                    if *positive {
+                        quote! { #ident }
                     } else {
-                        tokens.extend(quote! {
-                            assert_send::<crate:: #(#module::)* #ident #lt>();
-                        });
+                        quote! { !#ident }
                     }
-                    if config.not_sync.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_sync!(crate:: #(#module::)* #ident #lt);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_sync::<crate:: #(#module::)* #ident #lt>();
-                        });
+                });
+                let unit = quote! { () };
+                let mut args = vec![unit.clone(); type_params];
+                assert_value(&args, &quote! { #(#baseline)&* });
+
+                if type_params == 0 {
+                    return;
+                }
+                for (name, positive, other_trait) in traits {
+                    let ident = format_ident!("{}", name);
+                    let mut checks = vec![];
+                    if positive {
+                        checks.push(quote! { !#ident });
                     }
-                    if config.not_unpin.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_unpin!(crate:: #(#module::)* #ident #lt);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_unpin::<crate:: #(#module::)* #ident #lt>();
-                        });
+                    checks.extend(other_trait);
+                    if checks.is_empty() {
+                        continue;
                     }
-                    if config.not_unwind_safe.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_unwind_safe!(crate:: #(#module::)* #ident #lt);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_unwind_safe::<crate:: #(#module::)* #ident #lt>();
-                        });
-                    }
-                    if config.not_ref_unwind_safe.contains(&path_string.as_str()) {
-                        tokens.extend(quote! {
-                            assert_not_ref_unwind_safe!(crate:: #(#module::)* #ident #lt);
-                        });
-                    } else {
-                        tokens.extend(quote! {
-                            assert_ref_unwind_safe::<crate:: #(#module::)* #ident #lt>();
-                        });
+                    let checks = quote! { #(#checks)&* };
+                    let marker = format_ident!("Not{}", name);
+                    let marker = quote! { test_helper::marker::#marker };
+                    assert_value(&vec![marker.clone(); type_params], &checks);
+                    if type_params > 1 {
+                        // A missing bound on one parameter can be masked by another.
+                        for i in 0..type_params {
+                            args[i] = marker.clone();
+                            assert_value(&args, &checks);
+                            args[i] = unit.clone();
+                        }
                     }
                 }
             }
@@ -212,7 +138,6 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
         });
     }
 
-    let mut use_macros = use_generics_helpers;
     for (list, name) in &[
         (config.exclude, "AssertImplConfig::exclude"),
         (config.not_send, "AssertImplConfig::not_send"),
@@ -221,9 +146,6 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
         (config.not_unwind_safe, "AssertImplConfig::not_unwind_safe"),
         (config.not_ref_unwind_safe, "AssertImplConfig::not_ref_unwind_safe"),
     ] {
-        if name.starts_with("AssertImplConfig::not_") {
-            use_macros |= !list.is_empty();
-        }
         for &ty in *list {
             assert!(
                 visited_types.contains(ty),
@@ -234,70 +156,7 @@ pub fn gen_assert_impl(crate_root: &Path, config: AssertImplConfig) -> (PathBuf,
         }
     }
 
-    let mut out = quote! {
-        #![allow(
-            dead_code,
-            unused_macros,
-            clippy::std_instead_of_alloc,
-            clippy::std_instead_of_core,
-        )]
-        fn assert_send<T: ?Sized + Send>() {}
-        fn assert_sync<T: ?Sized + Sync>() {}
-        fn assert_unpin<T: ?Sized + Unpin>() {}
-        fn assert_unwind_safe<T: ?Sized + std::panic::UnwindSafe>() {}
-        fn assert_ref_unwind_safe<T: ?Sized + std::panic::RefUnwindSafe>() {}
-    };
-    if use_generics_helpers {
-        out.extend(quote! {
-            /// `Send` & `!Sync`
-            struct NotSync(core::cell::UnsafeCell<()>);
-            /// `!Send` & `Sync`
-            struct NotSend(std::sync::MutexGuard<'static, ()>);
-            /// `!Send` & `!Sync`
-            struct NotSendSync(*const ());
-            /// `!Unpin`
-            struct NotUnpin(core::marker::PhantomPinned);
-            /// `!UnwindSafe`
-            struct NotUnwindSafe(&'static mut ());
-            /// `!RefUnwindSafe`
-            struct NotRefUnwindSafe(core::cell::UnsafeCell<()>);
-        });
-    }
-    if use_macros {
-        out.extend(quote! {
-            macro_rules! assert_not_send {
-                ($ty:ty) => {
-                    static_assertions::assert_not_impl_all!($ty: Send);
-                };
-            }
-            macro_rules! assert_not_sync {
-                ($ty:ty) => {
-                    static_assertions::assert_not_impl_all!($ty: Sync);
-                };
-            }
-            macro_rules! assert_not_unpin {
-                ($ty:ty) => {
-                    static_assertions::assert_not_impl_all!($ty: Unpin);
-                };
-            }
-            macro_rules! assert_not_unwind_safe {
-                ($ty:ty) => {
-                    static_assertions::assert_not_impl_all!($ty: std::panic::UnwindSafe);
-                };
-            }
-            macro_rules! assert_not_ref_unwind_safe {
-                ($ty:ty) => {
-                    static_assertions::assert_not_impl_all!($ty: std::panic::RefUnwindSafe);
-                };
-            }
-        });
-    }
-    out.extend(quote! {
-        const _: fn() = || {
-            #tokens
-        };
-    });
-    (out_dir.join("assert_impl.rs"), out)
+    (out_dir.join("assert_impl.rs"), tokens)
 }
 
 #[derive(Clone, Copy)]

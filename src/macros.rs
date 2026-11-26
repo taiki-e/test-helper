@@ -34,3 +34,26 @@ macro_rules! bin_name {
         $crate::__private::env!("CARGO_BIN_NAME")
     };
 }
+
+// Inspired by assert_value! in https://github.com/tokio-rs/tokio/blob/854013a8cb7d1397e9d037315592dc1d2d55187d/tokio/tests/async_send_sync.rs.
+#[macro_export]
+macro_rules! assert_value {
+    ($ty:ty: $bound:ident $(& $($rest:tt)+)?) => {
+        const _: fn(*const $ty) = |value| {
+            fn check<T: ?$crate::__private::Sized + $crate::__private::$bound>(_: *const T) {}
+            check(value);
+        };
+        $($crate::assert_value!($ty: $($rest)+);)?
+    };
+    ($ty:ty: !$bound:ident $(& $($rest:tt)+)?) => {
+        const _: fn(*const $ty) = |value| {
+            trait AmbiguousIfImpl<A> {}
+            impl<T: ?$crate::__private::Sized> AmbiguousIfImpl<()> for T {}
+            impl<T: ?$crate::__private::Sized + $crate::__private::$bound> AmbiguousIfImpl<((),)>
+                for T {}
+            fn check<T: ?$crate::__private::Sized + AmbiguousIfImpl<A>, A>(_: *const T) {}
+            check(value);
+        };
+        $($crate::assert_value!($ty: $($rest)+);)?
+    };
+}
