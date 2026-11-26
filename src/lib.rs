@@ -65,6 +65,8 @@ supposed to only be used in projects managed by us.
     feature(asm_experimental_arch)
 )]
 
+#[cfg(feature = "serde")]
+extern crate serde_crate as serde;
 #[cfg(feature = "std")]
 extern crate std;
 
@@ -101,5 +103,7 @@ pub mod git;
 pub mod marker;
 #[cfg(feature = "std")]
 pub mod once_lock;
+#[cfg(feature = "serde")]
+pub mod serde_test;
 #[cfg(all(feature = "valgrind", valgrind))]
 pub mod valgrind;

@@ -23,6 +23,8 @@ build.allow-build-scripts = [
     { name = "prettyplease" },
     { name = "proc-macro2" },
     { name = "quote" },
+    { name = "serde_core" },
+    { name = "serde" }, # https://github.com/serde-rs/serde/issues/2972
     { name = "syn" },
 ]
 build.bypass = [

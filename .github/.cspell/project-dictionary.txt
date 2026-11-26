@@ -1,6 +1,7 @@
 dsll
 fsmonitor
 memcheck
+newtype
 noaccess
 norvc
 reentrancy

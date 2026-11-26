@@ -33,6 +33,6 @@ jobs:
       # Exclude codegen feature because syn's MSRV.
       # Exclude valgrind feature because asm! requires Rust 1.59.
       # NB: Sync with features table in Cargo.toml
-      msrv-args: --features std,cli,critical-section-std,doc,git
-      no-std-args: --exclude-features std,cli,codegen,critical-section-std,doc,git
+      msrv-args: --features std,cli,critical-section-std,doc,git,serde
+      no-std-args: --exclude-features std,cli,codegen,critical-section-std,doc,git,serde
       optional-deps: ''
