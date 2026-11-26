@@ -12,7 +12,7 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-11-24
+## [0.1.0] - 2026-11-26
 
 Initial release
 
