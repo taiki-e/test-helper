@@ -12,6 +12,10 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
+- Make `NotSync` `RefUnwindSafe`.
+
+- Make `NotRefUnwindSafe` `Sync`.
+
 ## [0.1.0] - 2026-11-26
 
 Initial release

@@ -11,7 +11,9 @@ pub struct NotSend(PhantomData<*const ()>);
 unsafe impl Sync for NotSend {}
 
 /// A marker that is `Send` and `!Sync`.
-pub struct NotSync(PhantomData<UnsafeCell<()>>);
+pub struct NotSync(PhantomData<*const ()>);
+// SAFETY: this is a marker type and we'll never access the value.
+unsafe impl Send for NotSync {}
 
 /// A marker that is `!Send` and `!Sync`.
 pub struct NotSendSync(PhantomData<*const ()>);
@@ -24,15 +26,17 @@ pub struct NotUnwindSafe(PhantomData<&'static mut ()>);
 
 /// A marker that is `!RefUnwindSafe`.
 pub struct NotRefUnwindSafe(PhantomData<UnsafeCell<()>>);
+// SAFETY: this is a marker type and we'll never access the value.
+unsafe impl Sync for NotRefUnwindSafe {}
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     assert_value!(NotSend: !Send & Sync & Unpin & UnwindSafe & RefUnwindSafe);
-    assert_value!(NotSync: Send & !Sync & Unpin & UnwindSafe & !RefUnwindSafe);
+    assert_value!(NotSync: Send & !Sync & Unpin & UnwindSafe & RefUnwindSafe);
     assert_value!(NotSendSync: !Send & !Sync & Unpin & UnwindSafe & RefUnwindSafe);
     assert_value!(NotUnpin: Send & Sync & !Unpin & UnwindSafe & RefUnwindSafe);
     assert_value!(NotUnwindSafe: Send & Sync & Unpin & !UnwindSafe & RefUnwindSafe);
-    assert_value!(NotRefUnwindSafe: Send & !Sync & Unpin & UnwindSafe & !RefUnwindSafe);
+    assert_value!(NotRefUnwindSafe: Send & Sync & Unpin & UnwindSafe & !RefUnwindSafe);
 }
